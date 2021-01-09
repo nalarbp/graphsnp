@@ -1,0 +1,36 @@
+#header-content {
+  width: 100%;
+  font-family: "Nunito", sans-serif;
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+  height: auto;
+  text-align: center;
+  background-color: white;
+}
+
+#input-loader {
+  background: url("../img/bg_content_header.png") no-repeat fixed center,
+    linear-gradient(122deg, rgb(238, 173, 76) 15%, rgb(226, 88, 69) 100%);
+  height: calc(100vh - 250px);
+}
+
+#input-loader-button {
+  color: white;
+  background-color: #fd8d31;
+  border: 1px solid white;
+  margin-top: calc((100vh - 250px) / 2);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0 2em;
+}
+
+#footer-component {
+  width: 100vw;
+  height: 100px;
+  text-align: center;
+  margin: auto;
+  padding-top: 20px;
+  background-color: white;
+}
