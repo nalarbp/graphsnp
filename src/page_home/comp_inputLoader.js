@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Upload, Modal, Spin, Button, message } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Upload, Modal, Spin, Button, message, List } from "antd";
+import {
+  StopOutlined,
+  LoadingOutlined,
+  CheckCircleTwoTone,
+} from "@ant-design/icons";
 
 const fastaToJson = require("bio-parsers").fastaToJson;
 const { Dragger } = Upload;
@@ -65,7 +69,6 @@ const InputLoader = (props) => {
 
         if (noErr) {
           //load to store
-          console.log(snpsSequence);
           props.sequenceToStore(snpsSequence);
           //turn-off loading
           setisProcessingInput(false);
@@ -98,6 +101,32 @@ const InputLoader = (props) => {
       };
     }
     return false; //to avoid upload action (we parse and load it to store instead)
+  };
+
+  const inputList = ["SNPs sequence", "Collection dates", "Exposure period"];
+  const getInputStatus = function (item) {
+    switch (item) {
+      case "SNPs sequence":
+        if (props.sequence) {
+          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+        } else {
+          return <StopOutlined />;
+        }
+      case "Collection dates":
+        if (props.sequence && props.collectionDates) {
+          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+        } else {
+          return <StopOutlined />;
+        }
+      case "Exposure period":
+        if (props.sequence && props.exposurePeriod) {
+          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+        } else {
+          return <StopOutlined />;
+        }
+      default:
+        break;
+    }
   };
 
   return (
@@ -138,6 +167,19 @@ const InputLoader = (props) => {
           <Button id="input-loader-button" shape={"round"} size={"large"}>
             Drag and drop your input file(s) here
           </Button>
+        </div>
+        <div id="input-status">
+          <List
+            grid={{ gutter: 4, column: 3 }}
+            size="small"
+            style={{ fontSize: "10px", lineHeight: "3px" }}
+            dataSource={inputList}
+            renderItem={(item) => (
+              <List.Item style={{ backgroundColor: "white", margin: "0px" }}>
+                {getInputStatus(item)} {item}
+              </List.Item>
+            )}
+          />
         </div>
       </Dragger>
     </React.Fragment>

@@ -6,3 +6,17 @@ export function sequenceToStore(val) {
     payload: val,
   };
 }
+
+export function colDatesToStore(val) {
+  return {
+    type: constant.COLDATE_DATA,
+    payload: val,
+  };
+}
+
+export function exposurePeriodToStore(val) {
+  return {
+    type: constant.EXPERIOD_DATA,
+    payload: val,
+  };
+}
