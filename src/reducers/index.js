@@ -10,6 +10,7 @@ export const initialState = {
   collectionDates: null,
   exposurePeriod: null,
   graphSettings: {
+    isUserFilterEdges: { status: false, cutoff: 0 },
     isUserReDraw: false,
     method: "slv",
     layout: "cose",

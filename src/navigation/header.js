@@ -5,6 +5,7 @@ import logo from "../img/logo.png";
 import "./style_navigation.css";
 
 const Header = (props) => {
+  //console.log("Header");
   return (
     <React.Fragment>
       <Row id="main-header">
@@ -25,3 +26,4 @@ const Header = (props) => {
 };
 
 export default Header;
+//Called once, didn't reload when navivation is changed

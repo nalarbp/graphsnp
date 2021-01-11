@@ -7,6 +7,13 @@ export function changeIsUserReDrawSetting(val) {
   };
 }
 
+export function changeIsUserFilterEdgesSetting(val) {
+  return {
+    type: constant.SETTING_IS_USER_FILTER_EDGES,
+    payload: val,
+  };
+}
+
 export function changeMethodSetting(val) {
   return {
     type: constant.SETTING_METHOD,

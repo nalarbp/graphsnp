@@ -10,6 +10,7 @@ import history from "./utils/history";
 
 class App extends Component {
   render() {
+    //console.log("App");
     let routes = (
       <Switch>
         <Route exact path={"/"} component={Home} />
@@ -29,3 +30,5 @@ class App extends Component {
 }
 
 export default App;
+//Called once when first loaded
+//Changing page didn't reload App

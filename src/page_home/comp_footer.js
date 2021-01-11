@@ -1,6 +1,7 @@
 import { Row, Col, Divider } from "antd";
 import "./style_home.css";
 const FooterComponent = (props) => {
+  console.log("Footer");
   return (
     <Row>
       <Col sm={24} id="footer-component">

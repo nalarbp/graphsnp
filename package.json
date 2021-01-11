@@ -10,6 +10,7 @@
     "antd": "^4.10.0",
     "bio-parsers": "^6.2.6",
     "cytoscape": "^3.17.1",
+    "d3-selection": "^2.0.0",
     "hamming": "0.0.2",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",

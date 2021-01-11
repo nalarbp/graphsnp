@@ -4,11 +4,17 @@
   overflow-y: auto;
 }
 
-#graphsnp-sider h6 {
+#graphsnp-sider h5 {
   font-size: 11px;
   margin-top: 10px;
   margin-bottom: 5px;
   font-weight: bold;
+}
+
+#graphsnp-sider h6 {
+  font-size: 8px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 #graphsnp-sider p {

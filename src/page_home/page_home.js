@@ -14,6 +14,7 @@ import InputLoader from "./comp_inputLoader";
 import FooterComponent from "./comp_footer";
 
 const Home = (props) => {
+  //console.log("Home");
   return (
     <React.Fragment>
       <Row>
@@ -54,6 +55,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
-/*
-      
-      */
+//Home called when navigating
+//Called when input is loaded (cause it subsribed to the store, so when the connected state change it will be re-called)

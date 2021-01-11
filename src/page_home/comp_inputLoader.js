@@ -11,10 +11,14 @@ const { Dragger } = Upload;
 const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const InputLoader = (props) => {
+  //console.log("Input Loader - init");
   const [isProcessingInput, setisProcessingInput] = useState(false);
 
   async function readFastaToJSON(fastaString) {
     if (props.sequence === null) {
+      //console.log("async");
+      //turn-on loading
+      setisProcessingInput(true);
       const sequenceJSON = await fastaToJson(fastaString);
       const snpsSequence = [];
       if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
@@ -71,7 +75,7 @@ const InputLoader = (props) => {
           //load to store
           props.sequenceToStore(snpsSequence);
           //turn-off loading
-          setisProcessingInput(false);
+          //setisProcessingInput(false);
           //display success message
           message.success("The sequences have been loaded", 0.5);
         }
@@ -81,16 +85,11 @@ const InputLoader = (props) => {
       setisProcessingInput(false);
     } else {
       alert("Sequences have been loaded. Refresh to re-load a new one");
-      setisProcessingInput(false);
     }
   }
 
   const beforeUploadHandler = (file) => {
-    setisProcessingInput(true);
     if (file) {
-      //turn-on loading
-      setisProcessingInput(true);
-
       const reader = new FileReader();
       reader.readAsText(file);
       reader.onloadend = function (evt) {
@@ -105,6 +104,7 @@ const InputLoader = (props) => {
 
   const inputList = ["SNPs sequence", "Collection dates", "Exposure period"];
   const getInputStatus = function (item) {
+    //console.log("getInputStatus");
     switch (item) {
       case "SNPs sequence":
         if (props.sequence) {
@@ -186,3 +186,9 @@ const InputLoader = (props) => {
   );
 };
 export default InputLoader;
+
+/*
+
+        */
+
+// Changing component state will trigger Component-Init and Component-Render

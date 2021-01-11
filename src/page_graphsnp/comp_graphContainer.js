@@ -1,34 +1,63 @@
+/*
+- Comp init => render => all useEffect
+- loading wont work using states, use indicator on draw button instead
+- All useEffect called when first loaded (eg: from Home to graphSNP page)
+- certain useEffect called when any deppendent useEffect affected
+*/
 import React, { useEffect, useRef, useState } from "react";
-import { Empty, Spin } from "antd";
-import cytoscape from "cytoscape";
-import { LoadingOutlined } from "@ant-design/icons";
+import { Empty } from "antd";
 import { generateCytoscapeGraph } from "../utils/utils";
-
-const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
+import cytoscape from "cytoscape";
 
 const GraphContainer = (props) => {
-  //Settings/state
+  //state
+  const [graphIsDrawn, setgraphIsDrawn] = useState(false);
+  //Settings
   const layout = props.graphSettings.layout;
+  const userDrawGraph = props.graphSettings.isUserReDraw;
+  const userFilterEdges = props.graphSettings.isUserFilterEdges;
   const cytoscapeRef = useRef(null);
 
-  const [graphIsReady, setGraphIsReady] = useState(true);
-  const [isProcessingGraph, setIsProcessingGraph] = useState(false);
-  const graphCytoscapeRef = useRef();
-  const graphEmptyRef = useRef();
-  const graphProcessingRef = useRef();
-  const graphData = generateCytoscapeGraph(
-    props.sequence,
-    props.collectionDates,
-    props.exposurePeriod,
-    props.graphSettings
-  );
+  useEffect(() => {
+    if (userDrawGraph) {
+      draw();
+      setgraphIsDrawn(true);
+      props.changeIsUserReDrawSetting(false);
+    }
+  }, [userDrawGraph]);
 
   useEffect(() => {
-    draw();
-  }, [props.sequence]);
+    if (layout && cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      let graph_layout = { name: layout, animate: false, fit: true };
+      cy.layout(graph_layout).run();
+      cytoscapeRef.current = cy;
+    }
+  }, [layout]);
+
+  useEffect(() => {
+    let cy = cytoscapeRef.current;
+    if (cy && userFilterEdges.status && userFilterEdges.cutoff > 0) {
+      let cy = cytoscapeRef.current;
+      cy.remove(`edge[weight > ${userFilterEdges.cutoff}]`);
+      let graph_layout = { name: layout, animate: false, fit: true };
+      cy.layout(graph_layout).run();
+      props.changeIsUserFilterEdgesSetting({
+        status: false,
+        cutoff: userFilterEdges.cutoff,
+      });
+      //cytoscapeRef.current = cy;
+    }
+  }, [userFilterEdges]);
 
   //DRAW
   function draw() {
+    const graphData = generateCytoscapeGraph(
+      props.sequence,
+      props.collectionDates,
+      props.exposurePeriod,
+      props.graphSettings
+    );
     //clean previous drawing artifacts
     const graph_layout = { name: layout, animate: false, fit: true };
     if (graphData) {
@@ -74,45 +103,33 @@ const GraphContainer = (props) => {
           },
         ],
       });
-      cy.selectionType("single");
       cy.layout(graph_layout).run();
-
       //save current Ref
       cytoscapeRef.current = cy;
+      //setIsProcessingGraph(false);
     }
   }
 
   return (
     <React.Fragment>
       <div
-        id="processing-graph"
-        style={{ display: isProcessingGraph ? "block" : " none" }}
-        ref={graphProcessingRef}
-      >
-        <Spin
-          indicator={loadingIcon}
-          style={{ fontSize: "10pt", color: "black" }}
-          size="small"
-        />
-      </div>
-
-      <div
         id="graph-empty"
-        style={{ display: graphIsReady ? "none" : " block" }}
-        ref={graphEmptyRef}
+        style={{ display: graphIsDrawn ? "none" : " block" }}
       >
         <Empty
-          description={"No graph: click draw graph to create one"}
+          description={"No graph: click load previous graph or draw new graph"}
           image={Empty.PRESENTED_IMAGE_SIMPLE}
         />
       </div>
       <div
         id="cytoscape-canvas"
-        style={{ display: graphIsReady ? "block" : "none" }}
-        ref={graphCytoscapeRef}
+        style={{ display: graphIsDrawn ? "block" : " none" }}
       ></div>
     </React.Fragment>
   );
 };
 
 export default GraphContainer;
+/*
+
+*/

@@ -74,19 +74,27 @@ function createMEG(seq) {
   let final_snpDist = [];
   //console.log(minDistances);
   minDistances.forEach((d) => {
-    //filter edges to minimum only
+    //keep edges with minimum distance only
     let minDist = snpDist_df
       .filter((e) => {
         return e.var1 === d.id || e.var2 === d.id;
       })
       .filter((f) => {
         return f.dist === d.dist;
+      })
+      .filter(function (g) {
+        let duplicatedG = final_snpDist.find(function (h) {
+          return h.var1 === g.var1 && h.var2 === g.var2;
+        });
+        return !duplicatedG ? true : false;
+        // if duplicatedG not found (undefined) (keep g), if inverseG exist (discard g )
+        // not actually an inverse, since we created asymetric matrix, it
+        // it was just a duplicated pairwise distance,
+        // so h.var1 === g.var1 && h.var2 === g.var2 will works
       });
-    //console.log(minDist, snpDist_df.length);
     //merge
     final_snpDist = final_snpDist.concat(minDist);
   });
-
   return final_snpDist.length > 0 ? final_snpDist : null;
 }
 

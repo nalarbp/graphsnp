@@ -5,3 +5,7 @@
 
 
 //TO DO LIST
+x filter final_snpDist so no duplicated edges (MEG)
+x Create loading mechanism on graph container
+x Add refresh/ re-draw button
+x Add filter edges algorithm 

@@ -10,6 +10,13 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_isUserReDraw;
 
+    case constant.SETTING_IS_USER_FILTER_EDGES:
+      let newState_isUserFilterEdges = Object.assign({}, prevState);
+      if (action.payload !== prevState.isUserFilterEdges) {
+        newState_isUserFilterEdges.isUserFilterEdges = action.payload;
+      }
+      return newState_isUserFilterEdges;
+
     case constant.SETTING_METHOD:
       let newState_method = Object.assign({}, prevState);
       if (action.payload && action.payload !== prevState.method) {
