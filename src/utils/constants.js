@@ -1,3 +1,7 @@
+//Is input loading
+export const INPUT_LOADING = "INPUT_LOADING";
+//Graph matrix
+export const MATRIX_DATA = "MATRIX_DATA";
 //Navigation
 export const NAV_LOCATION = "NAV_LOCATION";
 //Sequence

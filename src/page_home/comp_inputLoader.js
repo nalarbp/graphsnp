@@ -1,24 +1,24 @@
-import React, { useState, useEffect } from "react";
-import { Upload, Modal, Spin, Button, message, List } from "antd";
+import React from "react";
+import { Upload, Button, message, List } from "antd";
+import { StopOutlined, CheckCircleTwoTone } from "@ant-design/icons";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
 import {
-  StopOutlined,
-  LoadingOutlined,
-  CheckCircleTwoTone,
-} from "@ant-design/icons";
+  sequenceToStore,
+  colDatesToStore,
+  exposurePeriodToStore,
+  isinputLoadingToStore,
+} from "../action/inputActions";
 
 const fastaToJson = require("bio-parsers").fastaToJson;
 const { Dragger } = Upload;
-const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const InputLoader = (props) => {
   //console.log("Input Loader - init");
-  const [isProcessingInput, setisProcessingInput] = useState(false);
 
   async function readFastaToJSON(fastaString) {
     if (props.sequence === null) {
       //console.log("async");
-      //turn-on loading
-      setisProcessingInput(true);
       const sequenceJSON = await fastaToJson(fastaString);
       const snpsSequence = [];
       if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
@@ -74,15 +74,13 @@ const InputLoader = (props) => {
         if (noErr) {
           //load to store
           props.sequenceToStore(snpsSequence);
-          //turn-off loading
-          //setisProcessingInput(false);
+          //props.isinputLoadingToStore(false);
           //display success message
           message.success("The sequences have been loaded", 0.5);
         }
       } else {
         alert("Error: Required at least 2 sequences");
       }
-      setisProcessingInput(false);
     } else {
       alert("Sequences have been loaded. Refresh to re-load a new one");
     }
@@ -90,14 +88,29 @@ const InputLoader = (props) => {
 
   const beforeUploadHandler = (file) => {
     if (file) {
-      const reader = new FileReader();
-      reader.readAsText(file);
-      reader.onloadend = function (evt) {
-        const dataText = evt.target.result;
-        // read here
-        readFastaToJSON(dataText);
-        // when done turn-off loading
-      };
+      let inputType = "seq";
+
+      //check extension
+      //check content
+
+      switch (inputType) {
+        case "seq":
+          const reader = new FileReader();
+          reader.readAsText(file);
+          props.isinputLoadingToStore(true);
+          reader.onloadend = function (evt) {
+            const dataText = evt.target.result;
+            readFastaToJSON(dataText);
+            props.isinputLoadingToStore(false);
+          };
+          break;
+        case "colDate":
+          break;
+
+        default:
+          message.error("Invalid input file", 0.5);
+          break;
+      }
     }
     return false; //to avoid upload action (we parse and load it to store instead)
   };
@@ -131,28 +144,8 @@ const InputLoader = (props) => {
 
   return (
     <React.Fragment>
-      <Modal
-        visible={isProcessingInput}
-        closable={false}
-        centered={true}
-        width={0}
-        footer={null}
-        bodyStyle={{
-          textAlign: "center",
-          backgroundColor: "teal",
-          padding: "0px",
-        }}
-      >
-        <Spin
-          indicator={loadingIcon}
-          style={{ color: "white" }}
-          tip="Processing..."
-          size="large"
-        />
-      </Modal>
-
       <Dragger
-        accept={".fa"}
+        accept={".fa, .fasta, .fna, .mfa, .csv"}
         showUploadList={false}
         style={{
           height: "500px",
@@ -172,7 +165,7 @@ const InputLoader = (props) => {
           <List
             grid={{ gutter: 4, column: 3 }}
             size="small"
-            style={{ fontSize: "10px", lineHeight: "3px" }}
+            style={{ fontSize: "10px", lineHeight: "10px" }}
             dataSource={inputList}
             renderItem={(item) => (
               <List.Item style={{ backgroundColor: "white", margin: "0px" }}>
@@ -185,7 +178,27 @@ const InputLoader = (props) => {
     </React.Fragment>
   );
 };
-export default InputLoader;
+
+function mapStateToProps(state) {
+  return {
+    sequence: state.sequence,
+    collectionDates: state.collectionDates,
+    exposurePeriod: state.exposurePeriod,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      sequenceToStore,
+      colDatesToStore,
+      exposurePeriodToStore,
+      isinputLoadingToStore,
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputLoader);
 
 /*
 

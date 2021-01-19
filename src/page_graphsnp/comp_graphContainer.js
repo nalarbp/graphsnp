@@ -60,9 +60,9 @@ const GraphContainer = (props) => {
     );
     //clean previous drawing artifacts
     const graph_layout = { name: layout, animate: false, fit: true };
-    if (graphData) {
+    if (graphData && graphData.cytoscape) {
       const cy = cytoscape({
-        elements: graphData,
+        elements: graphData.cytoscape,
         container: document.getElementById("cytoscape-canvas"),
         pannable: true,
         selected: true,
@@ -106,7 +106,11 @@ const GraphContainer = (props) => {
       cy.layout(graph_layout).run();
       //save current Ref
       cytoscapeRef.current = cy;
-      //setIsProcessingGraph(false);
+      //send to matrix store
+      props.graphMatrixToStore({
+        type: graphData.method,
+        data: graphData.distanceMatrix,
+      });
     }
   }
 

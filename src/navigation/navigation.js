@@ -21,6 +21,8 @@ const NavigationMenu = (props) => {
           return "graphsnp";
         case "/documentation":
           return "documentation";
+        case "/matrix":
+          return "matrix";
         default:
           return "none";
       }
@@ -57,6 +59,16 @@ const NavigationMenu = (props) => {
           }}
         >
           <NavLink to="/graphsnp">GraphSNP</NavLink>
+        </Menu.Item>
+
+        <Menu.Item
+          key="matrix"
+          style={{ padding: "0 20px", margin: "0px" }}
+          onClick={(e) => {
+            props.changeNavLocation(e.key);
+          }}
+        >
+          <NavLink to="/matrix">Distance matrix</NavLink>
         </Menu.Item>
 
         <Menu.Item

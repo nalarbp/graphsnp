@@ -10,7 +10,7 @@ const exposurePeriodReducer = (prevState, action) => {
       if (prevState) {
         return prevState;
       } else {
-        return initialState.sequence;
+        return initialState.exposurePeriod;
       }
   }
 };

@@ -1,4 +1,4 @@
-import { Row, Col, Divider } from "antd";
+import { Row, Col } from "antd";
 import "./style_home.css";
 const FooterComponent = (props) => {
   console.log("Footer");

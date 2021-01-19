@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 //import { Link, NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { changeNavLocation } from "../action/navigationActions";
+import { graphMatrixToStore } from "../action/graphMatrixActions";
 import {
   changeIsUserReDrawSetting,
   changeMethodSetting,
@@ -13,6 +14,7 @@ import {
   changeIsUserDownloadingSetting,
   changeIsUserFilterEdgesSetting,
 } from "../action/graphSettingsActions";
+
 import SiderMenu from "./comp_sider";
 import GraphContainer from "./comp_graphContainer";
 
@@ -48,6 +50,7 @@ const GraphSNP = (props) => {
               collectionDates={props.collectionDates}
               exposurePeriod={props.exposurePeriod}
               graphSettings={props.graphSettings}
+              graphMatrixToStore={props.graphMatrixToStore}
               changeIsUserReDrawSetting={props.changeIsUserReDrawSetting}
               changeIsUserFilterEdgesSetting={
                 props.changeIsUserFilterEdgesSetting
@@ -78,6 +81,7 @@ function mapDispatchToProps(dispatch) {
       changeExportFormatSetting: changeExportFormatSetting,
       changeIsUserDownloadingSetting: changeIsUserDownloadingSetting,
       changeIsUserFilterEdgesSetting: changeIsUserFilterEdgesSetting,
+      graphMatrixToStore: graphMatrixToStore,
     },
     dispatch
   );

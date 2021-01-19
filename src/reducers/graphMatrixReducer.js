@@ -1,18 +1,18 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const collectionDatesReducer = (prevState, action) => {
+const graphMatrixReducer = (prevState, action) => {
   switch (action.type) {
-    case constant.COLDATE_DATA:
+    case constant.MATRIX_DATA:
       return action.payload;
 
     default:
       if (prevState) {
         return prevState;
       } else {
-        return initialState.collectionDates;
+        return initialState.graphMatrix;
       }
   }
 };
 
-export default collectionDatesReducer;
+export default graphMatrixReducer;

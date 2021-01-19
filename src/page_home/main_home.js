@@ -1,17 +1,15 @@
 import React from "react";
-import { Row, Col } from "antd";
+import { Row, Col, Modal, Spin } from "antd";
 import "./style_home.css";
 import { connect } from "react-redux";
 //import { Link, NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { changeNavLocation } from "../action/navigationActions";
-import {
-  sequenceToStore,
-  colDatesToStore,
-  exposurePeriodToStore,
-} from "../action/inputActions";
+import { LoadingOutlined } from "@ant-design/icons";
 import InputLoader from "./comp_inputLoader";
 import FooterComponent from "./comp_footer";
+
+const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const Home = (props) => {
   //console.log("Home");
@@ -19,14 +17,26 @@ const Home = (props) => {
     <React.Fragment>
       <Row>
         <Col xs={24} id="header-content">
-          <InputLoader
-            sequence={props.sequence}
-            collectionDates={props.collectionDates}
-            exposurePeriod={props.exposurePeriod}
-            sequenceToStore={props.sequenceToStore}
-            colDatesToStore={props.colDatesToStore}
-            exposurePeriodToStore={props.exposurePeriodToStore}
-          />
+          <Modal
+            visible={props.isInputLoading}
+            closable={false}
+            centered={true}
+            width={0}
+            footer={null}
+            bodyStyle={{
+              textAlign: "center",
+              backgroundColor: "teal",
+              padding: "0px",
+            }}
+          >
+            <Spin
+              indicator={loadingIcon}
+              style={{ color: "white" }}
+              tip="Processing..."
+              size="large"
+            />
+          </Modal>
+          <InputLoader />
         </Col>
       </Row>
       <FooterComponent />
@@ -36,18 +46,13 @@ const Home = (props) => {
 
 function mapStateToProps(state) {
   return {
-    sequence: state.sequence,
-    collectionDates: state.collectionDates,
-    exposurePeriod: state.exposurePeriod,
+    isInputLoading: state.isInputLoading,
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       changeNavLocation,
-      sequenceToStore,
-      colDatesToStore,
-      exposurePeriodToStore,
     },
     dispatch
   );

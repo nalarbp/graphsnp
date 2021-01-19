@@ -20,3 +20,10 @@ export function exposurePeriodToStore(val) {
     payload: val,
   };
 }
+
+export function isinputLoadingToStore(val) {
+  return {
+    type: constant.INPUT_LOADING,
+    payload: val,
+  };
+}

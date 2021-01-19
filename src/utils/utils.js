@@ -1,31 +1,48 @@
-const hammingDistance = require("hamming");
+import * as al from "./algorithms";
 
 export function filterUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
 export function generateCytoscapeGraph(seq, colDate, expDate, settings) {
-  let graph;
+  let graphData = { method: null, cytoscape: null, distanceMatrix: null };
   switch (settings.method) {
     case "slv":
       if (seq) {
-        let snpDist_df = createMEG(seq);
-        if (snpDist_df) {
+        let mcgDist = al.createMEG(seq);
+        if (mcgDist && mcgDist.snpDistDF) {
           //create cytoscape data structure
           //let data = [{ data: { id: id, label: name } },
           //            { data: {source: s, target: t, weight: w} }  ]
           let cytoscapeData = [];
+          let matrixTableHeaders = [];
+          let matrixTableCells = [];
           let nodes = seq
             .map((d) => {
               return d.id;
             })
             .filter(filterUnique);
+          matrixTableHeaders.push({
+            key: "root",
+            title: "",
+            dataIndex: "rowKey",
+          });
           //adding nodes data
-          nodes.forEach((d) => {
+          nodes.forEach((d, idx) => {
             cytoscapeData.push({ data: { id: d } });
+            //Matrix - headers
+            matrixTableHeaders.push({ key: d, title: d, dataIndex: d });
+            //Matrix - cells
+            let raw_cells = mcgDist.snpDistMat.get(d); //return [{col: MS01, val: 0}]
+            let mat_cells = { key: d, rowKey: d };
+            raw_cells.forEach((e) => {
+              mat_cells[e.col] = e.val;
+            });
+            matrixTableCells.push(mat_cells);
           });
           //adding edges data
-          snpDist_df.forEach(function (d) {
+          mcgDist.snpDistDF.forEach(function (d) {
+            //cytoscape
             cytoscapeData.push({
               data: {
                 source: d.var1,
@@ -35,7 +52,14 @@ export function generateCytoscapeGraph(seq, colDate, expDate, settings) {
               },
             });
           });
-          graph = cytoscapeData;
+          //matrix
+
+          graphData.distanceMatrix = {
+            headers: matrixTableHeaders,
+            cells: matrixTableCells,
+          };
+          graphData.method = "mcg";
+          graphData.cytoscape = cytoscapeData;
         }
       }
       break;
@@ -45,80 +69,5 @@ export function generateCytoscapeGraph(seq, colDate, expDate, settings) {
     default:
       break;
   }
-  return graph;
-}
-
-function createMEG(seq) {
-  let snpDist_df = [];
-  let minDistances = [];
-  //
-  for (let i = 0; i < seq.length - 1; i++) {
-    const var1 = seq[i];
-    let minTracker = { id: var1.id, dist: null };
-    //console.log(minTracker.id, var1.id);
-    for (let j = i + 1; j < seq.length; j++) {
-      const var2 = seq[j];
-      let snpDist = hammingDistance(var1.sequence, var2.sequence);
-      snpDist_df.push({ var1: var1.id, var2: var2.id, dist: snpDist });
-      //console.log(minTracker.dist, snpDist);
-      if (minTracker.dist === null) {
-        minTracker.dist = snpDist;
-      } else {
-        if (snpDist < minTracker.dist) {
-          minTracker.dist = snpDist;
-        }
-      }
-    }
-    minDistances.push(minTracker);
-  }
-  let final_snpDist = [];
-  //console.log(minDistances);
-  minDistances.forEach((d) => {
-    //keep edges with minimum distance only
-    let minDist = snpDist_df
-      .filter((e) => {
-        return e.var1 === d.id || e.var2 === d.id;
-      })
-      .filter((f) => {
-        return f.dist === d.dist;
-      })
-      .filter(function (g) {
-        let duplicatedG = final_snpDist.find(function (h) {
-          return h.var1 === g.var1 && h.var2 === g.var2;
-        });
-        return !duplicatedG ? true : false;
-        // if duplicatedG not found (undefined) (keep g), if inverseG exist (discard g )
-        // not actually an inverse, since we created asymetric matrix, it
-        // it was just a duplicated pairwise distance,
-        // so h.var1 === g.var1 && h.var2 === g.var2 will works
-      });
-    //merge
-    final_snpDist = final_snpDist.concat(minDist);
-  });
-  return final_snpDist.length > 0 ? final_snpDist : null;
-}
-
-function createSMEG(seq) {
-  let snpDist_df = [];
-  let minEdgeTracker = { s: null, t: null, dist: null };
-  for (let i = 0; i < seq.length - 1; i++) {
-    const var1 = seq[i];
-    minEdgeTracker.s = var1.id;
-    minEdgeTracker.dist = null;
-    for (let j = i + 1; j < seq.length; j++) {
-      const var2 = seq[j];
-      let snpDist = hammingDistance(var1.sequence, var2.sequence);
-      if (minEdgeTracker.dist === null) {
-        minEdgeTracker.t = var2.id;
-        minEdgeTracker.dist = snpDist;
-      } else {
-        if (snpDist < minEdgeTracker.dist) {
-          minEdgeTracker.t = var2.id;
-          minEdgeTracker.dist = snpDist;
-        }
-      }
-    }
-    snpDist_df.push(minEdgeTracker);
-  }
-  return snpDist_df.length > 0 ? snpDist_df : null;
+  return graphData;
 }
