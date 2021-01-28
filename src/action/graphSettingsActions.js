@@ -1,8 +1,29 @@
 import * as constant from "../utils/constants";
 
+export function changeMethodSetting(val) {
+  return {
+    type: constant.SETTING_METHOD,
+    payload: val,
+  };
+}
+
+export function changeLayoutSetting(val) {
+  return {
+    type: constant.SETTING_LAYOUT,
+    payload: val,
+  };
+}
+
 export function changeIsUserReDrawSetting(val) {
   return {
     type: constant.SETTING_IS_USER_REDRAW,
+    payload: val,
+  };
+}
+
+export function changeEdgeFilterCutoffSetting(val) {
+  return {
+    type: constant.SETTING_EDGE_FILTER_CUTOFF,
     payload: val,
   };
 }
@@ -14,16 +35,16 @@ export function changeIsUserFilterEdgesSetting(val) {
   };
 }
 
-export function changeMethodSetting(val) {
+export function changeClusterMethodSetting(val) {
   return {
-    type: constant.SETTING_METHOD,
+    type: constant.SETTING_CLUSTER_METHOD,
     payload: val,
   };
 }
 
-export function changeLayoutSetting(val) {
+export function changeIsUserClusteringSetting(val) {
   return {
-    type: constant.SETTING_LAYOUT,
+    type: constant.SETTING_IS_USER_CLUSTERING,
     payload: val,
   };
 }

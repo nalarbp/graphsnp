@@ -5,15 +5,9 @@ import { connect } from "react-redux";
 //import { Link, NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { changeNavLocation } from "../action/navigationActions";
+import { prevGraphToStore } from "../action/prevGraphActions";
 import { graphMatrixToStore } from "../action/graphMatrixActions";
-import {
-  changeIsUserReDrawSetting,
-  changeMethodSetting,
-  changeLayoutSetting,
-  changeExportFormatSetting,
-  changeIsUserDownloadingSetting,
-  changeIsUserFilterEdgesSetting,
-} from "../action/graphSettingsActions";
+import * as settingsAction from "../action/graphSettingsActions";
 
 import SiderMenu from "./comp_sider";
 import GraphContainer from "./comp_graphContainer";
@@ -31,13 +25,16 @@ const GraphSNP = (props) => {
             collectionDates={props.collectionDates}
             exposurePeriod={props.exposurePeriod}
             graphSettings={props.graphSettings}
-            changeIsUserReDrawSetting={props.changeIsUserReDrawSetting}
             changeMethodSetting={props.changeMethodSetting}
             changeLayoutSetting={props.changeLayoutSetting}
-            changeExportFormatSetting={props.changeExportFormatSetting}
+            changeIsUserReDrawSetting={props.changeIsUserReDrawSetting}
+            changeEdgeFilterCutoffSetting={props.changeEdgeFilterCutoffSetting}
             changeIsUserFilterEdgesSetting={
               props.changeIsUserFilterEdgesSetting
             }
+            changeClusterMethodSetting={props.changeClusterMethodSetting}
+            changeIsUserClusteringSetting={props.changeIsUserClusteringSetting}
+            changeExportFormatSetting={props.changeExportFormatSetting}
             changeIsUserDownloadingSetting={
               props.changeIsUserDownloadingSetting
             }
@@ -46,12 +43,14 @@ const GraphSNP = (props) => {
         <Layout>
           <Content id="graphsnp-container">
             <GraphContainer
+              prevGraph={props.prevGraph}
               sequence={props.sequence}
               collectionDates={props.collectionDates}
               exposurePeriod={props.exposurePeriod}
               graphSettings={props.graphSettings}
               graphMatrixToStore={props.graphMatrixToStore}
               changeIsUserReDrawSetting={props.changeIsUserReDrawSetting}
+              prevGraphToStore={props.prevGraphToStore}
               changeIsUserFilterEdgesSetting={
                 props.changeIsUserFilterEdgesSetting
               }
@@ -68,6 +67,7 @@ function mapStateToProps(state) {
     exposurePeriod: state.exposurePeriod,
     sequence: state.sequence,
     graphSettings: state.graphSettings,
+    prevGraph: state.prevGraph,
   };
 }
 
@@ -75,13 +75,21 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       changeNavLocation: changeNavLocation,
-      changeIsUserReDrawSetting: changeIsUserReDrawSetting,
-      changeMethodSetting: changeMethodSetting,
-      changeLayoutSetting: changeLayoutSetting,
-      changeExportFormatSetting: changeExportFormatSetting,
-      changeIsUserDownloadingSetting: changeIsUserDownloadingSetting,
-      changeIsUserFilterEdgesSetting: changeIsUserFilterEdgesSetting,
+      changeMethodSetting: settingsAction.changeMethodSetting,
+      changeLayoutSetting: settingsAction.changeLayoutSetting,
+      changeIsUserReDrawSetting: settingsAction.changeIsUserReDrawSetting,
+      changeEdgeFilterCutoffSetting:
+        settingsAction.changeEdgeFilterCutoffSetting,
+      changeIsUserFilterEdgesSetting:
+        settingsAction.changeIsUserFilterEdgesSetting,
+      changeClusterMethodSetting: settingsAction.changeClusterMethodSetting,
+      changeIsUserClusteringSetting:
+        settingsAction.changeIsUserClusteringSetting,
+      changeExportFormatSetting: settingsAction.changeExportFormatSetting,
+      changeIsUserDownloadingSetting:
+        settingsAction.changeIsUserDownloadingSetting,
       graphMatrixToStore: graphMatrixToStore,
+      prevGraphToStore: prevGraphToStore,
     },
     dispatch
   );

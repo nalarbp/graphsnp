@@ -1,24 +1,30 @@
-import React, { useState } from "react";
+import React from "react";
 import { Button, Row, Col, Select, InputNumber } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
 const SiderMenu = (props) => {
   //STATES
-  const [edgeCutoff, setEdgeCutoff] = useState(0);
+
   //SETTINGS
-  const graph_isUserReDraw = props.graphSettings.isUserReDraw;
-  const graph_isUserFilterEdges = props.graphSettings.isUserFilterEdges.status;
+
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
+  const graph_isUserReDraw = props.graphSettings.isUserReDraw;
+  const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
+  const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
+  const graph_clusterMethod = props.graphSettings.clusterMethod;
+  const graph_isUserClustering = props.graphSettings.isUserClustering;
   const graph_exportFormat = props.graphSettings.exportFormat;
+  const graph_isUserDownloading = props.graphSettings.isUserDownloading;
 
   //HANDLERS
-  const edgeCutoffHandler = (val) => {
-    if (val > 0) {
-      setEdgeCutoff(val);
-    }
+  const changeMethodHandler = (val) => {
+    props.changeMethodSetting(val);
+  };
+
+  const changeLayoutHandler = (val) => {
+    props.changeLayoutSetting(val);
   };
 
   const drawingHandler = () => {
@@ -26,22 +32,33 @@ const SiderMenu = (props) => {
       props.changeIsUserReDrawSetting(true);
     }
   };
-  const filterEdgesHandler = () => {
-    if (!graph_isUserFilterEdges) {
-      props.changeIsUserFilterEdgesSetting({
-        status: true,
-        cutoff: edgeCutoff,
-      });
+
+  const edgeCutoffHandler = (val) => {
+    if (val > 0) {
+      props.changeEdgeFilterCutoffSetting(val);
     }
   };
-  const changeMethodHandler = (val) => {
-    props.changeMethodSetting(val);
+
+  const filterEdgesHandler = () => {
+    if (!graph_isUserFilterEdges) {
+      props.changeIsUserFilterEdgesSetting(true);
+    }
   };
-  const changeLayoutHandler = (val) => {
-    props.changeLayoutSetting(val);
+
+  const changeClusterMethodHandler = (val) => {
+    props.changeClusterMethodSetting(val);
   };
+
+  const clusteringHandler = () => {
+    if (!graph_isUserClustering) {
+      props.changeIsUserClusteringSetting(true);
+    }
+  };
+
   const changeExportFormatHandler = (val) => {
-    props.changeExportFormatSetting(val);
+    if (!graph_isUserDownloading) {
+      props.changeExportFormatSetting(val);
+    }
   };
   //input list data
 
@@ -56,8 +73,8 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             onChange={changeMethodHandler}
           >
+            <Option value="mcg">MCG</Option>
             <Option value="cathai">CATHAI</Option>
-            <Option value="slv">SLV graph</Option>
           </Select>
         </Col>
         <Col span={24}>
@@ -76,7 +93,14 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
-          <h5>Node settings</h5>
+          <h5>Create graph</h5>
+          <Button
+            danger={true}
+            disabled={props.sequence ? false : true}
+            onClick={drawingHandler}
+          >
+            Draw graph
+          </Button>
         </Col>
 
         <Col span={24}>
@@ -85,7 +109,7 @@ const SiderMenu = (props) => {
           <InputNumber
             min={0}
             step={0.1}
-            value={edgeCutoff}
+            value={graph_edgeFilterCutoff}
             onChange={edgeCutoffHandler}
             style={{ marginBottom: "5px" }}
           />
@@ -97,26 +121,21 @@ const SiderMenu = (props) => {
           </Button>
         </Col>
 
-        <Col span={18}>
-          <h5>Create graph</h5>
-          <Button
-            disabled={props.sequence ? false : true}
-            onClick={drawingHandler}
+        <Col span={24}>
+          <p>Clustering method</p>
+          <Select
+            value={graph_clusterMethod}
+            style={{ width: "100%" }}
+            onChange={changeClusterMethodHandler}
           >
-            Draw graph
-          </Button>
+            <Option value="optimal">Optimal</Option>
+            <Option value="walktrap">Walktrap</Option>
+            <Option value="djikra">Djikra</Option>
+          </Select>
         </Col>
-        <Col
-          span={6}
-          style={{ display: graph_isUserReDraw ? "block" : "none" }}
-        >
-          <h6>.</h6>
-          <LoadingOutlined
-            style={{
-              fontSize: 18,
-            }}
-            spin
-          />
+
+        <Col span={24}>
+          <Button onClick={clusteringHandler}>Find clusters</Button>
         </Col>
 
         <Col span={24}>
@@ -141,3 +160,22 @@ const SiderMenu = (props) => {
 };
 
 export default SiderMenu;
+
+/*
+<Col span={24}>
+          <h5>Node settings</h5>
+        </Col>
+
+        <Col
+          span={6}
+          style={{ display: graph_isUserReDraw ? "block" : "none" }}
+        >
+          <h6>.</h6>
+          <LoadingOutlined
+            style={{
+              fontSize: 18,
+            }}
+            spin
+          />
+        </Col>
+*/

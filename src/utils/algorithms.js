@@ -19,47 +19,44 @@ OUTPUT
 - A list of edge list object (edges that equal to the minimum value only) 
 - OR NUll
 */
-export function createMEG(seq) {
-  //Always assume seq is true, correct, and appropriate input
+
+export function createMCG(seq) {
+  //Always assume seq is true, correct, and appropriate input (more than 2)
   //Construct the matrix, find the minimum edges and save it the list of objects
   let snpDist_df = [];
-  let minDistances = [];
+  let taxaIDs = [];
   let disMat = new Map();
   for (let i = 0; i < seq.length; i++) {
+    taxaIDs.push(seq[i].id);
     if (i !== seq.length - 1) {
+      //console.log(i, "===");
       const var1 = seq[i];
       const matrixCells = [];
-      let minTracker = { id: var1.id, dist: null };
       for (let j = i + 1; j < seq.length; j++) {
         const var2 = seq[j];
         let snpDist = hammingDistance(var1.sequence, var2.sequence);
         snpDist_df.push({ var1: var1.id, var2: var2.id, dist: snpDist });
         matrixCells.push({ col: var2.id, val: snpDist });
-        if (minTracker.dist === null) {
-          minTracker.dist = snpDist;
-        } else {
-          if (snpDist < minTracker.dist) {
-            minTracker.dist = snpDist;
-          }
-        }
       }
       disMat.set(var1.id, matrixCells);
-      minDistances.push(minTracker);
     } else {
       const var1 = seq[i];
       const matrixCells = [];
       disMat.set(var1.id, matrixCells);
     }
   }
-  //Filter the matrix
+  //Filter minimum
   let final_snpDist = [];
-  minDistances.forEach((d) => {
-    let minDist = snpDist_df
+  taxaIDs.forEach((taxa) => {
+    let taxa_df = snpDist_df.filter((t) => {
+      return t.var1 == taxa || t.var2 == taxa;
+    });
+
+    let taxa_min = Math.min(...taxa_df.map((d) => d.dist)); //spread operator to extract elem from array
+
+    let taxa_df_min = taxa_df
       .filter((e) => {
-        return e.var1 === d.id || e.var2 === d.id;
-      })
-      .filter((f) => {
-        return f.dist === d.dist;
+        return e.dist == taxa_min;
       })
       .filter(function (g) {
         let duplicatedG = final_snpDist.find(function (h) {
@@ -71,9 +68,29 @@ export function createMEG(seq) {
         // it was just a duplicated pairwise distance,
         // so h.var1 === g.var1 && h.var2 === g.var2 will works
       });
-    //merge
-    final_snpDist = final_snpDist.concat(minDist);
+    final_snpDist = final_snpDist.concat(taxa_df_min);
   });
+  // minDistances.forEach((d) => {
+  //   let minDist = snpDist_df
+  //     .filter((e) => {
+  //       return e.var1 === d.id || e.var2 === d.id;
+  //     })
+  //     .filter((f) => {
+  //       return f.dist === d.dist;
+  //     })
+  //     .filter(function (g) {
+  //       let duplicatedG = final_snpDist.find(function (h) {
+  //         return h.var1 === g.var1 && h.var2 === g.var2;
+  //       });
+  //       return !duplicatedG ? true : false;
+  //       // if duplicatedG not found (undefined) (keep g), if inverseG exist (discard g )
+  //       // not actually an inverse, since we created asymetric matrix, it
+  //       // it was just a duplicated pairwise distance,
+  //       // so h.var1 === g.var1 && h.var2 === g.var2 will works
+  //     });
+  //   //merge
+  //   final_snpDist = final_snpDist.concat(minDist);
+  // });
 
   return final_snpDist.length > 0
     ? { snpDistMat: disMat, snpDistDF: final_snpDist }
@@ -108,3 +125,30 @@ export function createMEG(seq) {
 // }
 
 //========================================== SEQTRACK ================================================
+
+export function createCATHAI(seq) {
+  //Always assume seq is true, correct, and appropriate input (more than 2)
+  //Construct the matrix
+  let snpDist_df = [];
+  let disMat = new Map();
+  for (let i = 0; i < seq.length; i++) {
+    if (i !== seq.length - 1) {
+      const var1 = seq[i];
+      const matrixCells = [];
+      for (let j = i + 1; j < seq.length; j++) {
+        const var2 = seq[j];
+        let snpDist = hammingDistance(var1.sequence, var2.sequence);
+        snpDist_df.push({ var1: var1.id, var2: var2.id, dist: snpDist });
+        matrixCells.push({ col: var2.id, val: snpDist });
+      }
+      disMat.set(var1.id, matrixCells);
+    } else {
+      const var1 = seq[i];
+      const matrixCells = [];
+      disMat.set(var1.id, matrixCells);
+    }
+  }
+  return snpDist_df.length > 0
+    ? { snpDistMat: disMat, snpDistDF: snpDist_df }
+    : null;
+}

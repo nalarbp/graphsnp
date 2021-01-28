@@ -6,6 +6,7 @@ import collectionDatesReducer from "./collectionDatesReducer";
 import exposurePeriodReducer from "./exposurePeriodReducer";
 import isInputLoadingReducer from "./isInputLoadingReducer";
 import graphMatrixReducer from "./graphMatrixReducer";
+import prevGraphReducer from "./prevGraphReducer";
 
 export const initialState = {
   sequence: null,
@@ -16,11 +17,15 @@ export const initialState = {
     type: null,
     data: null,
   },
+  prevGraph: null,
   graphSettings: {
-    isUserFilterEdges: { status: false, cutoff: 0 },
-    isUserReDraw: false,
-    method: "slv",
+    method: "mcg",
     layout: "cose",
+    isUserReDraw: false,
+    isUserFilteringEdge: false,
+    edgeFilterCutoff: 0.1,
+    clusterMethod: "optimal",
+    isUserClustering: false,
     exportFormat: "dot",
     isUserDownloading: false,
   },
@@ -36,9 +41,11 @@ const rootReducer = combineReducers(
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
     graphMatrix: graphMatrixReducer,
+    prevGraph: prevGraphReducer,
     isInputLoading: isInputLoadingReducer,
   },
   initialState
 );
 
 export default rootReducer;
+//isUserFilterEdges: { status: false, cutoff: 0 },
