@@ -5,27 +5,27 @@ import graphSettingsReducer from "./graphSettingsReducer";
 import collectionDatesReducer from "./collectionDatesReducer";
 import exposurePeriodReducer from "./exposurePeriodReducer";
 import isInputLoadingReducer from "./isInputLoadingReducer";
-import graphMatrixReducer from "./graphMatrixReducer";
-import prevGraphReducer from "./prevGraphReducer";
+import graphObjectReducer from "./graphObjectReducer";
+import graphClustersReducer from "./graphClustersReducer";
+import hammMatrixReducer from "./hammMatrixReducer";
 
 export const initialState = {
   sequence: null,
   collectionDates: null,
   exposurePeriod: null,
   isInputLoading: false,
-  graphMatrix: {
-    type: null,
-    data: null,
-  },
-  prevGraph: null,
+  hammMatrix: null,
+  graphObject: null,
+  graphClusters: null,
   graphSettings: {
     method: "mcg",
     layout: "cose",
     isUserReDraw: false,
     isUserFilteringEdge: false,
-    edgeFilterCutoff: 0.1,
-    clusterMethod: "optimal",
+    edgeFilterCutoff: 25,
+    clusterMethod: "Connected Components",
     isUserClustering: false,
+    colorNodedBy: "na",
     exportFormat: "dot",
     isUserDownloading: false,
   },
@@ -40,8 +40,9 @@ const rootReducer = combineReducers(
     exposurePeriod: exposurePeriodReducer,
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
-    graphMatrix: graphMatrixReducer,
-    prevGraph: prevGraphReducer,
+    hammMatrix: hammMatrixReducer,
+    graphObject: graphObjectReducer,
+    graphClusters: graphClustersReducer,
     isInputLoading: isInputLoadingReducer,
   },
   initialState

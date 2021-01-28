@@ -1,18 +1,18 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const graphMatrixReducer = (prevState, action) => {
+const graphObjectReducer = (prevState, action) => {
   switch (action.type) {
-    case constant.MATRIX_DATA:
+    case constant.GRAPH_OBJECT:
       return action.payload;
 
     default:
       if (prevState) {
         return prevState;
       } else {
-        return initialState.graphMatrix;
+        return initialState.graphObject;
       }
   }
 };
 
-export default graphMatrixReducer;
+export default graphObjectReducer;

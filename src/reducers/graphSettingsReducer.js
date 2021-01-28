@@ -52,6 +52,13 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_isUseClustering;
 
+    case constant.SETTING_COLOR_NODE_BY:
+      let newState_colorNode = Object.assign({}, prevState);
+      if (action.payload && action.payload !== prevState.colorNodedBy) {
+        newState_colorNode.colorNodedBy = action.payload;
+      }
+      return newState_colorNode;
+
     case constant.SETTING_EXPORT_FORMAT:
       let newState_exportFormat = Object.assign({}, prevState);
       if (action.payload && action.payload !== prevState.exportFormat) {

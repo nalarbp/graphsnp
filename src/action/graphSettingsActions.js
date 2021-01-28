@@ -49,6 +49,13 @@ export function changeIsUserClusteringSetting(val) {
   };
 }
 
+export function changeColorNodeSetting(val) {
+  return {
+    type: constant.SETTING_COLOR_NODE_BY,
+    payload: val,
+  };
+}
+
 export function changeExportFormatSetting(val) {
   return {
     type: constant.SETTING_EXPORT_FORMAT,

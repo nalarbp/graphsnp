@@ -76,7 +76,7 @@ const InputLoader = (props) => {
           props.sequenceToStore(snpsSequence);
           //props.isinputLoadingToStore(false);
           //display success message
-          message.success("The sequences have been loaded", 0.5);
+          message.success("The sequences have been loaded", 2);
         }
       } else {
         alert("Error: Required at least 2 sequences");

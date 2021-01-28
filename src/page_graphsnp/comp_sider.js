@@ -1,5 +1,18 @@
 import React from "react";
 import { Button, Row, Col, Select, InputNumber } from "antd";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import {
+  changeMethodSetting,
+  changeLayoutSetting,
+  changeIsUserReDrawSetting,
+  changeEdgeFilterCutoffSetting,
+  changeClusterMethodSetting,
+  changeIsUserClusteringSetting,
+  changeExportFormatSetting,
+  changeIsUserDownloadingSetting,
+  changeColorNodeSetting,
+} from "../action/graphSettingsActions";
 
 const { Option } = Select;
 
@@ -7,14 +20,13 @@ const SiderMenu = (props) => {
   //STATES
 
   //SETTINGS
-
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
   const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
-  const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
   const graph_clusterMethod = props.graphSettings.clusterMethod;
   const graph_isUserClustering = props.graphSettings.isUserClustering;
+  const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
   const graph_isUserDownloading = props.graphSettings.isUserDownloading;
 
@@ -39,12 +51,6 @@ const SiderMenu = (props) => {
     }
   };
 
-  const filterEdgesHandler = () => {
-    if (!graph_isUserFilterEdges) {
-      props.changeIsUserFilterEdgesSetting(true);
-    }
-  };
-
   const changeClusterMethodHandler = (val) => {
     props.changeClusterMethodSetting(val);
   };
@@ -53,6 +59,10 @@ const SiderMenu = (props) => {
     if (!graph_isUserClustering) {
       props.changeIsUserClusteringSetting(true);
     }
+  };
+
+  const changeColorNodeHandler = (val) => {
+    props.changeColorNodeSetting(val);
   };
 
   const changeExportFormatHandler = (val) => {
@@ -93,6 +103,18 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
+          <h5>Edge settings</h5>
+          <p>Edge cutoff</p>
+          <InputNumber
+            min={0}
+            step={0.1}
+            value={graph_edgeFilterCutoff}
+            onChange={edgeCutoffHandler}
+            style={{ marginBottom: "5px" }}
+          />
+        </Col>
+
+        <Col span={24}>
           <h5>Create graph</h5>
           <Button
             danger={true}
@@ -104,38 +126,42 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
-          <h5>Edge settings</h5>
-          <p>Edge cutoff</p>
-          <InputNumber
-            min={0}
-            step={0.1}
-            value={graph_edgeFilterCutoff}
-            onChange={edgeCutoffHandler}
-            style={{ marginBottom: "5px" }}
-          />
-          <Button
-            disabled={props.sequence ? false : true}
-            onClick={filterEdgesHandler}
-          >
-            Filter edges
-          </Button>
-        </Col>
-
-        <Col span={24}>
           <p>Clustering method</p>
           <Select
             value={graph_clusterMethod}
             style={{ width: "100%" }}
             onChange={changeClusterMethodHandler}
           >
-            <Option value="optimal">Optimal</Option>
+            <Option value="Connected Components">Connected Components</Option>
             <Option value="walktrap">Walktrap</Option>
             <Option value="djikra">Djikra</Option>
           </Select>
         </Col>
 
         <Col span={24}>
-          <Button onClick={clusteringHandler}>Find clusters</Button>
+          <Button
+            disabled={props.graphObject ? false : true}
+            onClick={clusteringHandler}
+          >
+            Find clusters
+          </Button>
+        </Col>
+
+        <Col span={24}>
+          <h5>Color nodes by</h5>
+          <Select
+            value={graph_colorNodeBy}
+            style={{ width: "100%" }}
+            onChange={changeColorNodeHandler}
+          >
+            <Option value="na">None</Option>
+            <Option
+              disabled={props.graphClusters ? false : true}
+              value="clusters"
+            >
+              Clusters
+            </Option>
+          </Select>
         </Col>
 
         <Col span={24}>
@@ -159,23 +185,36 @@ const SiderMenu = (props) => {
   );
 };
 
-export default SiderMenu;
+function mapStateToProps(state) {
+  return {
+    collectionDates: state.collectionDates,
+    exposurePeriod: state.exposurePeriod,
+    sequence: state.sequence,
+    graphSettings: state.graphSettings,
+    graphObject: state.graphObject,
+    graphClusters: state.graphClusters,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      changeMethodSetting,
+      changeLayoutSetting,
+      changeIsUserReDrawSetting,
+      changeEdgeFilterCutoffSetting,
+      changeClusterMethodSetting,
+      changeIsUserClusteringSetting,
+      changeColorNodeSetting,
+      changeExportFormatSetting,
+      changeIsUserDownloadingSetting,
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SiderMenu);
 
 /*
-<Col span={24}>
-          <h5>Node settings</h5>
-        </Col>
 
-        <Col
-          span={6}
-          style={{ display: graph_isUserReDraw ? "block" : "none" }}
-        >
-          <h6>.</h6>
-          <LoadingOutlined
-            style={{
-              fontSize: 18,
-            }}
-            spin
-          />
-        </Col>
 */
