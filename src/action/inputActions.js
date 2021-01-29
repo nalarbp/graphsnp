@@ -7,14 +7,14 @@ export function sequenceToStore(val) {
   };
 }
 
-export function colDatesToStore(val) {
+export function metadataToStore(val) {
   return {
     type: constant.COLDATE_DATA,
     payload: val,
   };
 }
 
-export function exposurePeriodToStore(val) {
+export function phyloTimeTreeToStore(val) {
   return {
     type: constant.EXPERIOD_DATA,
     payload: val,

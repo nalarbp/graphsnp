@@ -1,18 +1,18 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const collectionDatesReducer = (prevState, action) => {
+const colorLUTReducer = (prevState, action) => {
   switch (action.type) {
-    case constant.COLDATE_DATA:
+    case constant.COLOR_LUT:
       return action.payload;
 
     default:
       if (prevState) {
         return prevState;
       } else {
-        return initialState.collectionDates;
+        return initialState.colorLUT;
       }
   }
 };
 
-export default collectionDatesReducer;
+export default colorLUTReducer;

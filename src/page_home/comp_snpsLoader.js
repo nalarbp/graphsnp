@@ -5,8 +5,8 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
   sequenceToStore,
-  colDatesToStore,
-  exposurePeriodToStore,
+  metadataToStore,
+  phyloTimeTreeToStore,
   isinputLoadingToStore,
 } from "../action/inputActions";
 
@@ -76,7 +76,7 @@ const InputLoader = (props) => {
           props.sequenceToStore(snpsSequence);
           //props.isinputLoadingToStore(false);
           //display success message
-          message.success("The sequences have been loaded", 2);
+          message.success("The sequences have been loaded", 1);
         }
       } else {
         alert("Error: Required at least 2 sequences");
@@ -104,8 +104,6 @@ const InputLoader = (props) => {
             props.isinputLoadingToStore(false);
           };
           break;
-        case "colDate":
-          break;
 
         default:
           message.error("Invalid input file", 0.5);
@@ -115,24 +113,12 @@ const InputLoader = (props) => {
     return false; //to avoid upload action (we parse and load it to store instead)
   };
 
-  const inputList = ["SNPs sequence", "Collection dates", "Exposure period"];
+  const inputList = ["SNPs sequence"];
   const getInputStatus = function (item) {
     //console.log("getInputStatus");
     switch (item) {
       case "SNPs sequence":
         if (props.sequence) {
-          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
-        } else {
-          return <StopOutlined />;
-        }
-      case "Collection dates":
-        if (props.sequence && props.collectionDates) {
-          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
-        } else {
-          return <StopOutlined />;
-        }
-      case "Exposure period":
-        if (props.sequence && props.exposurePeriod) {
           return <CheckCircleTwoTone twoToneColor="#52c41a" />;
         } else {
           return <StopOutlined />;
@@ -145,7 +131,7 @@ const InputLoader = (props) => {
   return (
     <React.Fragment>
       <Dragger
-        accept={".fa, .fasta, .fna, .mfa, .csv"}
+        accept={".fa, .fasta, .fna, .mfa"}
         showUploadList={false}
         style={{
           height: "500px",
@@ -156,14 +142,14 @@ const InputLoader = (props) => {
         action="dummy-post"
         beforeUpload={beforeUploadHandler}
       >
-        <div id="input-loader">
-          <Button id="input-loader-button" shape={"round"} size={"large"}>
-            Drag and drop your input file(s) here
+        <div id="input-loader-snps">
+          <Button id="input-loader-button-snps" shape={"round"} size={"large"}>
+            Input SNPs (fasta)
           </Button>
         </div>
         <div id="input-status">
           <List
-            grid={{ gutter: 4, column: 3 }}
+            grid={{ gutter: 0, column: 1 }}
             size="small"
             style={{ fontSize: "10px", lineHeight: "10px" }}
             dataSource={inputList}
@@ -182,16 +168,13 @@ const InputLoader = (props) => {
 function mapStateToProps(state) {
   return {
     sequence: state.sequence,
-    collectionDates: state.collectionDates,
-    exposurePeriod: state.exposurePeriod,
+    phyloTimeTree: state.phyloTimeTree,
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       sequenceToStore,
-      colDatesToStore,
-      exposurePeriodToStore,
       isinputLoadingToStore,
     },
     dispatch

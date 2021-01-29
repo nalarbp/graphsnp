@@ -2,17 +2,18 @@ import { combineReducers } from "redux";
 import sequenceReducer from "./sequenceReducer";
 import navSettingsReducer from "./navSettingsReducer";
 import graphSettingsReducer from "./graphSettingsReducer";
-import collectionDatesReducer from "./collectionDatesReducer";
-import exposurePeriodReducer from "./exposurePeriodReducer";
+import metadataReducer from "./metadataReducer";
+import phyloTimeTreeReducer from "./phyloTimeTreeReducer";
 import isInputLoadingReducer from "./isInputLoadingReducer";
 import graphObjectReducer from "./graphObjectReducer";
 import graphClustersReducer from "./graphClustersReducer";
 import hammMatrixReducer from "./hammMatrixReducer";
+import colorLUTReducer from "./colorLUTReducer";
 
 export const initialState = {
   sequence: null,
-  collectionDates: null,
-  exposurePeriod: null,
+  metadata: null,
+  phyloTimeTree: null,
   isInputLoading: false,
   hammMatrix: null,
   graphObject: null,
@@ -32,18 +33,20 @@ export const initialState = {
   navSettings: {
     navLocation: null,
   },
+  colorLUT: null,
 };
 const rootReducer = combineReducers(
   {
     sequence: sequenceReducer,
-    collectionDates: collectionDatesReducer,
-    exposurePeriod: exposurePeriodReducer,
+    metadata: metadataReducer,
+    phyloTimeTree: phyloTimeTreeReducer,
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
     hammMatrix: hammMatrixReducer,
     graphObject: graphObjectReducer,
     graphClusters: graphClustersReducer,
     isInputLoading: isInputLoadingReducer,
+    colorLUT: colorLUTReducer,
   },
   initialState
 );

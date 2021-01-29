@@ -1,7 +1,4 @@
 //========================================== Find connected component ================================================
-import * as d3Chroma from "d3-scale-chromatic";
-import { colorOrdinalInterpolator } from "../utils/utils";
-
 export function findConnectedComponents(graphObject) {
   let adjlist = createAdjacencyList(graphObject.edges);
   let groups = [];
@@ -13,14 +10,6 @@ export function findConnectedComponents(graphObject) {
       groups.push(breadthFirstSearch(v, adjlist, visited));
     }
   }
-  // Coloring
-  let clusters = groups.map((d, i) => {
-    return i + 1;
-  });
-  let color_byClusters = colorOrdinalInterpolator(
-    clusters,
-    d3Chroma.interpolateViridis
-  );
 
   let clusterResult = [];
   groups.forEach((g, i) => {
@@ -29,7 +18,6 @@ export function findConnectedComponents(graphObject) {
         clusterResult.push({
           sample: s,
           clusterID: i + 1,
-          color: color_byClusters(i + 1),
         });
       });
     }

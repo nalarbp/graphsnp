@@ -1,4 +1,5 @@
 import { scaleOrdinal, scaleSequential } from "d3-scale";
+import * as d3Chroma from "d3-scale-chromatic";
 
 export function filterUnique(value, index, self) {
   return self.indexOf(value) === index;
@@ -17,4 +18,37 @@ export function colorOrdinalInterpolator(domainList, d3ChromaInterpolator) {
   }
   var colorScale = scaleOrdinal().domain(domainList).range(colorList);
   return colorScale;
+}
+
+export function createColorLUT(sampleJSON, colorIndex) {
+  //input list of sample object [{sample:MS2, vanType: vanA}, ... ], colorIndex e.g vanType
+  //output a Map of sample return color
+  let colorLUT = null;
+  if (Array.isArray(sampleJSON) && sampleJSON.length > 0) {
+    let groups = sampleJSON
+      .map((d) => {
+        return d[colorIndex];
+      })
+      .filter(filterUnique);
+    let colorInterpolator = colorOrdinalInterpolator(
+      groups,
+      d3Chroma.interpolateViridis
+    );
+    let colorMap = new Map();
+    sampleJSON.forEach((d) => {
+      colorMap.set(d.sample, colorInterpolator(d[colorIndex]));
+    });
+    //console.log(colorMap);
+    colorLUT = colorMap;
+  }
+  return colorLUT;
+}
+
+export function getColorByColorIndex(query, colIndex, colLUT) {
+  let col = "lightgray";
+  if (colIndex !== "na") {
+    let lut = colLUT[colIndex];
+    col = lut.get(query) ? lut.get(query) : "lightgray";
+  }
+  return col;
 }

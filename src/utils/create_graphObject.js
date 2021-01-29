@@ -12,6 +12,7 @@ export function createGraphObject(
     case "mcg":
       let mcg_graph = createMCG(hammingMatrix, edgeCutoff);
       graphObject.oriMatrix = hammingMatrix;
+      graphObject.nodeType = "singleton"; //singleton or compound
       graphObject.nodes = mcg_graph.nodes;
       graphObject.edges = mcg_graph.edges;
       break;

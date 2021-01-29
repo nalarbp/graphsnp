@@ -16,6 +16,9 @@ export const SEQ_DATA = "SEQ_DATA";
 export const COLDATE_DATA = "COLDATE_DATA";
 //Exposure period
 export const EXPERIOD_DATA = "EXPERIOD_DATA";
+//Color LUT
+export const COLOR_LUT = "COLOR_LUT";
+
 //Graph Settings
 export const SETTING_METHOD = "SETTING_METHOD";
 export const SETTING_LAYOUT = "SETTING_LAYOUT";

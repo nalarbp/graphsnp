@@ -1,18 +1,18 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const exposurePeriodReducer = (prevState, action) => {
+const metadataReducer = (prevState, action) => {
   switch (action.type) {
-    case constant.EXPERIOD_DATA:
+    case constant.COLDATE_DATA:
       return action.payload;
 
     default:
       if (prevState) {
         return prevState;
       } else {
-        return initialState.exposurePeriod;
+        return initialState.metadata;
       }
   }
 };
 
-export default exposurePeriodReducer;
+export default metadataReducer;

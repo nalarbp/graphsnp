@@ -72,6 +72,14 @@ const SiderMenu = (props) => {
   };
   //input list data
 
+  const getColorOption = function (header, i) {
+    return (
+      <Option key={i} disabled={false} value={header}>
+        {header}
+      </Option>
+    );
+  };
+
   return (
     <React.Fragment>
       <Row gutter={[8, 8]}>
@@ -154,13 +162,14 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             onChange={changeColorNodeHandler}
           >
-            <Option value="na">None</Option>
-            <Option
-              disabled={props.graphClusters ? false : true}
-              value="clusters"
-            >
-              Clusters
-            </Option>
+            {" "}
+            {props.colorLUT && Object.keys(props.colorLUT)
+              ? Object.keys(props.colorLUT).map((k, i) => {
+                  return getColorOption(k, i);
+                })
+              : ["na"].map((l, j) => {
+                  return getColorOption(l, j);
+                })}
           </Select>
         </Col>
 
@@ -187,12 +196,13 @@ const SiderMenu = (props) => {
 
 function mapStateToProps(state) {
   return {
-    collectionDates: state.collectionDates,
-    exposurePeriod: state.exposurePeriod,
+    metadata: state.metadata,
+    phyloTimeTree: state.phyloTimeTree,
     sequence: state.sequence,
     graphSettings: state.graphSettings,
     graphObject: state.graphObject,
     graphClusters: state.graphClusters,
+    colorLUT: state.colorLUT,
   };
 }
 

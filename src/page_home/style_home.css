@@ -9,13 +9,47 @@
   background-color: white;
 }
 
-#input-loader {
+#input-loader-snps {
   background: url("../img/bg_content_header.png") no-repeat fixed center,
-    linear-gradient(122deg, rgb(238, 173, 76) 15%, rgb(226, 88, 69) 100%);
-  height: calc(100vh - 290px);
+    linear-gradient(90deg, rgb(226, 88, 69) 15%, rgb(238, 173, 76) 100%);
+  height: calc(100vh - 330px);
 }
 
-#input-loader-button {
+#input-loader-metadata {
+  background: url("../img/bg_content_header.png") no-repeat fixed center,
+    linear-gradient(90deg, rgb(238, 173, 76) 100%, rgb(238, 173, 76) 100%);
+  height: calc(100vh - 330px);
+}
+
+#input-loader-phyloTimeTree {
+  background: url("../img/bg_content_header.png") no-repeat fixed center,
+    linear-gradient(90deg, rgb(238, 173, 76) 10%, rgb(226, 88, 69) 100%);
+  height: calc(100vh - 330px);
+}
+
+#input-loader-button-snps {
+  color: white;
+  background-color: #fd8d31;
+  border: 1px solid white;
+  margin-top: calc((100vh - 260px) / 2);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0 2em;
+}
+
+#input-loader-button-metadata {
+  color: white;
+  background-color: #fd8d31;
+  border: 1px solid white;
+  margin-top: calc((100vh - 260px) / 2);
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  padding: 0 2em;
+}
+
+#input-loader-button-phyloTimeTree {
   color: white;
   background-color: #fd8d31;
   border: 1px solid white;

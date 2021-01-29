@@ -7,6 +7,15 @@
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { colorLUTtoStore } from "../action/colorActions";
+import { Col, Empty, message } from "antd";
+import { createGraphObject } from "../utils/create_graphObject";
+import { createCytoscapeData } from "../utils/create_cyData";
+import { findClusters } from "../utils//find_clusters";
+import cytoscape from "cytoscape";
+import { LoadingOutlined } from "@ant-design/icons";
+import { createColorLUT, getColorByColorIndex } from "../utils/utils";
+import HammingMatrix from "../model/hammingMatrix_prop";
 import {
   hmmMatrixToStore,
   graphObjectToStore,
@@ -16,13 +25,8 @@ import {
   changeIsUserReDrawSetting,
   changeIsUserClusteringSetting,
 } from "../action/graphSettingsActions";
-import { Col, Empty, message } from "antd";
-import { createGraphObject } from "../utils/create_graphObject";
-import { createCytoscapeData } from "../utils/create_cyData";
-import { findClusters } from "../utils//find_clusters";
-import cytoscape from "cytoscape";
-import { LoadingOutlined } from "@ant-design/icons";
-import HammingMatrix from "../model/hammingMatrix_prop";
+
+const _ = require("lodash");
 
 const GraphContainer = (props) => {
   //state
@@ -67,6 +71,20 @@ const GraphContainer = (props) => {
           `Found ${clusters.group.length} clusters in the graph`,
           2
         );
+        //update colorLUT by new clusters color
+        let colorLUT_byCluster = createColorLUT(clusters.members, "clusterID");
+        let newColorLUT = _.cloneDeep(props.colorLUT);
+        if (newColorLUT) {
+          let updated_newColorLUT = {
+            ...newColorLUT,
+            clusterID: colorLUT_byCluster,
+          };
+          newColorLUT = updated_newColorLUT;
+        } else {
+          newColorLUT = { clusterID: colorLUT_byCluster };
+        }
+        props.colorLUTtoStore(newColorLUT);
+
         props.graphClusterToStore(clusters);
         props.changeIsUserClusteringSetting(false);
       }, 100);
@@ -83,23 +101,28 @@ const GraphContainer = (props) => {
   }, [graph_layout]);
 
   useEffect(() => {
-    if (graph_colorNodeBy && cytoscapeRef.current) {
+    if (graph_colorNodeBy && props.colorLUT && cytoscapeRef.current) {
       let cy = cytoscapeRef.current;
-      // cy.style()
-      //   .selector("node")
-      //   .style({
-      //     "background-color": function(d) {
-      //       let isolate_name = d.data("label");
-
-      //       let col = getColorScaleByObject(obj, props.colorScale);
-      //       return col;
-      //     },
-      //   })
-      //   .update();
+      //console.log(graph_colorNodeBy, props.colorLUT);
+      cy.style()
+        .selector("node")
+        .style({
+          "background-color": function (d) {
+            let isolate_name = d.data("id");
+            let col = getColorByColorIndex(
+              isolate_name,
+              graph_colorNodeBy,
+              props.colorLUT
+            );
+            //console.log(props.colorLUT[graph_colorNodeBy]);
+            return col;
+          },
+        })
+        .update();
 
       cytoscapeRef.current = cy;
     }
-  }, [graph_colorNodeBy]);
+  }, [graph_colorNodeBy, props.colorLUT]);
 
   //DRAW
   function draw() {
@@ -113,8 +136,8 @@ const GraphContainer = (props) => {
       hammingMatrix,
       graph_method,
       graph_edgeFilterCutoff,
-      props.collectionDates,
-      props.exposurePeriod
+      props.metadata,
+      props.phyloTimeTree
     );
 
     //generate cytoscape data
@@ -136,6 +159,7 @@ const GraphContainer = (props) => {
               "border-width": 3,
               "border-style": "solid",
               "border-color": "black",
+              "background-color": "lightgray",
             },
           },
           {
@@ -212,12 +236,13 @@ const GraphContainer = (props) => {
 
 function mapStateToProps(state) {
   return {
-    collectionDates: state.collectionDates,
-    exposurePeriod: state.exposurePeriod,
+    metadata: state.metadata,
+    phyloTimeTree: state.phyloTimeTree,
     sequence: state.sequence,
     graphObject: state.graphObject,
     hammMatrix: state.hammMatrix,
     graphSettings: state.graphSettings,
+    colorLUT: state.colorLUT,
   };
 }
 
@@ -229,6 +254,7 @@ function mapDispatchToProps(dispatch) {
       hmmMatrixToStore,
       graphObjectToStore,
       graphClusterToStore,
+      colorLUTtoStore,
     },
     dispatch
   );

@@ -3,12 +3,14 @@ export function createCytoscapeData(graphObject) {
   //let data = [{ data: { id: id, label: name } },
   //            { data: {source: s, target: t, weight: w} }  ]
   let cytoscapeData = [];
+  let nodeType = graphObject.nodeType;
   let nodes = graphObject.nodes;
   let edges = graphObject.edges;
 
   //adding nodes data
   nodes.forEach((d) => {
-    cytoscapeData.push({ data: { id: d } });
+    let node_data = nodeType === "singleton" ? [] : d.data;
+    cytoscapeData.push({ data: { id: d, type: nodeType, data: node_data } });
   });
 
   //adding edges data
