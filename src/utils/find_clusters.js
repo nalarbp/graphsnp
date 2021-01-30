@@ -1,4 +1,5 @@
 import { findConnectedComponents } from "../algorithm/cluster_fcc";
+import { findLouvain } from "../algorithm/cluster_louvain";
 
 export function findClusters(graphObject, clusterMethod) {
   let clusteringResult = null;
@@ -6,7 +7,8 @@ export function findClusters(graphObject, clusterMethod) {
     case "Connected Components":
       clusteringResult = findConnectedComponents(graphObject);
       break;
-    case "cathai":
+    case "Louvain":
+      clusteringResult = findLouvain(graphObject);
       break;
 
     default:

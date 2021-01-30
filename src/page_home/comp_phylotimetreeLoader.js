@@ -1,5 +1,5 @@
 import React from "react";
-import { Upload, Button, message, List } from "antd";
+import { Upload, Button, message } from "antd";
 import { StopOutlined, CheckCircleTwoTone } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -108,19 +108,11 @@ const PhyloTimeTreeInputLoader = (props) => {
     return false; //to avoid upload action (we parse and load it to store instead)
   };
 
-  const inputList = ["Phylogenetic time tree"];
-  const getInputStatus = function (item) {
-    //console.log("getInputStatus");
-    switch (item) {
-      case "Phylogenetic time tree":
-        if (props.sequence && props.metadata) {
-          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
-        } else {
-          return <StopOutlined />;
-        }
-
-      default:
-        break;
+  const getIconStatus = function () {
+    if (props.sequence) {
+      return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+    } else {
+      return <StopOutlined />;
     }
   };
 
@@ -144,21 +136,8 @@ const PhyloTimeTreeInputLoader = (props) => {
             shape={"round"}
             size={"large"}
           >
-            Input Time Tree (tree)
+            {getIconStatus()} Time Tree
           </Button>
-        </div>
-        <div id="input-status">
-          <List
-            grid={{ gutter: 4, column: 1 }}
-            size="small"
-            style={{ fontSize: "10px", lineHeight: "10px" }}
-            dataSource={inputList}
-            renderItem={(item) => (
-              <List.Item style={{ backgroundColor: "white", margin: "0px" }}>
-                {getInputStatus(item)} {item}
-              </List.Item>
-            )}
-          />
         </div>
       </Dragger>
     </React.Fragment>

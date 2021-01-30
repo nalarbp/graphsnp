@@ -128,10 +128,11 @@ const GraphContainer = (props) => {
   function draw() {
     //check hamming distance ? if not create one, send to store at the end.
     const hammingMatrix = !props.hammMatrix
-      ? new HammingMatrix(props.sequence).getUpperMatrix()
+      ? new HammingMatrix(props.sequence).getHammingMatrix()
       : props.hammMatrix;
 
-    //Look at param (method, seq, ), generate graph object
+    //Look at param (method, seq, ), generate graph object: util functions
+    //graphObject: {type:'mcg', mapData: edgeList object}
     const graphObject = createGraphObject(
       hammingMatrix,
       graph_method,
@@ -141,6 +142,7 @@ const GraphContainer = (props) => {
     );
 
     //generate cytoscape data
+    //graphObject = [{data:{id:id, nodeType:'singleton', data:[]}}, { data: {source: s, target: t, weight: w} } ]
     const cytoscapeData = createCytoscapeData(graphObject);
 
     //Load and view cytoscape

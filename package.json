@@ -18,6 +18,7 @@
     "d3-time-format": "^3.0.0",
     "hamming": "0.0.2",
     "lodash": "^4.17.20",
+    "louvain": "^1.2.0",
     "moment": "^2.29.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

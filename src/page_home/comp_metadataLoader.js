@@ -1,6 +1,6 @@
 import React from "react";
-import { Upload, Button, message, List } from "antd";
-import { StopOutlined, CheckCircleTwoTone } from "@ant-design/icons";
+import { Upload, Button, message } from "antd";
+import { StopOutlined, CheckOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
@@ -39,19 +39,11 @@ const MetadataInputLoader = (props) => {
     return false; //to avoid upload action (we parse and load it to store instead)
   };
 
-  const inputList = ["Sample metadata"];
-  const getInputStatus = function (item) {
-    //console.log("getInputStatus");
-    switch (item) {
-      case "Sample metadata":
-        if (props.metadata) {
-          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
-        } else {
-          return <StopOutlined />;
-        }
-
-      default:
-        break;
+  const getIconStatus = function () {
+    if (props.sequence) {
+      return <CheckOutlined style={{ color: "#52c41a" }} />;
+    } else {
+      return <StopOutlined />;
     }
   };
 
@@ -75,21 +67,8 @@ const MetadataInputLoader = (props) => {
             shape={"round"}
             size={"large"}
           >
-            Input metadata (csv)
+            {getIconStatus()} Metadata
           </Button>
-        </div>
-        <div id="input-status">
-          <List
-            grid={{ gutter: 4, column: 1 }}
-            size="small"
-            style={{ fontSize: "10px", lineHeight: "10px" }}
-            dataSource={inputList}
-            renderItem={(item) => (
-              <List.Item style={{ backgroundColor: "white", margin: "0px" }}>
-                {getInputStatus(item)} {item}
-              </List.Item>
-            )}
-          />
         </div>
       </Dragger>
     </React.Fragment>

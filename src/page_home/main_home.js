@@ -39,13 +39,13 @@ const Home = (props) => {
             />
           </Modal>
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={8}>
           <SNPsLoader />
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={8}>
           <MetadataLoader />
         </Col>
-        <Col span={8}>
+        <Col xs={24} sm={8}>
           <PhyloTimeTreeLoader />
         </Col>
       </Row>

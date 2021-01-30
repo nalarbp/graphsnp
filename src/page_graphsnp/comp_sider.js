@@ -111,8 +111,7 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
-          <h5>Edge settings</h5>
-          <p>Edge cutoff</p>
+          <h5>SNPs cutoff</h5>
           <InputNumber
             min={0}
             step={0.1}
@@ -136,13 +135,13 @@ const SiderMenu = (props) => {
         <Col span={24}>
           <p>Clustering method</p>
           <Select
+            disabled={props.graphObject ? false : true}
             value={graph_clusterMethod}
             style={{ width: "100%" }}
             onChange={changeClusterMethodHandler}
           >
             <Option value="Connected Components">Connected Components</Option>
-            <Option value="walktrap">Walktrap</Option>
-            <Option value="djikra">Djikra</Option>
+            <Option value="Louvain">Louvain</Option>
           </Select>
         </Col>
 

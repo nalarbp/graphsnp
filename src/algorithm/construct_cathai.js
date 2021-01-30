@@ -1,32 +1,52 @@
-//========================================== CATHAI ================================================
+//========================================== MCG ================================================
 export function createCATHAI(mat, edgeCutoff) {
   //Assumed the input is true
-  //Take an adjacency matrix of pair-wise SNVs distance and edgecutoff (number > 0)
-  //Return graph with all edges that pass the cut-off criterion
-  let taxaIDs = mat.matrix_headers;
-  let taxaMatrix = mat.matrix_cells;
+  //Take an adjacency Map of pair-wise SNVs distance and edgecutoff (number > 0)
+  //Return graph with only edge that have minimum value among other pair-wise sibling edges (format adjacency list)
 
+  let edgeList = [];
+  let nodeList = [];
   //Filter minimum
-  let graphCATHAI = [];
-  taxaIDs.forEach((taxa) => {
-    let taxa_df = taxaMatrix
-      .filter((t) => {
-        return t.source == taxa || t.target == taxa;
-      })
-      .filter(function (g) {
-        let duplicatedG = graphCATHAI.find(function (h) {
-          return h.source === g.source && h.target === g.target;
-        });
-        return !duplicatedG ? true : false;
+  mat.forEach((val, key) => {
+    nodeList.push(key);
+    //console.log("@@ --", key);
+    let sortedRow = val.sort((a, b) => a.value - b.value);
+
+    //Filter by cut-off
+    if (edgeCutoff && edgeCutoff > 0) {
+      sortedRow = sortedRow.filter((e) => {
+        return e.value < edgeCutoff;
       });
-    graphCATHAI = graphCATHAI.concat(taxa_df);
+    }
+
+    //merge
+    edgeList = edgeList.concat(sortedRow);
   });
 
-  //Filter by cut-off
-  if (edgeCutoff && edgeCutoff > 0) {
-    graphCATHAI = graphCATHAI.filter((e) => {
-      return e.value < edgeCutoff;
+  //remove inverse duplicates edges
+  let tracker = new Map();
+  edgeList = edgeList.filter(function (g) {
+    let currentPair = g.source.concat("-", g.target);
+    let inversePair = g.target.concat("-", g.source);
+
+    let inverseEdge = edgeList.find(function (h) {
+      return h.source === g.target && h.target === g.source;
     });
-  }
-  return { nodes: taxaIDs, edges: graphCATHAI };
+
+    if (inverseEdge) {
+      if (tracker.get(inversePair) || tracker.get(currentPair)) {
+        return false;
+      } else {
+        tracker.set(currentPair, true);
+        tracker.set(inversePair, true);
+        return true;
+      }
+    } else {
+      tracker.set(currentPair, true);
+      tracker.set(inversePair, true);
+      return true;
+    }
+  });
+
+  return { nodes: nodeList, edges: edgeList };
 }

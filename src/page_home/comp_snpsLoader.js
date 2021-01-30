@@ -1,14 +1,9 @@
 import React from "react";
-import { Upload, Button, message, List } from "antd";
-import { StopOutlined, CheckCircleTwoTone } from "@ant-design/icons";
+import { Upload, Button, message } from "antd";
+import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import {
-  sequenceToStore,
-  metadataToStore,
-  phyloTimeTreeToStore,
-  isinputLoadingToStore,
-} from "../action/inputActions";
+import { sequenceToStore, isinputLoadingToStore } from "../action/inputActions";
 
 const fastaToJson = require("bio-parsers").fastaToJson;
 const { Dragger } = Upload;
@@ -113,18 +108,11 @@ const InputLoader = (props) => {
     return false; //to avoid upload action (we parse and load it to store instead)
   };
 
-  const inputList = ["SNPs sequence"];
-  const getInputStatus = function (item) {
-    //console.log("getInputStatus");
-    switch (item) {
-      case "SNPs sequence":
-        if (props.sequence) {
-          return <CheckCircleTwoTone twoToneColor="#52c41a" />;
-        } else {
-          return <StopOutlined />;
-        }
-      default:
-        break;
+  const getIconStatus = function () {
+    if (props.sequence) {
+      return <CheckCircleFilled style={{ fontSize: "14pt" }} />;
+    } else {
+      return <StopOutlined />;
     }
   };
 
@@ -144,21 +132,8 @@ const InputLoader = (props) => {
       >
         <div id="input-loader-snps">
           <Button id="input-loader-button-snps" shape={"round"} size={"large"}>
-            Input SNPs (fasta)
+            {getIconStatus()} SNPs
           </Button>
-        </div>
-        <div id="input-status">
-          <List
-            grid={{ gutter: 0, column: 1 }}
-            size="small"
-            style={{ fontSize: "10px", lineHeight: "10px" }}
-            dataSource={inputList}
-            renderItem={(item) => (
-              <List.Item style={{ backgroundColor: "white", margin: "0px" }}>
-                {getInputStatus(item)} {item}
-              </List.Item>
-            )}
-          />
         </div>
       </Dragger>
     </React.Fragment>

@@ -1,11 +1,11 @@
 import React from "react";
-import { Row, Col, Modal, Spin } from "antd";
+import { Row } from "antd";
 import "./style_matrix.css";
 import { connect } from "react-redux";
 
 //import MatrixViewer from "./comp_matrixViewer";
 
-const GraphMatrix = (props) => {
+const GraphMatrix = () => {
   return (
     <React.Fragment>
       <Row></Row>

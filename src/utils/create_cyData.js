@@ -2,28 +2,65 @@ export function createCytoscapeData(graphObject) {
   //create cytoscape data structure
   //let data = [{ data: { id: id, label: name } },
   //            { data: {source: s, target: t, weight: w} }  ]
-  let cytoscapeData = [];
-  let nodeType = graphObject.nodeType;
+  let creatorMethod = graphObject.creator;
   let nodes = graphObject.nodes;
   let edges = graphObject.edges;
 
-  //adding nodes data
-  nodes.forEach((d) => {
-    let node_data = nodeType === "singleton" ? [] : d.data;
-    cytoscapeData.push({ data: { id: d, type: nodeType, data: node_data } });
-  });
-
-  //adding edges data
-  edges.forEach(function (d) {
+  let cytoscapeData = [];
+  //converting edges to cytoscape data
+  edges.forEach((el) => {
     cytoscapeData.push({
       data: {
-        source: d.source,
-        target: d.target,
-        weight: d.value,
-        dir: "none",
+        source: el.source,
+        target: el.target,
+        weight: el.value,
+        dir: el.direction ? el.direction : "none",
       },
+    });
+  });
+
+  ///adding nodes data
+  nodes.forEach((d) => {
+    let node_data = creatorMethod === "nlv" ? d.data : [];
+    let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
+    cytoscapeData.push({
+      data: { id: d, nodeType: node_type, data: node_data },
     });
   });
 
   return cytoscapeData;
 }
+
+/*
+let cytoscapeData = [];
+  //extracting edges
+  let edgeList = [];
+  graphObject.mapData.forEach((val, key) => {
+    nodes.push(key);
+    val.forEach((c) => {
+      edgeList.push({ source: key, target: c.target, value: c.value });
+    });
+  });
+  //Filtering duplicates edges
+  let tracker = new Map();
+  edgeList = edgeList.filter(function (g) {
+    let currentPair = g.source.concat("-", g.target);
+    let inversePair = g.target.concat("-", g.source);
+
+    let inverseEdge = edgeList.find(function (h) {
+      return h.source === g.target && h.target === g.source;
+    });
+
+    if (inverseEdge) {
+      if (tracker.get(inversePair) || tracker.get(currentPair)) {
+        return false;
+      } else {
+        tracker.set(currentPair, true);
+        tracker.set(inversePair, true);
+        return true;
+      }
+    } else {
+      return true;
+    }
+  });
+*/

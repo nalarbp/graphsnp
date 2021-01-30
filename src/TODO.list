@@ -5,6 +5,33 @@
 
 
 //TO DO LIST
+# Input loading
+- separate or all in one? separate is fine, if the tool works, user wont bother to load 1 or 2 more times
+- sequence input OK
+- metadata input OK 
+- tree input, not yet
+
+# Graph drawing
+## Create HammingMatrixMap 
+    - get HammingMatrixMap from STORE
+    - If NONE: create one, save to STORE
+    - Hamming comparion only done once but save in both direction (making a symetric matrix), save in AdjMap format
+
+## Create GraphMap based on user's construction method
+    - Get the construction method
+    - Call create graph object (in: HammingMatrixMap, out: GraphMap)
+    - Save GraphMap STORE => for CLUSTERING purpose 
+    - include method attributes, if current method != with storeMethod, create new, otherwise take from store: WONT work you need to check cutoff as well: SKIP
+
+## View in Cytoscape
+    - Always create a new CytoscapeData from a fresh GraphObjectMap. PERIOD
+    - Load, view, save to current state
+
+
+- Tidy up the architecture (before its too big and messy)
+
+- Home: all initial states 
+
 x filter final_snpDist so no duplicated edges (MEG)
 x Create loading mechanism on graph container
 x Add refresh/ re-draw button
