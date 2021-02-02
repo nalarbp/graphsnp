@@ -9,14 +9,14 @@ export function sequenceToStore(val) {
 
 export function metadataToStore(val) {
   return {
-    type: constant.COLDATE_DATA,
+    type: constant.META_DATA,
     payload: val,
   };
 }
 
 export function phyloTimeTreeToStore(val) {
   return {
-    type: constant.EXPERIOD_DATA,
+    type: constant.TIME_TREE_DATA,
     payload: val,
   };
 }

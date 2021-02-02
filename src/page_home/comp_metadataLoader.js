@@ -1,9 +1,10 @@
 import React from "react";
 import { Upload, Button, message } from "antd";
-import { StopOutlined, CheckOutlined } from "@ant-design/icons";
+import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
+import { categoricalMapToStore } from "../action/categoricalMapActions";
 import { metadataToStore, isinputLoadingToStore } from "../action/inputActions";
 import { getMetadataInput } from "./util_inputLoaders";
 const { Dragger } = Upload;
@@ -26,6 +27,7 @@ const MetadataInputLoader = (props) => {
               dataUrl,
               props.metadataToStore,
               props.colorLUTtoStore,
+              props.categoricalMapToStore,
               props.isinputLoadingToStore
             );
           };
@@ -40,8 +42,8 @@ const MetadataInputLoader = (props) => {
   };
 
   const getIconStatus = function () {
-    if (props.sequence) {
-      return <CheckOutlined style={{ color: "#52c41a" }} />;
+    if (props.metadata) {
+      return <CheckCircleFilled style={{ fontSize: "14pt" }} />;
     } else {
       return <StopOutlined />;
     }
@@ -54,7 +56,7 @@ const MetadataInputLoader = (props) => {
         showUploadList={false}
         style={{
           height: "500px",
-          backgroundColor: "white",
+          backgroundColor: "transparent",
         }}
         name="file"
         multiple={false}
@@ -86,6 +88,7 @@ function mapDispatchToProps(dispatch) {
       metadataToStore,
       colorLUTtoStore,
       isinputLoadingToStore,
+      categoricalMapToStore,
     },
     dispatch
   );

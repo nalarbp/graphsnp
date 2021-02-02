@@ -1,18 +1,18 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const metadataReducer = (prevState, action) => {
+const categoricalMapReducer = (prevState, action) => {
   switch (action.type) {
-    case constant.META_DATA:
+    case constant.METADATA_CATEGORICAL:
       return action.payload;
 
     default:
       if (prevState) {
         return prevState;
       } else {
-        return initialState.metadata;
+        return initialState.categoricalMap;
       }
   }
 };
 
-export default metadataReducer;
+export default categoricalMapReducer;

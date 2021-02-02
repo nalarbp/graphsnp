@@ -8,11 +8,14 @@ import isInputLoadingReducer from "./isInputLoadingReducer";
 import graphObjectReducer from "./graphObjectReducer";
 import graphClustersReducer from "./graphClustersReducer";
 import hammMatrixReducer from "./hammMatrixReducer";
+import categoricalMapReducer from "./categoricalMapReducer";
 import colorLUTReducer from "./colorLUTReducer";
+import snpDistSettingsReducer from "./snpDistSettingsReducer";
 
 export const initialState = {
   sequence: null,
   metadata: null,
+  categoricalMap: null,
   phyloTimeTree: null,
   isInputLoading: false,
   hammMatrix: null,
@@ -26,9 +29,19 @@ export const initialState = {
     edgeFilterCutoff: 25,
     clusterMethod: "Connected Components",
     isUserClustering: false,
+    isEdgeScaled: true,
+    edgeScaleFactor: 1,
     colorNodedBy: "na",
     exportFormat: "dot",
     isUserDownloading: false,
+  },
+  snpDistSettings: {
+    dataToDisplay: "all",
+    dataColumn: null,
+    chartType: "horizontal",
+    isUserDrawChart: false,
+    snpDistExportFormat: "svg",
+    isUserExportSnpDist: false,
   },
   navSettings: {
     navLocation: null,
@@ -39,6 +52,7 @@ const rootReducer = combineReducers(
   {
     sequence: sequenceReducer,
     metadata: metadataReducer,
+    categoricalMap: categoricalMapReducer,
     phyloTimeTree: phyloTimeTreeReducer,
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
@@ -47,6 +61,7 @@ const rootReducer = combineReducers(
     graphClusters: graphClustersReducer,
     isInputLoading: isInputLoadingReducer,
     colorLUT: colorLUTReducer,
+    snpDistSettings: snpDistSettingsReducer,
   },
   initialState
 );

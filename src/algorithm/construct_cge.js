@@ -1,56 +1,60 @@
 //========================================== CGE ================================================
 /* Combined genomic epidemiology weighted graph
 - get pair-wise SNPs distance
-- get all available metadata matrix
+- get all available metadata matrix;
 - create weigted graph
 */
-export function createCGE(mat, metadataObj, edgeCutoff) {
+import GraphEdgeList from "../model/graphEdgeList_prop";
+export function createCGE(mat, categoricalMap, edgeCutoff) {
   //Assumed the input is true
   //Take an adjacency matrix of pair-wise SNVs distance and edgecutoff (number > 0)
   //Return graph with only edge that have minimum value among other pair-wise sibling edges
-  let taxaIDs = mat.matrix_headers;
-  let taxaMatrix = mat.matrix_cells;
 
+  let edgeList = [];
+  let nodeList = [];
   //Filter minimum
-  let graphMinEdges = [];
-  taxaIDs.forEach((taxa) => {
-    let taxa_df = taxaMatrix.filter((t) => {
-      return t.source == taxa || t.target == taxa;
-    });
-    let taxa_min = Math.min(...taxa_df.map((d) => d.value)); //spread operator to extract elem from array
-    let taxa_df_min = taxa_df
-      .filter((e) => {
-        return e.value == taxa_min;
-      })
-      .filter(function (g) {
-        let duplicatedG = graphMinEdges.find(function (h) {
-          return h.source === g.source && h.target === g.target;
-        });
-        return !duplicatedG ? true : false;
-      });
-    graphMinEdges = graphMinEdges.concat(taxa_df_min);
-  });
-
-  //Filter by cut-off
-  if (edgeCutoff && edgeCutoff > 0) {
-    graphMinEdges = graphMinEdges.filter((e) => {
-      return e.value < edgeCutoff;
-    });
-  }
-  graphMinEdges.forEach((j) => {
-    j.value = 1;
-  });
-
-  for (let x = 0; x < taxaIDs.length; x++) {
-    let var1 = taxaIDs[x];
-    for (let y = x + 1; y < taxaIDs.length - 1; y++) {
-      let var2 = taxaIDs[y];
-      //for each available categorical information
-
-      const element = array[y];
+  mat.forEach((val, key) => {
+    nodeList.push(key);
+    //console.log("@@ --", key);
+    let sortedRow = val.sort((a, b) => a.value - b.value);
+    let minDist = sortedRow[0].value;
+    //console.log("++", minDist);
+    //find minimum threshold index
+    let indexOnValueGreaterThanCutoff = 0;
+    for (let i = 0; i < sortedRow.length; i++) {
+      let cell = sortedRow[i];
+      //console.log("==", i, cell.value, "==");
+      if (cell.value === minDist) {
+        indexOnValueGreaterThanCutoff = i;
+      } else {
+        indexOnValueGreaterThanCutoff = i;
+        //console.log("++break", indexOnValueGreaterThanCutoff);
+        break;
+      }
     }
-    const element = array[x];
-  }
+    //remove based on index
+    sortedRow.splice(indexOnValueGreaterThanCutoff);
+
+    //merge
+    edgeList = edgeList.concat(sortedRow);
+  });
+  console.log(nodeList, edgeList);
+
+  let graphEdgeList = new GraphEdgeList(nodeList, edgeList).getSymetricEdges();
+
+  let newEdges = graphEdgeList.edges;
+  newEdges.forEach((pe) => {
+    pe.value = 1;
+    if (pe.value < edgeCutoff) {
+      pe.value = pe.value + 1;
+    }
+    categoricalMap.forEach((val, key) => {
+      if (val.indexOf(pe.source) !== -1 && val.indexOf(pe.target) !== -1) {
+        pe.value = pe.value + 1;
+      }
+    });
+  });
+
   //check available edges
-  return { nodes: taxaIDs, edges: graphMinEdges };
+  return { nodes: graphEdgeList.nodes, edges: newEdges };
 }

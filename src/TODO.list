@@ -27,6 +27,11 @@
     - Always create a new CytoscapeData from a fresh GraphObjectMap. PERIOD
     - Load, view, save to current state
 
+## Cluster Object 
+    - With 
+
+## Metadata group
+    - hash map on each metadata header based on their categorical group
 
 - Tidy up the architecture (before its too big and messy)
 
@@ -36,3 +41,12 @@ x filter final_snpDist so no duplicated edges (MEG)
 x Create loading mechanism on graph container
 x Add refresh/ re-draw button
 x Add filter edges algorithm 
+
+## CGE algorithm
+    - create non-duplicated edgeList from HammingMatrix (use deep clone and values())
+    - create hash map on each metadata header based on their categorical group, blank is NA
+    - Iterate all edge in edgeList:
+        - change value to base = 0 
+        - look up edge cutoff, if below, add value with 1
+        - look up (iterate) all available hash map key, if edge in the list (indexOf), add value with 1
+        

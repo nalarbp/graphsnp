@@ -52,3 +52,35 @@ export function getColorByColorIndex(query, colIndex, colLUT) {
   }
   return col;
 }
+
+export function getEdgeAndArrowWidth(
+  isEdgeWeightApplied,
+  edgeWeight,
+  weightFactor,
+  option
+) {
+  if (isEdgeWeightApplied) {
+    let weight = edgeWeight + 1; //normalized weight to avoid 0
+    let width = weight ? weight * weightFactor : 3;
+    if (option === "edge") {
+      return width;
+    } else {
+      let arrow_w = width < 1 ? width : 1;
+      return arrow_w;
+    }
+  } else {
+    if (option === "edge") {
+      return 3;
+    } else {
+      return 1;
+    }
+  }
+}
+
+export function vh(v) {
+  var h = Math.max(
+    document.documentElement.clientHeight,
+    window.innerHeight || 0
+  );
+  return (v * h) / 100;
+}

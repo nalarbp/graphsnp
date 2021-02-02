@@ -9,6 +9,7 @@ export async function getMetadataInput(
   fileURL,
   metadataToStore,
   colorLUTtoStore,
+  categoricalMapToStore,
   setisLoading
 ) {
   let data_promise_raw = await csv(fileURL).then(function (result) {
@@ -76,36 +77,60 @@ export async function getMetadataInput(
 
   //Get other available metadata for color
   let headers_for_colorLUT = inputHeaders.filter((d) => {
-    return d !== "sample_id" && d !== "sample_date";
+    return d !== "sample_id";
   });
   let colorLUTstore = {};
+  let categorical_Map = new Map();
+  let excludedCategory = ["0", 0, "null", "na", "#N/A", "NA", "", "excluded"];
   headers_for_colorLUT.forEach((d) => {
     const columnHeader = d;
     let row_group = [];
     let cells = [];
     data_promise_raw.forEach((d) => {
-      let cell = {};
+      let cell = {}; //{sample: taxaA, header1: valueOfHeader1}
       cell["sample"] = d.sample_id;
       cell[columnHeader] = d[columnHeader];
       cells.push(cell);
       row_group.push(d[columnHeader]);
     });
 
-    row_group.filter(util.filterUnique);
+    row_group.filter(util.filterUnique); //categorical: e.g vanA, vanB
+
+    //create categorical map
+    //extract category on a row
+    row_group.forEach((g) => {
+      //{vanA: [taxaA, taxaB]}
+      let gList = cells
+        .filter((c) => {
+          return c[columnHeader] === g;
+        })
+        .map((d) => d.sample);
+
+      if (excludedCategory.indexOf(g) === -1) {
+        let categoricalID = columnHeader.concat("-", g);
+        categorical_Map.set(categoricalID, gList);
+      }
+    });
+    //create color LUT
     let colorLUT = util.createColorLUT(cells, columnHeader);
     colorLUTstore[columnHeader] = colorLUT;
   });
 
-  //Convert isolateDate into Map
+  //Convert metadata into Map
   let metadata_Map = new Map();
   data_promise_raw.forEach((d) => {
     metadata_Map.set(d.sample_id, d);
   });
 
-  console.log(colorLUTstore);
+  //Create categorical Map object from metadata
+  //{groupLocA: [taxa1, taxa2, ...], groupLocB: [taxa4, taxa6]}
+  //for each column, get the categorical
+
+  //console.log(colorLUTstore);
 
   //When all pass validation test, send to store
   metadataToStore(metadata_Map);
   colorLUTtoStore(colorLUTstore);
+  categoricalMapToStore(categorical_Map);
   setisLoading(false);
 }

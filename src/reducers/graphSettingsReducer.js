@@ -52,6 +52,20 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_isUseClustering;
 
+    case constant.SETTING_IS_EDGE_SCALED:
+      let newState_isEdgeScaled = Object.assign({}, prevState);
+      if (action.payload !== prevState.isEdgeScaled) {
+        newState_isEdgeScaled.isEdgeScaled = action.payload;
+      }
+      return newState_isEdgeScaled;
+
+    case constant.SETTING_EDGE_SCALE_FACTOR:
+      let newState_scaleFactor = Object.assign({}, prevState);
+      if (action.payload !== prevState.edgeScaleFactor) {
+        newState_scaleFactor.edgeScaleFactor = action.payload;
+      }
+      return newState_scaleFactor;
+
     case constant.SETTING_COLOR_NODE_BY:
       let newState_colorNode = Object.assign({}, prevState);
       if (action.payload && action.payload !== prevState.colorNodedBy) {

@@ -21,7 +21,7 @@ const NavigationMenu = (props) => {
           return "graphsnp";
         case "/documentation":
           return "documentation";
-        case "/matrix":
+        case "/snpdistance":
           return "matrix";
         default:
           return "none";
@@ -52,6 +52,16 @@ const NavigationMenu = (props) => {
         </Menu.Item>
 
         <Menu.Item
+          key="snpdistance"
+          style={{ padding: "0 20px", margin: "0px" }}
+          onClick={(e) => {
+            props.changeNavLocation(e.key);
+          }}
+        >
+          <NavLink to="/snpdistance">SNP distance</NavLink>
+        </Menu.Item>
+
+        <Menu.Item
           key="graphsnp"
           style={{ padding: "0 20px", margin: "0px" }}
           onClick={(e) => {
@@ -60,17 +70,6 @@ const NavigationMenu = (props) => {
         >
           <NavLink to="/graphsnp">GraphSNP</NavLink>
         </Menu.Item>
-
-        <Menu.Item
-          key="matrix"
-          style={{ padding: "0 20px", margin: "0px" }}
-          onClick={(e) => {
-            props.changeNavLocation(e.key);
-          }}
-        >
-          <NavLink to="/matrix">Distance matrix</NavLink>
-        </Menu.Item>
-
         <Menu.Item
           key="documentation"
           style={{ padding: "0 20px", margin: "0px" }}

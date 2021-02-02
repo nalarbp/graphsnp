@@ -1,6 +1,6 @@
 import React from "react";
 import { Upload, Button, message } from "antd";
-import { StopOutlined, CheckCircleTwoTone } from "@ant-design/icons";
+import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { metadataToStore, isinputLoadingToStore } from "../action/inputActions";
@@ -110,7 +110,7 @@ const PhyloTimeTreeInputLoader = (props) => {
 
   const getIconStatus = function () {
     if (props.sequence) {
-      return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+      return <CheckCircleFilled twoToneColor="#52c41a" />;
     } else {
       return <StopOutlined />;
     }
@@ -123,7 +123,7 @@ const PhyloTimeTreeInputLoader = (props) => {
         showUploadList={false}
         style={{
           height: "500px",
-          backgroundColor: "white",
+          backgroundColor: "transparent",
         }}
         name="file"
         multiple={false}

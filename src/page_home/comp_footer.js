@@ -6,19 +6,26 @@ const FooterComponent = (props) => {
       <Col sm={24} id="footer-component">
         <p>
           <a
-            href="https://haiviz.beatsonlab.com"
+            href="https://graphsnp.beatsonlab.com"
             target="_blank"
             rel="noopener noreferrer"
           >
             GraphSNP v.0.1
           </a>
-          | {new Date().getFullYear()}
+          <br />
+          <b>
+            {" "}
+            Graph-based outbreak cluster and transmission
+            <br /> detection and visualization using single-nucleotide
+            polymorphisms (SNPs) in web browser
+          </b>
           <br /> Developed by Budi Permana at{" "}
           <a
             href="https://beatsonlab.com/"
             target="_blank"
             rel="noopener noreferrer"
           >
+            {" "}
             Beatson Lab
           </a>
           <br />{" "}
@@ -30,6 +37,7 @@ const FooterComponent = (props) => {
             The University of Queensland
           </a>{" "}
           | Australia
+          <br /> {new Date().getFullYear()}
         </p>
       </Col>
     </Row>

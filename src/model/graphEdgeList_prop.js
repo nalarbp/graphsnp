@@ -1,45 +1,55 @@
-// function GraphEdgeList(graphAdjacencyMap) {
-//   //instance of edge list that take an adjacency map object
-//   this.adjMap = graphAdjacencyMap;
-// }
+function GraphsymEdges(nodes, edges) {
+  //instance of edge list that take an adjacency map object
+  this.nodes = nodes;
+  this.edges = edges;
+}
 
-// GraphEdgeList.prototype.nodes = function () {
-//   return graphAdjacencyMap.keys();
-// };
+GraphsymEdges.prototype.getSymetricEdges = function () {
+  let symEdges = this.edges;
+  let tracker = new Map();
+  symEdges = symEdges.filter(function (g) {
+    let currentPair = g.source.concat("-", g.target);
+    let inversePair = g.target.concat("-", g.source);
 
-// GraphEdgeList.prototype.edges = function () {
-//   let edgeList = [];
-//   this.adjMap.forEach((val, key) => {
-//     val.forEach((c) => {
-//       edgeList.push({ source: key, target: c.target, value: c.value });
-//     });
-//   });
-//   return edgeList;
-// };
+    let inverseEdge = symEdges.find(function (h) {
+      return h.source === g.target && h.target === g.source;
+    });
 
-// GraphEdgeList.prototype.symetricEdges = function () {
-//   let symEdges = this.edges();
-//   symEdges = symEdges.filter(
-//     (thing, index, self) =>
-//       index ===
-//       self.findIndex(
-//         (t) =>
-//           t.source === thing.target &&
-//           t.target === thing.source &&
-//           t.value === thing.value
-//       )
-//   );
-//   return symEdges;
-// };
+    if (inverseEdge) {
+      if (tracker.get(inversePair) || tracker.get(currentPair)) {
+        return false;
+      } else {
+        tracker.set(currentPair, true);
+        tracker.set(inversePair, true);
+        return true;
+      }
+    } else {
+      tracker.set(currentPair, true);
+      tracker.set(inversePair, true);
+      return true;
+    }
+  });
+  return new GraphsymEdges(this.nodes, symEdges);
+};
 
-// GraphEdgeList.prototype.cutSymeticEdges = function (cutOff) {
-//   let cutSymEdges = this.symetricEdges();
-//   if (cutOff && cutOff > 0) {
-//     cutSymEdges = edgeList.filter((e) => {
-//       return e.val < cutOff;
-//     });
-//   }
-//   return cutSymEdges;
-// };
+GraphsymEdges.prototype.getEdgesLowerThanCutoff = function (cutOff) {
+  let cutEdges = this.edges;
+  if (cutOff && cutOff > 0) {
+    cutEdges = cutEdges.filter((e) => {
+      return e.value < cutOff;
+    });
+  }
+  return new GraphsymEdges(this.nodes, cutEdges);
+};
 
-// export default GraphEdgeList;
+GraphsymEdges.prototype.getEdgesGreaterThanCutoff = function (cutOff) {
+  let cutEdges = this.edges;
+  if (cutOff && cutOff > 0) {
+    cutEdges = cutEdges.filter((e) => {
+      return e.value > cutOff;
+    });
+  }
+  return new GraphsymEdges(this.nodes, cutEdges);
+};
+
+export default GraphsymEdges;

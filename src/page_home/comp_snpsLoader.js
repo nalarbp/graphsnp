@@ -4,6 +4,8 @@ import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { sequenceToStore, isinputLoadingToStore } from "../action/inputActions";
+import HammingMatrix from "../model/hammingMatrix_prop";
+import { hmmMatrixToStore } from "../action/graphMatrixActions";
 
 const fastaToJson = require("bio-parsers").fastaToJson;
 const { Dragger } = Upload;
@@ -67,11 +69,25 @@ const InputLoader = (props) => {
         }
 
         if (noErr) {
-          //load to store
-          props.sequenceToStore(snpsSequence);
-          //props.isinputLoadingToStore(false);
           //display success message
-          message.success("The sequences have been loaded", 1);
+          message.success(
+            "The sequences have been loaded, now building distance matrix ..",
+            2
+          );
+          setTimeout(() => {
+            const hammingMatrix = new HammingMatrix(
+              snpsSequence
+            ).getHammingMatrix();
+            message.success(
+              "Pair-wise SNP distance matrix has been created",
+              1
+            );
+            props.sequenceToStore(snpsSequence);
+            props.hmmMatrixToStore(hammingMatrix);
+            props.isinputLoadingToStore(false);
+          }, 100);
+
+          //load to store
         }
       } else {
         alert("Error: Required at least 2 sequences");
@@ -96,7 +112,6 @@ const InputLoader = (props) => {
           reader.onloadend = function (evt) {
             const dataText = evt.target.result;
             readFastaToJSON(dataText);
-            props.isinputLoadingToStore(false);
           };
           break;
 
@@ -122,8 +137,8 @@ const InputLoader = (props) => {
         accept={".fa, .fasta, .fna, .mfa"}
         showUploadList={false}
         style={{
+          backgroundColor: "transparent",
           height: "500px",
-          backgroundColor: "white",
         }}
         name="file"
         multiple={false}
@@ -151,6 +166,7 @@ function mapDispatchToProps(dispatch) {
     {
       sequenceToStore,
       isinputLoadingToStore,
+      hmmMatrixToStore,
     },
     dispatch
   );

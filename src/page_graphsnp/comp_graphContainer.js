@@ -14,7 +14,11 @@ import { createCytoscapeData } from "../utils/create_cyData";
 import { findClusters } from "../utils//find_clusters";
 import cytoscape from "cytoscape";
 import { LoadingOutlined } from "@ant-design/icons";
-import { createColorLUT, getColorByColorIndex } from "../utils/utils";
+import {
+  createColorLUT,
+  getColorByColorIndex,
+  getEdgeAndArrowWidth,
+} from "../utils/utils";
 import HammingMatrix from "../model/hammingMatrix_prop";
 import {
   hmmMatrixToStore,
@@ -41,6 +45,8 @@ const GraphContainer = (props) => {
   const graph_clusterMethod = props.graphSettings.clusterMethod;
   const graph_isUserClustering = props.graphSettings.isUserClustering;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
+  const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
+  const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
   //const graph_exportFormat = props.graphSettings.exportFormat;
   //const graph_isUserDownloading = props.graphSettings.isUserDownloading;
 
@@ -101,6 +107,47 @@ const GraphContainer = (props) => {
   }, [graph_layout]);
 
   useEffect(() => {
+    if (props.graphObject && cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      if (graph_isEdgeScaled) {
+        cy.style()
+          .selector("edge")
+          .style({
+            width: function (e) {
+              return getEdgeAndArrowWidth(
+                graph_isEdgeScaled,
+                e.data("weight"),
+                graph_edgeScaleFactor,
+                "edge"
+              );
+            },
+            "arrow-scale": function (e) {
+              return getEdgeAndArrowWidth(
+                graph_isEdgeScaled,
+                e.data("weight"),
+                graph_edgeScaleFactor,
+                "arrow"
+              );
+            },
+          })
+          .update();
+        cytoscapeRef.current = cy;
+      } else {
+        cy.style()
+          .selector("edge")
+          .style({
+            width: 3,
+            "arrow-scale": 1,
+          })
+          .update();
+        cytoscapeRef.current = cy;
+      }
+
+      cytoscapeRef.current = cy;
+    }
+  }, [graph_isEdgeScaled, graph_edgeScaleFactor]);
+
+  useEffect(() => {
     if (graph_colorNodeBy && props.colorLUT && cytoscapeRef.current) {
       let cy = cytoscapeRef.current;
       //console.log(graph_colorNodeBy, props.colorLUT);
@@ -137,7 +184,7 @@ const GraphContainer = (props) => {
       hammingMatrix,
       graph_method,
       graph_edgeFilterCutoff,
-      props.metadata,
+      props.categoricalMap,
       props.phyloTimeTree
     );
 
@@ -171,12 +218,27 @@ const GraphContainer = (props) => {
               "font-size": "8px",
               "text-background-color": "#F5E372",
               color: "black",
-              width: 3,
+              width: function (e) {
+                return getEdgeAndArrowWidth(
+                  graph_isEdgeScaled,
+                  e.data("weight"),
+                  graph_edgeScaleFactor,
+                  "edge"
+                );
+              },
               "target-arrow-color": "black",
               "target-arrow-shape": (e) => {
                 return e.data("dir") === "forward" ? "triangle" : "none";
               },
               "curve-style": "bezier",
+              "arrow-scale": function (e) {
+                return getEdgeAndArrowWidth(
+                  graph_isEdgeScaled,
+                  e.data("weight"),
+                  graph_edgeScaleFactor,
+                  "arrow"
+                );
+              },
             },
           },
           {
@@ -245,6 +307,7 @@ function mapStateToProps(state) {
     hammMatrix: state.hammMatrix,
     graphSettings: state.graphSettings,
     colorLUT: state.colorLUT,
+    categoricalMap: state.categoricalMap,
   };
 }
 

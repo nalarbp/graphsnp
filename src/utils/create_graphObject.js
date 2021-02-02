@@ -1,5 +1,6 @@
 import { createMCG } from "../algorithm/construct_mcg";
 import { createCATHAI } from "../algorithm/construct_cathai";
+import { createCGE } from "../algorithm/construct_cge";
 
 /* Definition of graph object
 it always returns an object
@@ -15,7 +16,7 @@ export function createGraphObject(
   hammingMatrix,
   method,
   edgeCutoff,
-  colDate,
+  metadataMap,
   expDate
 ) {
   let graphObject = { creator: null, nodes: null, edges: null };
@@ -31,6 +32,12 @@ export function createGraphObject(
       graphObject.creator = "cathai";
       graphObject.nodes = cathai_graph.nodes;
       graphObject.edges = cathai_graph.edges;
+      break;
+    case "cge":
+      let cge_graph = createCGE(hammingMatrix, metadataMap, edgeCutoff);
+      graphObject.creator = "cge";
+      graphObject.nodes = cge_graph.nodes;
+      graphObject.edges = cge_graph.edges;
       break;
 
     default:
