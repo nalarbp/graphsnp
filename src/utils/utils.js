@@ -1,6 +1,8 @@
 import { scaleOrdinal, scaleSequential } from "d3-scale";
 import * as d3Chroma from "d3-scale-chromatic";
 
+const _ = require("lodash");
+
 export function filterUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
@@ -16,24 +18,33 @@ export function colorOrdinalInterpolator(domainList, d3ChromaInterpolator) {
   for (var i = 0; i < domainList.length; i++) {
     colorList.push(domainInterpolator(i));
   }
-  var colorScale = scaleOrdinal().domain(domainList).range(colorList);
+  var colorScale = scaleOrdinal().domain(domainList).range(d3Chroma.schemeSet3);
   return colorScale;
 }
 
-export function createColorLUT(sampleJSON, colorIndex) {
+export function createColorLUT(raw_sampleJSON, colorIndex) {
   //input list of sample object [{sample:MS2, vanType: vanA}, ... ], colorIndex e.g vanType
   //output a Map of sample return color
+  let sampleJSON = _.cloneDeep(raw_sampleJSON);
   let colorLUT = null;
   if (Array.isArray(sampleJSON) && sampleJSON.length > 0) {
+    //remove na from clusterID
+    if (colorIndex === "clusterID") {
+      sampleJSON = sampleJSON.filter((d) => {
+        return d.clusterID !== "na";
+      });
+    }
     let groups = sampleJSON
       .map((d) => {
         return d[colorIndex];
       })
       .filter(filterUnique);
+
     let colorInterpolator = colorOrdinalInterpolator(
       groups,
       d3Chroma.interpolateViridis
     );
+
     let colorMap = new Map();
     sampleJSON.forEach((d) => {
       colorMap.set(d.sample, colorInterpolator(d[colorIndex]));
@@ -83,4 +94,12 @@ export function vh(v) {
     window.innerHeight || 0
   );
   return (v * h) / 100;
+}
+
+export function vw(v) {
+  var w = Math.max(
+    document.documentElement.clientWidth,
+    window.innerWidth || 0
+  );
+  return (v * w) / 100;
 }

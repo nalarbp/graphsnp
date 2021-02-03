@@ -4,6 +4,7 @@ group: [[], [], []
 members: [{sample: taxa, clusterID: groupNumber}]
 */
 export function findConnectedComponents(graphObject) {
+  let nodes = graphObject.nodes;
   let adjlist = createAdjacencyList(graphObject.edges);
   let groups = [];
   let visited = {};
@@ -16,10 +17,12 @@ export function findConnectedComponents(graphObject) {
   }
 
   let clusterResult = [];
-  groups = groups.sort((a, b) => a.length - b.length);
+  groups = groups.sort((a, b) => b.length - a.length);
+  let taxas = [];
   groups.forEach((g, i) => {
     if (Array.isArray(g) && g.length > 0) {
       g.forEach((s) => {
+        taxas.push(s);
         clusterResult.push({
           sample: s,
           clusterID: i + 1,
@@ -27,7 +30,18 @@ export function findConnectedComponents(graphObject) {
       });
     }
   });
-  //console.log(clusterResult);
+
+  //make all nodes saved in members
+  nodes.forEach((n) => {
+    if (taxas.indexOf(n) === -1) {
+      clusterResult.push({
+        sample: n,
+        clusterID: "na",
+      });
+    }
+  });
+
+  console.log(clusterResult);
   return { group: groups, members: clusterResult };
 }
 

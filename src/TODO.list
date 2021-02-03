@@ -6,15 +6,15 @@
 
 //TO DO LIST
 # Input loading
-- separate or all in one? separate is fine, if the tool works, user wont bother to load 1 or 2 more times
-- sequence input OK
-- metadata input OK 
+x separate or all in one? separate is fine, if the tool works, user wont bother to load 1 or 2 more times
+x sequence input, and directly create hamming matrix, OK
+x metadata input OK 
 - tree input, not yet
 
 # Graph drawing
 ## Create HammingMatrixMap 
-    - get HammingMatrixMap from STORE
-    - If NONE: create one, save to STORE
+    x get HammingMatrixMap from STORE, 
+    x If NONE: create one, save to STORE
     - Hamming comparion only done once but save in both direction (making a symetric matrix), save in AdjMap format
 
 ## Create GraphMap based on user's construction method

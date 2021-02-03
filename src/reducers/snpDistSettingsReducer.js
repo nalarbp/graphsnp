@@ -17,6 +17,13 @@ const snpDistSettingsReducer = (prevState, action) => {
       }
       return newState_dc;
 
+    case constant.DIST_CHART_ORIENTATION:
+      let newState_co = Object.assign({}, prevState);
+      if (action.payload !== prevState.chartOrientation) {
+        newState_co.chartOrientation = action.payload;
+      }
+      return newState_co;
+
     case constant.DIST_CHART_TYPE:
       let newState_ct = Object.assign({}, prevState);
       if (action.payload !== prevState.chartType) {
@@ -37,6 +44,13 @@ const snpDistSettingsReducer = (prevState, action) => {
         newState_isd.isUserDrawChart = action.payload;
       }
       return newState_isd;
+
+    case constant.DIST_IS_USER_GENERATE_MATRIX:
+      let newState_iugm = Object.assign({}, prevState);
+      if (action.payload !== prevState.isUserGenerateMatrix) {
+        newState_iugm.isUserGenerateMatrix = action.payload;
+      }
+      return newState_iugm;
 
     case constant.DIST_IS_USER_EXPORT:
       let newState_iue = Object.assign({}, prevState);

@@ -5,11 +5,12 @@
 - create weigted graph
 */
 import GraphEdgeList from "../model/graphEdgeList_prop";
-export function createCGE(mat, categoricalMap, edgeCutoff) {
+const _ = require("lodash");
+export function createCGE(rawMatrix, categoricalMap, edgeCutoff) {
   //Assumed the input is true
   //Take an adjacency matrix of pair-wise SNVs distance and edgecutoff (number > 0)
   //Return graph with only edge that have minimum value among other pair-wise sibling edges
-
+  let mat = _.cloneDeep(rawMatrix);
   let edgeList = [];
   let nodeList = [];
   //Filter minimum
@@ -38,14 +39,13 @@ export function createCGE(mat, categoricalMap, edgeCutoff) {
     //merge
     edgeList = edgeList.concat(sortedRow);
   });
-  console.log(nodeList, edgeList);
 
   let graphEdgeList = new GraphEdgeList(nodeList, edgeList).getSymetricEdges();
 
   let newEdges = graphEdgeList.edges;
   newEdges.forEach((pe) => {
     pe.value = 1;
-    if (pe.value < edgeCutoff) {
+    if (pe.value <= edgeCutoff) {
       pe.value = pe.value + 1;
     }
     categoricalMap.forEach((val, key) => {

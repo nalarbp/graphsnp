@@ -6,6 +6,7 @@ members: [{sample: taxa, clusterID: groupNumber}]
 */
 export function findLouvain(graphObject) {
   let edges = graphObject.edges;
+  let all_nodes = graphObject.nodes;
   let nodes = [];
   edges.forEach((d) => {
     nodes.push(d.source, d.target);
@@ -15,8 +16,11 @@ export function findLouvain(graphObject) {
   let members = [];
   let community = louvain.jLouvain().nodes(nodes).edges(edges);
   let louvainResult = community();
+  let taxas = [];
+
   for (let key in louvainResult) {
-    let clusterGroup = louvainResult[key];
+    taxas.push(key);
+    let clusterGroup = louvainResult[key] + 1;
     members.push({ sample: key, clusterID: clusterGroup });
 
     if (groups.get(clusterGroup)) {
@@ -30,6 +34,16 @@ export function findLouvain(graphObject) {
   let group = [];
   groups.forEach((val, key) => {
     group.push(val);
+  });
+
+  //make all nodes saved in members
+  all_nodes.forEach((n) => {
+    if (taxas.indexOf(n) === -1) {
+      members.push({
+        sample: n,
+        clusterID: "na",
+      });
+    }
   });
 
   return { group: group, members: members };

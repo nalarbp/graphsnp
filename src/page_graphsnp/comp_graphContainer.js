@@ -11,6 +11,7 @@ import { colorLUTtoStore } from "../action/colorActions";
 import { Col, Empty, message } from "antd";
 import { createGraphObject } from "../utils/create_graphObject";
 import { createCytoscapeData } from "../utils/create_cyData";
+import { createClusterCSVFile } from "../utils/create_exportFile";
 import { findClusters } from "../utils//find_clusters";
 import cytoscape from "cytoscape";
 import { LoadingOutlined } from "@ant-design/icons";
@@ -28,9 +29,14 @@ import {
 import {
   changeIsUserReDrawSetting,
   changeIsUserClusteringSetting,
+  changeIsUserDownloadingSetting,
 } from "../action/graphSettingsActions";
 
 const _ = require("lodash");
+const fcose = require("cytoscape-fcose");
+const spread = require("cytoscape-spread");
+cytoscape.use(fcose); // register extension
+cytoscape.use(spread); // register extension
 
 const GraphContainer = (props) => {
   //state
@@ -47,8 +53,6 @@ const GraphContainer = (props) => {
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
-  //const graph_exportFormat = props.graphSettings.exportFormat;
-  //const graph_isUserDownloading = props.graphSettings.isUserDownloading;
 
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };
@@ -100,7 +104,12 @@ const GraphContainer = (props) => {
   useEffect(() => {
     if (graph_layout && cytoscapeRef.current) {
       let cy = cytoscapeRef.current;
-      let layout = { name: graph_layout, animate: false, fit: true };
+      let layout = {
+        name: graph_layout,
+        animate: false,
+        fit: true,
+        prelayout: false,
+      };
       cy.layout(layout).run();
       cytoscapeRef.current = cy;
     }
@@ -307,6 +316,7 @@ function mapStateToProps(state) {
     hammMatrix: state.hammMatrix,
     graphSettings: state.graphSettings,
     colorLUT: state.colorLUT,
+    graphClusters: state.graphClusters,
     categoricalMap: state.categoricalMap,
   };
 }
@@ -320,6 +330,7 @@ function mapDispatchToProps(dispatch) {
       graphObjectToStore,
       graphClusterToStore,
       colorLUTtoStore,
+      changeIsUserDownloadingSetting,
     },
     dispatch
   );

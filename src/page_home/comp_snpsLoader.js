@@ -72,7 +72,7 @@ const InputLoader = (props) => {
           //display success message
           message.success(
             "The sequences have been loaded, now building distance matrix ..",
-            2
+            1
           );
           setTimeout(() => {
             const hammingMatrix = new HammingMatrix(

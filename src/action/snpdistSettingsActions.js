@@ -14,6 +14,13 @@ export function dist_changeDataColumn(val) {
   };
 }
 
+export function dist_changeChartOrientation(val) {
+  return {
+    type: constant.DIST_CHART_ORIENTATION,
+    payload: val,
+  };
+}
+
 export function dist_changeChartType(val) {
   return {
     type: constant.DIST_CHART_TYPE,
@@ -38,6 +45,13 @@ export function dist_changeIsUserDraw(val) {
 export function dist_changeIsUserExport(val) {
   return {
     type: constant.DIST_IS_USER_EXPORT,
+    payload: val,
+  };
+}
+
+export function dist_changeIsUserGenerateMatrix(val) {
+  return {
+    type: constant.DIST_IS_USER_GENERATE_MATRIX,
     payload: val,
   };
 }

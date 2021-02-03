@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Row, Col, Select, InputNumber, Checkbox, Divider } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { createClusterCSVFile } from "../utils/create_exportFile";
 import {
   changeMethodSetting,
   changeLayoutSetting,
@@ -32,7 +33,6 @@ const SiderMenu = (props) => {
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
-  const graph_isUserDownloading = props.graphSettings.isUserDownloading;
 
   //HANDLERS
   const changeMethodHandler = (val) => {
@@ -70,9 +70,7 @@ const SiderMenu = (props) => {
   };
 
   const changeExportFormatHandler = (val) => {
-    if (!graph_isUserDownloading) {
-      props.changeExportFormatSetting(val);
-    }
+    props.changeExportFormatSetting(val);
   };
 
   const isEdgeScaledHandler = (e) => {
@@ -83,6 +81,17 @@ const SiderMenu = (props) => {
   const edgeScaleFactorHandler = (val) => {
     if (val > 0) {
       props.changeEdgeScaleFactorSetting(val);
+    }
+  };
+
+  const exportingHandler = () => {
+    switch (graph_exportFormat) {
+      case "clusterID":
+        createClusterCSVFile(props.graphClusters.members);
+        break;
+
+      default:
+        break;
     }
   };
 
@@ -126,9 +135,9 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             onChange={changeLayoutHandler}
           >
-            <Option value="cose">COSE</Option>
-            <Option value="circle">Circle</Option>
-            <Option value="grid">Grid</Option>
+            <Option value="cose">CoSE</Option>
+            <Option value="spread">Spread</Option>
+            <Option value="fcose">fCoSE</Option>
             <Option value="random">Random</Option>
             <Option value="concentric">Concentric</Option>
           </Select>
@@ -189,6 +198,7 @@ const SiderMenu = (props) => {
             style={{ fontSize: "10px" }}
             onChange={isEdgeScaledHandler}
             checked={graph_isEdgeScaled}
+            disabled={props.graphObject ? false : true}
           >
             Scale edge to weight
           </Checkbox>
@@ -225,19 +235,37 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
-          <p>Export format</p>
+          <p>Download format</p>
           <Select
+            disabled={props.graphClusters ? false : true}
             value={graph_exportFormat}
             style={{ width: "100%" }}
             onChange={changeExportFormatHandler}
           >
-            <Option value="dot">DOT</Option>
-            <Option value="edgeList">Edge List</Option>
-            <Option value="grapml">Graph ML</Option>
+            <Option disabled={true} value="dot">
+              Graph (DOT)
+            </Option>
+            <Option disabled={true} value="edgeList">
+              Graph (Edge List)
+            </Option>
+            <Option disabled={true} value="grapml">
+              Graph (GraphML)
+            </Option>
+            <Option
+              disabled={props.graphClusters ? false : true}
+              value="clusterID"
+            >
+              Cluster IDs (CSV)
+            </Option>
           </Select>
         </Col>
         <Col span={24}>
-          <Button onClick={drawingHandler}>Export graph</Button>
+          <Button
+            disabled={props.graphClusters ? false : true}
+            onClick={exportingHandler}
+          >
+            Download
+          </Button>
         </Col>
       </Row>
     </React.Fragment>

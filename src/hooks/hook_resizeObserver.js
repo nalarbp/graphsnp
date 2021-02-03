@@ -4,6 +4,7 @@ import ResizeObserver from "resize-observer-polyfill";
 // custom hooks to observe dimension's change
 const useResizeObserver = (ref) => {
   const [dimensions, setDimensions] = useState(null);
+  console.log(dimensions);
   useEffect(() => {
     const observeTarget = ref.current;
     const resizeObserver = new ResizeObserver((entries) => {

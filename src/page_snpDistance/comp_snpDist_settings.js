@@ -5,7 +5,7 @@ import { bindActionCreators } from "redux";
 import {
   dist_changeDataToDisplay,
   dist_changeDataColumn,
-  dist_changeChartType,
+  dist_changeChartOrientation,
   dist_changeExportFormat,
   dist_changeIsUserDraw,
   dist_changeIsUserExport,
@@ -19,7 +19,7 @@ const SNPdistSettings = (props) => {
   //SETTINGS
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
-  const chartType = props.snpDistSettings.chartType;
+  const chartOrientation = props.snpDistSettings.chartOrientation;
   const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
   const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
   const isUserExportSnpDist = props.snpDistSettings.isUserExportSnpDist;
@@ -33,8 +33,8 @@ const SNPdistSettings = (props) => {
     props.dist_changeDataColumn(val);
   };
 
-  const chartTypeHandler = (val) => {
-    props.dist_changeChartType(val);
+  const chartOrientationHandler = (val) => {
+    props.dist_changeChartOrientation(val);
   };
 
   const drawChartHandler = (val) => {
@@ -79,10 +79,10 @@ const SNPdistSettings = (props) => {
         <Col span={24}>
           <p>Chart(s) orientation</p>
           <Select
-            value={chartType}
+            value={chartOrientation}
             style={{ width: "100%" }}
             disabled={props.hammingMatrix ? false : true}
-            onChange={chartTypeHandler}
+            onChange={chartOrientationHandler}
           >
             <Option value="horizontal">Horizontal</Option>
             <Option value="vertical">Vertical</Option>
@@ -130,7 +130,7 @@ function mapDispatchToProps(dispatch) {
     {
       dist_changeDataToDisplay,
       dist_changeDataColumn,
-      dist_changeChartType,
+      dist_changeChartOrientation,
       dist_changeExportFormat,
       dist_changeIsUserDraw,
       dist_changeIsUserExport,
