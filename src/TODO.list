@@ -11,6 +11,42 @@ x sequence input, and directly create hamming matrix, OK
 x metadata input OK 
 - tree input, not yet
 
+#DATA-MODEL 
+##Hamming-Matrix 
+    - Adjacency list full matrix implemented in Map Object: {v1:[{target: tv, value: pwv}, ...], v2: [{},..]}
+    - .getSymetricEdges => return a symetric matrix in Map Object 
+    - What do you need from a matrix: need a nodeList, full_edgeList, upper_edgeList, lower_edgeList, cutOff_edgeList
+
+## Graph-Object 
+    - A plain object consist of keys: creator, nodes, edges: {}
+    - Should change to prototype model 
+
+## Cluster-Object
+
+##
+
+#ALGORITHM 
+
+#PAGE-SNP-DIST 
+
+#PAGE-GRAPH-SNP 
+## Construction
+### Method 
+### Layout
+    - Fix buh in Spread algorithm 
+### User drawing 
+
+## Clustering 
+### Method 
+### Coloring 
+### Exporting 
+
+## Visualizing 
+### Edge 
+### Node 
+
+# PAGE-TIME-TREE 
+
 # Graph drawing
 ## Create HammingMatrixMap 
     x get HammingMatrixMap from STORE, 

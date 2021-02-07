@@ -31,6 +31,8 @@ export const initialState = {
     isUserClustering: false,
     isEdgeScaled: false,
     edgeScaleFactor: 1,
+    isHideEdgesByCutoff: false,
+    hiddenEdgesCutoff: 0,
     colorNodedBy: "na",
     exportFormat: "clusterID",
     isUserDownloading: false,

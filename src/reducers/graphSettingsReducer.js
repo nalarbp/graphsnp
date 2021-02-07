@@ -66,6 +66,20 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_scaleFactor;
 
+    case constant.SETTING_IS_HIDE_EDGES:
+      let newState_ihe = Object.assign({}, prevState);
+      if (action.payload !== prevState.isHideEdgesByCutoff) {
+        newState_ihe.isHideEdgesByCutoff = action.payload;
+      }
+      return newState_ihe;
+
+    case constant.SETTING_EDGE_HIDE_CUTOFF:
+      let newState_ehc = Object.assign({}, prevState);
+      if (action.payload !== prevState.hiddenEdgesCutoff) {
+        newState_ehc.hiddenEdgesCutoff = action.payload;
+      }
+      return newState_ehc;
+
     case constant.SETTING_COLOR_NODE_BY:
       let newState_colorNode = Object.assign({}, prevState);
       if (action.payload && action.payload !== prevState.colorNodedBy) {

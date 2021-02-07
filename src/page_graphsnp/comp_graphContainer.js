@@ -50,6 +50,8 @@ const GraphContainer = (props) => {
   const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
   const graph_clusterMethod = props.graphSettings.clusterMethod;
   const graph_isUserClustering = props.graphSettings.isUserClustering;
+  const graph_isEdgesHideByCutoff = props.graphSettings.isHideEdgesByCutoff;
+  const graph_edgesHideCutoff = props.graphSettings.hiddenEdgesCutoff;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
@@ -151,10 +153,40 @@ const GraphContainer = (props) => {
           .update();
         cytoscapeRef.current = cy;
       }
-
-      cytoscapeRef.current = cy;
     }
   }, [graph_isEdgeScaled, graph_edgeScaleFactor]);
+
+  useEffect(() => {
+    if (props.graphObject && cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      if (graph_isEdgesHideByCutoff) {
+        cy.style()
+          .selector("edge")
+          .style({
+            opacity: function (o) {
+              let edgeWeight = o.data("weight");
+              if (graph_isEdgesHideByCutoff) {
+                let res = edgeWeight <= graph_edgesHideCutoff ? 0 : 1;
+                return res;
+              } else {
+                return 1;
+              }
+            },
+          })
+          .update();
+        cytoscapeRef.current = cy;
+      } else {
+        cy.style()
+          .selector("edge")
+          .style({
+            opacity: 1,
+          })
+          .update();
+        cytoscapeRef.current = cy;
+      }
+      cytoscapeRef.current = cy;
+    }
+  }, [graph_isEdgesHideByCutoff, graph_edgesHideCutoff]);
 
   useEffect(() => {
     if (graph_colorNodeBy && props.colorLUT && cytoscapeRef.current) {
@@ -223,6 +255,16 @@ const GraphContainer = (props) => {
           {
             selector: "edge",
             style: {
+              opacity: function (o) {
+                let edgeWeight = o.data("weight");
+                //console.log(edgeWeight);
+                if (graph_isEdgesHideByCutoff) {
+                  let res = edgeWeight <= graph_edgesHideCutoff ? 0 : 1;
+                  return res;
+                } else {
+                  return 1;
+                }
+              },
               label: "data(weight)",
               "font-size": "8px",
               "text-background-color": "#F5E372",

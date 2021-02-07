@@ -15,6 +15,8 @@ import {
   changeColorNodeSetting,
   changeIsEdgeScaledSetting,
   changeEdgeScaleFactorSetting,
+  changeIsHideEdgesByCutoff,
+  changeEdgesHideCutoff,
 } from "../action/graphSettingsActions";
 
 const { Option } = Select;
@@ -31,6 +33,8 @@ const SiderMenu = (props) => {
   const graph_isUserClustering = props.graphSettings.isUserClustering;
   const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
+  const graph_isEdgesHideByCutoff = props.graphSettings.isHideEdgesByCutoff;
+  const graph_edgesHideCutoff = props.graphSettings.hiddenEdgesCutoff;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
 
@@ -81,6 +85,17 @@ const SiderMenu = (props) => {
   const edgeScaleFactorHandler = (val) => {
     if (val > 0) {
       props.changeEdgeScaleFactorSetting(val);
+    }
+  };
+
+  const isEdgeHideByCutoffHandler = (e) => {
+    let isChecked = e.target.checked;
+    props.changeIsHideEdgesByCutoff(isChecked);
+  };
+
+  const edgesHideCutoffHandler = (val) => {
+    if (val > 0) {
+      props.changeEdgesHideCutoff(val);
     }
   };
 
@@ -148,7 +163,7 @@ const SiderMenu = (props) => {
           <InputNumber
             min={0}
             disabled={props.sequence ? false : true}
-            step={0.1}
+            step={1}
             value={graph_edgeFilterCutoff}
             onChange={edgeCutoffHandler}
             style={{ marginBottom: "5px" }}
@@ -211,7 +226,27 @@ const SiderMenu = (props) => {
             step={0.1}
             value={graph_edgeScaleFactor}
             onChange={edgeScaleFactorHandler}
-            style={{ marginBottom: "5px" }}
+          />
+        </Col>
+
+        <Col span={24}>
+          <Checkbox
+            style={{ fontSize: "10px" }}
+            onChange={isEdgeHideByCutoffHandler}
+            checked={graph_isEdgesHideByCutoff}
+            disabled={props.graphObject ? false : true}
+          >
+            Hide some edges
+          </Checkbox>
+        </Col>
+        <Col span={24}>
+          <p>Cutoff to hide the edges</p>
+          <InputNumber
+            min={0}
+            disabled={props.graphObject ? false : true}
+            step={0.1}
+            value={graph_edgesHideCutoff}
+            onChange={edgesHideCutoffHandler}
           />
         </Col>
 
@@ -248,8 +283,8 @@ const SiderMenu = (props) => {
             <Option disabled={true} value="edgeList">
               Graph (Edge List)
             </Option>
-            <Option disabled={true} value="grapml">
-              Graph (GraphML)
+            <Option disabled={true} value="svg">
+              Graph (SVG)
             </Option>
             <Option
               disabled={props.graphClusters ? false : true}
@@ -298,6 +333,8 @@ function mapDispatchToProps(dispatch) {
       changeColorNodeSetting,
       changeExportFormatSetting,
       changeIsUserDownloadingSetting,
+      changeIsHideEdgesByCutoff,
+      changeEdgesHideCutoff,
     },
     dispatch
   );

@@ -63,6 +63,20 @@ export function changeEdgeScaleFactorSetting(val) {
   };
 }
 
+export function changeIsHideEdgesByCutoff(val) {
+  return {
+    type: constant.SETTING_IS_HIDE_EDGES,
+    payload: val,
+  };
+}
+
+export function changeEdgesHideCutoff(val) {
+  return {
+    type: constant.SETTING_EDGE_HIDE_CUTOFF,
+    payload: val,
+  };
+}
+
 export function changeColorNodeSetting(val) {
   return {
     type: constant.SETTING_COLOR_NODE_BY,
