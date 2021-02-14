@@ -1,7 +1,11 @@
 import { csv } from "d3-fetch";
 import { utcParse } from "d3-time-format";
+import Moment from "moment";
+import { extendMoment } from "moment-range";
 import * as util from "../utils/utils";
+
 const _ = require("lodash");
+const moment = extendMoment(Moment);
 
 export const isoDateParser = utcParse("%Y-%m-%d");
 //========================== METADATA ============================
@@ -15,7 +19,7 @@ export async function getMetadataInput(
   let data_promise_raw = await csv(fileURL).then(function (result) {
     return result;
   });
-  const validHeaders = ["sample_id", "sample_date"];
+  const validHeaders = ["sample_id", "sample_date", "patient_id"];
   const inputHeaders = Object.keys(data_promise_raw[0]);
   let header_is_valid = true;
   validHeaders.forEach((item) => {
@@ -57,7 +61,7 @@ export async function getMetadataInput(
   }
 
   // no empty record or invalid format in collection date
-  let isolate_date_invalid = false;
+  let isolate_start_datevalid = false;
   data_promise_raw.forEach(function (d) {
     d.sample_id = d.sample_id.replace(/\s*$/, "");
     d.sample_date = d.sample_date.replace(/\s*$/, "");
@@ -65,11 +69,11 @@ export async function getMetadataInput(
       d["uid"] = d.sample_id;
       d.sample_date = isoDateParser(d.sample_date);
     } else {
-      isolate_date_invalid = true;
+      isolate_start_datevalid = true;
     }
   });
 
-  if (isolate_date_invalid) {
+  if (isolate_start_datevalid) {
     alert("Invalid data: wrong date format in column sample date");
     setisLoading(false);
     return;
@@ -132,5 +136,122 @@ export async function getMetadataInput(
   metadataToStore(metadata_Map);
   colorLUTtoStore(colorLUTstore);
   categoricalMapToStore(categorical_Map);
+  setisLoading(false);
+}
+
+//========================== Patient Movement ============================
+export async function getPatientMovementInput(
+  fileURL,
+  patientMovementToStore,
+  setisLoading
+) {
+  let data_promise_raw = await csv(fileURL).then(function (result) {
+    return result;
+  });
+  const validHeaders = [
+    "patient_id",
+    "start_date",
+    "end_date",
+    "hospital_id",
+    "ward_id",
+    "bay_id",
+    "bed_id",
+  ];
+
+  const nullRecords = [
+    "null",
+    "",
+    " ",
+    "na",
+    "NA",
+    "N/A",
+    "#N/A",
+    "NULL",
+    "Null",
+  ];
+  const inputHeaders = Object.keys(data_promise_raw[0]);
+  let header_is_valid = true;
+  validHeaders.forEach((item) => {
+    if (inputHeaders.indexOf(item) === -1) {
+      header_is_valid = false;
+    }
+  });
+
+  if (!header_is_valid) {
+    alert("Invalid headers: One or more required headers was not found");
+    setisLoading(false);
+    return;
+  }
+
+  // no empty record or invalid format in date in and out
+  let date_invalid = false;
+  data_promise_raw.forEach(function (d) {
+    d.patient_id = d.patient_id.replace(/\s*$/, "");
+    d.start_date = d.start_date.replace(/\s*$/, "");
+    d.end_date = d.end_date.replace(/\s*$/, "");
+    d.hospital_id =
+      nullRecords.indexOf(d.hospital_id) !== -1 //when id = NA and in consist of nullRecords null, tidak -1 artinya ada di null
+        ? null
+        : d.hospital_id.replace(/\s*$/, "");
+    d.ward_id =
+      nullRecords.indexOf(d.ward_id) !== -1
+        ? null
+        : d.ward_id.replace(/\s*$/, "");
+    d.bay_id =
+      nullRecords.indexOf(d.bay_id) !== -1
+        ? null
+        : d.bay_id.replace(/\s*$/, "");
+    d.bed_id =
+      nullRecords.indexOf(d.bed_id) !== -1
+        ? null
+        : d.bed_id.replace(/\s*$/, "");
+
+    if (moment(d.start_date) && moment(d.end_date)) {
+      d.start_date = moment(d.start_date);
+      d.end_date = moment(d.end_date);
+    } else {
+      date_invalid = true;
+    }
+  });
+
+  if (date_invalid) {
+    alert(
+      "Invalid data: wrong date format in column start_date and or end_date"
+    );
+    setisLoading(false);
+    return;
+  }
+
+  //Start creating Patient stays Map:
+  //key is pid, value is pid and StayList instance pid => pid: pat_id, stays: stayList
+
+  let patientStaysMap = new Map();
+
+  const patList = data_promise_raw
+    .map((d) => d.patient_id)
+    .filter(util.filterUnique);
+
+  patList.forEach((p) => {
+    let stays = [];
+    let patStays = data_promise_raw.filter((d) => {
+      return d.patient_id === p;
+    });
+    patStays.forEach((s) => {
+      let stay = {
+        pid: p,
+        start_date: s.start_date,
+        end_date: s.end_date,
+        hospital_id: s.hospital_id,
+        ward_id: s.ward_id,
+        bay_id: s.bay_id,
+        bed_id: s.bed_id,
+      };
+      stays.push(stay);
+    });
+    patientStaysMap.set(p, stays);
+  });
+
+  //When all pass validation test, send to store
+  patientMovementToStore(patientStaysMap);
   setisLoading(false);
 }

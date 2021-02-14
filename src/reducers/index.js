@@ -3,7 +3,7 @@ import sequenceReducer from "./sequenceReducer";
 import navSettingsReducer from "./navSettingsReducer";
 import graphSettingsReducer from "./graphSettingsReducer";
 import metadataReducer from "./metadataReducer";
-import phyloTimeTreeReducer from "./phyloTimeTreeReducer";
+import patientMovementReducer from "./patientMovementReducer";
 import isInputLoadingReducer from "./isInputLoadingReducer";
 import graphObjectReducer from "./graphObjectReducer";
 import graphClustersReducer from "./graphClustersReducer";
@@ -16,7 +16,7 @@ export const initialState = {
   sequence: null,
   metadata: null,
   categoricalMap: null,
-  phyloTimeTree: null,
+  patientMovement: null,
   isInputLoading: false,
   hammMatrix: null,
   graphObject: null,
@@ -57,7 +57,7 @@ const rootReducer = combineReducers(
     sequence: sequenceReducer,
     metadata: metadataReducer,
     categoricalMap: categoricalMapReducer,
-    phyloTimeTree: phyloTimeTreeReducer,
+    patientMovement: patientMovementReducer,
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
     hammMatrix: hammMatrixReducer,

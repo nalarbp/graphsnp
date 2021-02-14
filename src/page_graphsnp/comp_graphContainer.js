@@ -226,7 +226,8 @@ const GraphContainer = (props) => {
       graph_method,
       graph_edgeFilterCutoff,
       props.categoricalMap,
-      props.phyloTimeTree
+      props.patientMovement,
+      props.metadata
     );
 
     //generate cytoscape data
@@ -352,7 +353,7 @@ const GraphContainer = (props) => {
 function mapStateToProps(state) {
   return {
     metadata: state.metadata,
-    phyloTimeTree: state.phyloTimeTree,
+    patientMovement: state.patientMovement,
     sequence: state.sequence,
     graphObject: state.graphObject,
     hammMatrix: state.hammMatrix,

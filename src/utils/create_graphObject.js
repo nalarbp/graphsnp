@@ -1,6 +1,7 @@
 import { createMCG } from "../algorithm/construct_mcg";
 import { createCATHAI } from "../algorithm/construct_cathai";
 import { createCGE } from "../algorithm/construct_cge";
+import { createSMSO } from "../algorithm/construct_smso";
 
 /* Definition of graph object
 it always returns an object
@@ -16,8 +17,9 @@ export function createGraphObject(
   hammingMatrix,
   method,
   edgeCutoff,
-  metadataMap,
-  expDate
+  categoricalMap,
+  patientMovementData,
+  metadataMap
 ) {
   let graphObject = { creator: null, nodes: null, edges: null };
   switch (method) {
@@ -34,11 +36,21 @@ export function createGraphObject(
       graphObject.edges = cathai_graph.edges;
       break;
     case "cge":
-      let cge_graph = createCGE(hammingMatrix, metadataMap, edgeCutoff);
+      let cge_graph = createCGE(hammingMatrix, categoricalMap, edgeCutoff);
       graphObject.creator = "cge";
       graphObject.nodes = cge_graph.nodes;
       graphObject.edges = cge_graph.edges;
       break;
+    case "hierSnpsMetaStayOverlap":
+      let hierStayOverlap_graph = createSMSO(
+        hammingMatrix,
+        edgeCutoff,
+        patientMovementData,
+        metadataMap
+      );
+      graphObject.creator = "hierSnpsMetaStayOverlap";
+      graphObject.nodes = hierStayOverlap_graph.nodes;
+      graphObject.edges = hierStayOverlap_graph.edges;
 
     default:
       break;

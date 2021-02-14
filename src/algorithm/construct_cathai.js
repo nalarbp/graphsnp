@@ -4,11 +4,10 @@ const _ = require("lodash");
 export function createCATHAI(rawMatrix, edgeCutoff) {
   //Assumed the input is true
   //Take an adjacency Map of pair-wise SNVs distance and edgecutoff (number > 0)
-  //Return graph with only edge that have minimum value among other pair-wise sibling edges (format adjacency list)
+  //Return graph with only edge <= cut-off
   let mat = _.cloneDeep(rawMatrix);
   let edgeList = [];
   let nodeList = [];
-  //Filter minimum
   mat.forEach((val, key) => {
     nodeList.push(key);
     let sortedRow = val;

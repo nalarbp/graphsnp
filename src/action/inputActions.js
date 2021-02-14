@@ -14,7 +14,7 @@ export function metadataToStore(val) {
   };
 }
 
-export function phyloTimeTreeToStore(val) {
+export function patientMovementToStore(val) {
   return {
     type: constant.TIME_TREE_DATA,
     payload: val,

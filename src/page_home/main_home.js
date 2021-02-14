@@ -9,7 +9,7 @@ import { LoadingOutlined } from "@ant-design/icons";
 import SNPsLoader from "./comp_snpsLoader";
 import TitleHeader from "./comp_titleHeader";
 import MetadataLoader from "./comp_metadataLoader";
-import PhyloTimeTreeLoader from "./comp_phylotimetreeLoader";
+import PatientMovementLoader from "./comp_patientMovementLoader";
 import FooterComponent from "./comp_footer";
 import Particles from "react-particles-js";
 import { vh } from "../utils/utils";
@@ -82,7 +82,7 @@ const Home = (props) => {
           <MetadataLoader />
         </Col>
         <Col xs={24} sm={8}>
-          <PhyloTimeTreeLoader />
+          <PatientMovementLoader />
         </Col>
       </Row>
       <FooterComponent />

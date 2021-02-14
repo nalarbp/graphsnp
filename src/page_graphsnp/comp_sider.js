@@ -140,6 +140,16 @@ const SiderMenu = (props) => {
               MCG + metadata
             </Option>
             <Option value="cathai">CATHAI</Option>
+            <Option
+              disabled={
+                props.sequence && props.metadata && props.patientMovement
+                  ? false
+                  : true
+              }
+              value="hierSnpsMetaStayOverlap"
+            >
+              SNPs + Stay overlap (Transmission)
+            </Option>
           </Select>
         </Col>
         <Col span={24}>
@@ -310,7 +320,7 @@ const SiderMenu = (props) => {
 function mapStateToProps(state) {
   return {
     metadata: state.metadata,
-    phyloTimeTree: state.phyloTimeTree,
+    patientMovement: state.patientMovement,
     sequence: state.sequence,
     graphSettings: state.graphSettings,
     graphObject: state.graphObject,

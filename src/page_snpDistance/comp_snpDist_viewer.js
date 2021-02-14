@@ -12,6 +12,7 @@ import * as d3Select from "d3-selection";
 import GraphEdgeList from "../model/graphEdgeList_prop";
 import { vh, vw } from "../utils/utils";
 import { createBoxplot } from "./chart_boxplot_all";
+import { createSNPdistCSVFile } from "../utils/create_exportFile";
 
 const _ = require("lodash");
 
@@ -46,6 +47,31 @@ const SNPdistViewer = (props) => {
       }, 10);
     }
   }, [isUserDrawChart]);
+
+  useEffect(() => {
+    if (isUserExportSnpDist) {
+      switch (snpDistExportFormat) {
+        case "symSnpDist":
+          //prepare data
+          let edgeList = [];
+          let nodeList = [];
+          props.hammingMatrix.forEach((v, k) => {
+            nodeList.push(k);
+            edgeList = edgeList.concat(v);
+          });
+          let snp_dist = new GraphEdgeList(
+            nodeList,
+            edgeList
+          ).getSymetricEdges().edges;
+          createSNPdistCSVFile(snp_dist);
+          props.dist_changeIsUserExport(false);
+          break;
+
+        default:
+          break;
+      }
+    }
+  }, [snpDistExportFormat, isUserExportSnpDist]);
 
   //DRAWING
   function draw() {

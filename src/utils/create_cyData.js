@@ -14,7 +14,7 @@ export function createCytoscapeData(graphObject) {
         source: el.source,
         target: el.target,
         weight: el.value,
-        dir: el.direction ? el.direction : "none",
+        dir: el.dir === "forward" ? "forward" : "none",
       },
     });
   });

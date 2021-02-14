@@ -1,7 +1,7 @@
 import { initialState } from ".";
 import * as constant from "../utils/constants";
 
-const phyloTimeTreeReducer = (prevState, action) => {
+const patientMovementReducer = (prevState, action) => {
   switch (action.type) {
     case constant.TIME_TREE_DATA:
       return action.payload;
@@ -10,9 +10,9 @@ const phyloTimeTreeReducer = (prevState, action) => {
       if (prevState) {
         return prevState;
       } else {
-        return initialState.phyloTimeTree;
+        return initialState.patientMovement;
       }
   }
 };
 
-export default phyloTimeTreeReducer;
+export default patientMovementReducer;

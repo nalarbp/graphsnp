@@ -54,7 +54,7 @@ const snpDistSettingsReducer = (prevState, action) => {
 
     case constant.DIST_IS_USER_EXPORT:
       let newState_iue = Object.assign({}, prevState);
-      if (action.payload && action.payload !== prevState.isUserExportSnpDist) {
+      if (action.payload !== prevState.isUserExportSnpDist) {
         newState_iue.isUserExportSnpDist = action.payload;
       }
       return newState_iue;

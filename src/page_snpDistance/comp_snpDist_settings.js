@@ -43,6 +43,10 @@ const SNPdistSettings = (props) => {
     }
   };
 
+  const exportFormatHandler = (val) => {
+    props.dist_changeExportFormat(val);
+  };
+
   const exportChartHandler = (val) => {
     if (!isUserExportSnpDist) {
       props.dist_changeIsUserExport(true);
@@ -101,16 +105,26 @@ const SNPdistSettings = (props) => {
         <Divider style={{ margin: "10px 0px 0px 0px" }} />
 
         <Col span={24}>
-          <h5>Export settings</h5>
-          <p>Export format </p>
-          <Select value={snpDistExportFormat} style={{ width: "100%" }}>
-            <Option value="svg">SVG</Option>
-            <Option value="png">PNG</Option>
+          <h5>Download settings</h5>
+          <p>Format </p>
+          <Select
+            value={snpDistExportFormat}
+            onChange={exportFormatHandler}
+            style={{ width: "100%" }}
+          >
+            <Option
+              disabled={props.hammingMatrix ? false : true}
+              value="symSnpDist"
+            >
+              Pair-wise SNPs differences
+            </Option>
+            <Option value="svg">SVG Chart</Option>
+            <Option value="png">PNG Chart</Option>
           </Select>
         </Col>
 
         <Col span={24}>
-          <Button onClick={exportChartHandler}>Export chart</Button>
+          <Button onClick={exportChartHandler}>Download</Button>
         </Col>
       </Row>
     </React.Fragment>

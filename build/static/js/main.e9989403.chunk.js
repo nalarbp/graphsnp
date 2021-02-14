@@ -125,7 +125,7 @@
         he = K.a.Dragger;
       var ge = Object(f.b)(
         function (e) {
-          return { sequence: e.sequence, phyloTimeTree: e.phyloTimeTree };
+          return { sequence: e.sequence, patientMovement: e.patientMovement };
         },
         function (e) {
           return Object(x.b)(
@@ -716,9 +716,9 @@
                 return !1;
               },
               children: Object(a.jsx)("div", {
-                id: "input-loader-phyloTimeTree",
+                id: "input-loader-patientMovement",
                 children: Object(a.jsxs)(ee.a, {
-                  id: "input-loader-button-phyloTimeTree",
+                  id: "input-loader-button-patientMovement",
                   shape: "round",
                   size: "large",
                   children: [
@@ -899,7 +899,7 @@
           function (e) {
             return {
               metadata: e.metadata,
-              phyloTimeTree: e.phyloTimeTree,
+              patientMovement: e.patientMovement,
               sequence: e.sequence,
               graphSettings: e.graphSettings,
               graphObject: e.graphObject,
@@ -1421,7 +1421,7 @@
           function (e) {
             return {
               metadata: e.metadata,
-              phyloTimeTree: e.phyloTimeTree,
+              patientMovement: e.patientMovement,
               sequence: e.sequence,
               graphObject: e.graphObject,
               hammMatrix: e.hammMatrix,
@@ -1473,7 +1473,7 @@
                       var t = e.hammMatrix
                           ? e.hammMatrix
                           : new oe(e.sequence).getHammingMatrix(),
-                        n = lt(t, p, b, e.categoricalMap, e.phyloTimeTree),
+                        n = lt(t, p, b, e.categoricalMap, e.patientMovement),
                         a = (function (e) {
                           var t = e.creator,
                             n = e.nodes,
@@ -2335,7 +2335,7 @@
             case D:
               return t.payload;
             default:
-              return e || dn.phyloTimeTree;
+              return e || dn.patientMovement;
           }
         },
         an = function (e, t) {
@@ -2442,7 +2442,7 @@
           sequence: null,
           metadata: null,
           categoricalMap: null,
-          phyloTimeTree: null,
+          patientMovement: null,
           isInputLoading: !1,
           hammMatrix: null,
           graphObject: null,
@@ -2477,7 +2477,7 @@
             sequence: Kt,
             metadata: tn,
             categoricalMap: on,
-            phyloTimeTree: nn,
+            patientMovement: nn,
             navSettings: Zt,
             graphSettings: en,
             hammMatrix: cn,

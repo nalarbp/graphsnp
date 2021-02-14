@@ -28,6 +28,7 @@
     "lodash": "^4.17.20",
     "louvain": "^1.2.0",
     "moment": "^2.29.1",
+    "moment-range": "^4.0.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-particles-js": "^3.4.1",

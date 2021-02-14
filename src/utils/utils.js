@@ -103,3 +103,70 @@ export function vw(v) {
   );
   return (v * w) / 100;
 }
+
+export function getMovementOverlapScore(p1_stay, p2_stay) {
+  //
+  // if
+}
+
+export function getHighestLocation(stay) {
+  // return the highest available location in number format
+  let res = 0;
+  if (stay.hospital_id) {
+    res = 1;
+    if (stay.ward_id) {
+      res = 2;
+      if (stay.bay_id) {
+        res = 3;
+        if (stay.bed_id) {
+          res = 4;
+        }
+      }
+    }
+  }
+  return res;
+}
+
+export function getOverlapLocationLevel(stay_1, stay_2) {
+  let res = 0;
+  if (stay_1.hospital_id === stay_2.hospital_id) {
+    res = 1;
+    if (stay_1.ward_id === stay_2.ward_id) {
+      res = 2;
+      if (stay_1.bay_id === stay_2.bay_id) {
+        res = 3;
+        if (stay_1.bed_id === stay_2.bed_id) {
+          res = 4;
+        }
+      }
+    }
+  }
+  return res;
+}
+
+export function filterInverseSymEdges(symEdges) {
+  let tracker = new Map();
+  let upperTriangle = symEdges.filter(function (g) {
+    let currentPair = g.source.concat("-", g.target);
+    let inversePair = g.target.concat("-", g.source);
+
+    let inverseEdge = symEdges.find(function (h) {
+      return h.source === g.target && h.target === g.source;
+    });
+
+    if (inverseEdge) {
+      if (tracker.get(inversePair) || tracker.get(currentPair)) {
+        return false;
+      } else {
+        tracker.set(currentPair, true);
+        tracker.set(inversePair, true);
+        return true;
+      }
+    } else {
+      tracker.set(currentPair, true);
+      tracker.set(inversePair, true);
+      return true;
+    }
+  });
+  return upperTriangle;
+}

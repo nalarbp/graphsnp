@@ -158,7 +158,7 @@ const InputLoader = (props) => {
 function mapStateToProps(state) {
   return {
     sequence: state.sequence,
-    phyloTimeTree: state.phyloTimeTree,
+    patientMovement: state.patientMovement,
   };
 }
 function mapDispatchToProps(dispatch) {
