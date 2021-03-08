@@ -36,6 +36,7 @@ export const initialState = {
     colorNodedBy: "na",
     exportFormat: "clusterID",
     isUserDownloading: false,
+    transIncludeLocLevel: 1,
   },
   snpDistSettings: {
     dataToDisplay: "all",

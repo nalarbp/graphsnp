@@ -14,11 +14,13 @@ import { createCytoscapeData } from "../utils/create_cyData";
 import { createClusterCSVFile } from "../utils/create_exportFile";
 import { findClusters } from "../utils//find_clusters";
 import cytoscape from "cytoscape";
+import cy_svg from "cytoscape-svg";
 import { LoadingOutlined } from "@ant-design/icons";
 import {
   createColorLUT,
   getColorByColorIndex,
   getEdgeAndArrowWidth,
+  downloadFileAsText,
 } from "../utils/utils";
 import HammingMatrix from "../model/hammingMatrix_prop";
 import {
@@ -37,6 +39,7 @@ const fcose = require("cytoscape-fcose");
 const spread = require("cytoscape-spread");
 cytoscape.use(fcose); // register extension
 cytoscape.use(spread); // register extension
+cytoscape.use(cy_svg); // register extension
 
 const GraphContainer = (props) => {
   //state
@@ -55,6 +58,8 @@ const GraphContainer = (props) => {
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
+  const graph_isUserDownloading = props.graphSettings.isUserDownloading;
+  const trans_locLevel = props.graphSettings.transIncludeLocLevel;
 
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };
@@ -71,6 +76,15 @@ const GraphContainer = (props) => {
       }, 100);
     }
   }, [graph_isUserReDraw]);
+
+  useEffect(() => {
+    if (graph_isUserDownloading) {
+      let cy = cytoscapeRef.current;
+      let svgContent = cy.svg({ scale: 1, full: true });
+      downloadFileAsText("GraphSNP-cytoscape-svg.svg", svgContent);
+      props.changeIsUserDownloadingSetting(false);
+    }
+  }, [graph_isUserDownloading]);
 
   useEffect(() => {
     if (graph_isUserClustering && props.graphObject) {
@@ -191,7 +205,6 @@ const GraphContainer = (props) => {
   useEffect(() => {
     if (graph_colorNodeBy && props.colorLUT && cytoscapeRef.current) {
       let cy = cytoscapeRef.current;
-      //console.log(graph_colorNodeBy, props.colorLUT);
       cy.style()
         .selector("node")
         .style({
@@ -202,7 +215,6 @@ const GraphContainer = (props) => {
               graph_colorNodeBy,
               props.colorLUT
             );
-            //console.log(props.colorLUT[graph_colorNodeBy]);
             return col;
           },
         })
@@ -227,7 +239,8 @@ const GraphContainer = (props) => {
       graph_edgeFilterCutoff,
       props.categoricalMap,
       props.patientMovement,
-      props.metadata
+      props.metadata,
+      trans_locLevel
     );
 
     //generate cytoscape data
@@ -267,9 +280,9 @@ const GraphContainer = (props) => {
                 }
               },
               label: "data(weight)",
-              "font-size": "8px",
+              "font-size": "10px",
               "text-background-color": "#F5E372",
-              color: "black",
+              color: "red",
               width: function (e) {
                 return getEdgeAndArrowWidth(
                   graph_isEdgeScaled,

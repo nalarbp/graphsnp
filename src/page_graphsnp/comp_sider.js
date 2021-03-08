@@ -2,7 +2,10 @@ import React from "react";
 import { Button, Row, Col, Select, InputNumber, Checkbox, Divider } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { createClusterCSVFile } from "../utils/create_exportFile";
+import {
+  createClusterCSVFile,
+  createDOTGraph,
+} from "../utils/create_exportFile";
 import {
   changeMethodSetting,
   changeLayoutSetting,
@@ -17,6 +20,7 @@ import {
   changeEdgeScaleFactorSetting,
   changeIsHideEdgesByCutoff,
   changeEdgesHideCutoff,
+  changeTransIcludeLocLevel,
 } from "../action/graphSettingsActions";
 
 const { Option } = Select;
@@ -37,6 +41,7 @@ const SiderMenu = (props) => {
   const graph_edgesHideCutoff = props.graphSettings.hiddenEdgesCutoff;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
+  const trans_locLevel = props.graphSettings.transIncludeLocLevel;
 
   //HANDLERS
   const changeMethodHandler = (val) => {
@@ -99,10 +104,20 @@ const SiderMenu = (props) => {
     }
   };
 
+  const changeTransLocLevelHandler = (val) => {
+    props.changeTransIcludeLocLevel(val);
+  };
+
   const exportingHandler = () => {
     switch (graph_exportFormat) {
       case "clusterID":
         createClusterCSVFile(props.graphClusters.members);
+        break;
+      case "svg":
+        props.changeIsUserDownloadingSetting(true);
+        break;
+      case "dot":
+        createDOTGraph(props.graphObject);
         break;
 
       default:
@@ -178,6 +193,21 @@ const SiderMenu = (props) => {
             onChange={edgeCutoffHandler}
             style={{ marginBottom: "5px" }}
           />
+        </Col>
+        <Col span={24}>
+          <p>Filter transmission edges from: (hierarchically) </p>
+          <Select
+            disabled={graph_method === "hierSnpsMetaStayOverlap" ? false : true}
+            value={trans_locLevel}
+            style={{ width: "100%" }}
+            onChange={changeTransLocLevelHandler}
+          >
+            <Option value={1}>SNPs</Option>
+            <Option value={2}>Hospital</Option>
+            <Option value={3}>Ward</Option>
+            <Option value={4}>Bay</Option>
+            <Option value={5}>Bed</Option>
+          </Select>
         </Col>
 
         <Col span={24}>
@@ -282,18 +312,17 @@ const SiderMenu = (props) => {
         <Col span={24}>
           <p>Download format</p>
           <Select
-            disabled={props.graphClusters ? false : true}
             value={graph_exportFormat}
             style={{ width: "100%" }}
             onChange={changeExportFormatHandler}
           >
-            <Option disabled={true} value="dot">
+            <Option disabled={props.graphObject ? false : true} value="dot">
               Graph (DOT)
             </Option>
             <Option disabled={true} value="edgeList">
               Graph (Edge List)
             </Option>
-            <Option disabled={true} value="svg">
+            <Option disabled={props.graphObject ? false : true} value="svg">
               Graph (SVG)
             </Option>
             <Option
@@ -306,7 +335,7 @@ const SiderMenu = (props) => {
         </Col>
         <Col span={24}>
           <Button
-            disabled={props.graphClusters ? false : true}
+            disabled={props.graphClusters || props.graphObject ? false : true}
             onClick={exportingHandler}
           >
             Download
@@ -345,6 +374,7 @@ function mapDispatchToProps(dispatch) {
       changeIsUserDownloadingSetting,
       changeIsHideEdgesByCutoff,
       changeEdgesHideCutoff,
+      changeTransIcludeLocLevel,
     },
     dispatch
   );

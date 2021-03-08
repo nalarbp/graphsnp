@@ -1,5 +1,6 @@
 import { scaleOrdinal, scaleSequential } from "d3-scale";
 import * as d3Chroma from "d3-scale-chromatic";
+import { color } from "d3-color";
 
 const _ = require("lodash");
 
@@ -53,6 +54,20 @@ export function createColorLUT(raw_sampleJSON, colorIndex) {
     colorLUT = colorMap;
   }
   return colorLUT;
+}
+
+export function colorLUTFromUser(headerWithColor, data_promise_raw) {
+  let data_raw = _.cloneDeep(data_promise_raw);
+  let colorMap = new Map();
+  //iterate each row and set the map by sample_id and color
+  data_raw.forEach((r) => {
+    let col =
+      r[headerWithColor] && color(r[headerWithColor])
+        ? color(r[headerWithColor]).formatHex()
+        : color("lightgray").formatHex();
+    colorMap.set(r.sample_id, col);
+  });
+  return colorMap;
 }
 
 export function getColorByColorIndex(query, colIndex, colLUT) {
@@ -169,4 +184,20 @@ export function filterInverseSymEdges(symEdges) {
     }
   });
   return upperTriangle;
+}
+
+export function downloadFileAsText(filename, text) {
+  let element = document.createElement("a");
+  element.setAttribute(
+    "href",
+    "data:text/plain;charset=utf-8," + encodeURIComponent(text)
+  );
+  element.setAttribute("download", filename);
+
+  element.style.display = "none";
+  document.body.appendChild(element);
+
+  element.click();
+
+  document.body.removeChild(element);
 }

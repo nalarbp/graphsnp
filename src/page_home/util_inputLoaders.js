@@ -80,13 +80,31 @@ export async function getMetadataInput(
   }
 
   //Get other available metadata for color
-  let headers_for_colorLUT = inputHeaders.filter((d) => {
-    return d !== "sample_id";
+  let headers_for_categoricalMap = [];
+  let headers_userColorLUT = [];
+
+  inputHeaders.forEach((h) => {
+    let splittedHeader = h.split(":");
+    let isHeaderForColor =
+      splittedHeader.length > 1 && splittedHeader[1] === "color" ? true : false;
+    if (isHeaderForColor) {
+      headers_userColorLUT.push(splittedHeader[0]);
+    } else {
+      if (h !== "sample_id") {
+        headers_for_categoricalMap.push(h);
+      }
+    }
   });
+
+  // let headers_for_categoricalMap = inputHeaders.filter((d) => {
+  //   //filter out headers that have
+  //   return d !== "sample_id";
+  // });
+
   let colorLUTstore = {};
   let categorical_Map = new Map();
   let excludedCategory = ["0", 0, "null", "na", "#N/A", "NA", "", "excluded"];
-  headers_for_colorLUT.forEach((d) => {
+  headers_for_categoricalMap.forEach((d) => {
     const columnHeader = d;
     let row_group = [];
     let cells = [];
@@ -116,7 +134,17 @@ export async function getMetadataInput(
       }
     });
     //create color LUT
-    let colorLUT = util.createColorLUT(cells, columnHeader);
+    //check is there any header:color or not, if exist use this to create colorLUT, otherwise create new one
+    let colorLUT = null;
+    let isHeaderHasColor = headers_userColorLUT.indexOf(d) > -1 ? true : false;
+    if (isHeaderHasColor) {
+      //get column header:color
+      let headerWithColor = d.concat(":color");
+      colorLUT = util.colorLUTFromUser(headerWithColor, data_promise_raw);
+    } else {
+      colorLUT = util.createColorLUT(cells, columnHeader);
+    }
+
     colorLUTstore[columnHeader] = colorLUT;
   });
 

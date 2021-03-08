@@ -23,7 +23,8 @@ export function createSMSO(
   rawMatrix,
   edgeCutoff,
   rawPatientMovementData,
-  metadata
+  metadata,
+  trans_locLevel
 ) {
   //Assumed the input is true
   //Take an adjacency matrix of pair-wise SNVs distance and edgecutoff (number > 0)
@@ -150,8 +151,9 @@ export function createSMSO(
 
   //let clean_undirectedEdges = filterInverseSymEdges(undirectedEdges);
   //merge edges
+
   directedEdges = directedEdges.filter((e) => {
-    return e.value > 1;
+    return e.value >= trans_locLevel;
   });
 
   //SCORING: 1: snps only, 2: snps+hospital, 3: snps+ ward, 4: snps+bay, 5: snps+bed

@@ -101,6 +101,13 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_isUserDownloading;
 
+    case constant.SETTING_TRANS_LOC_LEVEL:
+      let newState_transLocLevel = Object.assign({}, prevState);
+      if (action.payload && action.payload !== prevState.transIncludeLocLevel) {
+        newState_transLocLevel.transIncludeLocLevel = action.payload;
+      }
+      return newState_transLocLevel;
+
     default:
       if (prevState) {
         return prevState;

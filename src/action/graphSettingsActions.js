@@ -97,3 +97,10 @@ export function changeIsUserDownloadingSetting(val) {
     payload: val,
   };
 }
+
+export function changeTransIcludeLocLevel(val) {
+  return {
+    type: constant.SETTING_TRANS_LOC_LEVEL,
+    payload: val,
+  };
+}

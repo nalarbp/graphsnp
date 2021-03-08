@@ -19,7 +19,8 @@ export function createGraphObject(
   edgeCutoff,
   categoricalMap,
   patientMovementData,
-  metadataMap
+  metadataMap,
+  trans_locLevel
 ) {
   let graphObject = { creator: null, nodes: null, edges: null };
   switch (method) {
@@ -46,11 +47,13 @@ export function createGraphObject(
         hammingMatrix,
         edgeCutoff,
         patientMovementData,
-        metadataMap
+        metadataMap,
+        trans_locLevel
       );
       graphObject.creator = "hierSnpsMetaStayOverlap";
       graphObject.nodes = hierStayOverlap_graph.nodes;
       graphObject.edges = hierStayOverlap_graph.edges;
+      break;
 
     default:
       break;
