@@ -6,29 +6,38 @@ function GraphsymEdges(nodes, edges) {
 
 GraphsymEdges.prototype.getSymetricEdges = function () {
   let symEdges = this.edges;
-  let tracker = new Map();
+  //EFFICIENT ALGORITHM
   symEdges = symEdges.filter(function (g) {
-    let currentPair = g.source.concat("-", g.target);
-    let inversePair = g.target.concat("-", g.source);
-
-    let inverseEdge = symEdges.find(function (h) {
-      return h.source === g.target && h.target === g.source;
-    });
-
-    if (inverseEdge) {
-      if (tracker.get(inversePair) || tracker.get(currentPair)) {
-        return false;
-      } else {
-        tracker.set(currentPair, true);
-        tracker.set(inversePair, true);
-        return true;
-      }
-    } else {
-      tracker.set(currentPair, true);
-      tracker.set(inversePair, true);
+    if (g.part === "upper") {
       return true;
+    } else {
+      return false;
     }
   });
+  //NOT EFFICIENT ALGORITHM
+  // let tracker = new Map();
+  // symEdges = symEdges.filter(function (g) {
+  //   let currentPair = g.source.concat("-", g.target);
+  //   let inversePair = g.target.concat("-", g.source);
+
+  //   let inverseEdge = symEdges.find(function (h) {
+  //     return h.source === g.target && h.target === g.source;
+  //   });
+
+  //   if (inverseEdge) {
+  //     if (tracker.get(inversePair) || tracker.get(currentPair)) {
+  //       return false;
+  //     } else {
+  //       tracker.set(currentPair, true);
+  //       tracker.set(inversePair, true);
+  //       return true;
+  //     }
+  //   } else {
+  //     tracker.set(currentPair, true);
+  //     tracker.set(inversePair, true);
+  //     return true;
+  //   }
+  // });
   return new GraphsymEdges(this.nodes, symEdges);
 };
 

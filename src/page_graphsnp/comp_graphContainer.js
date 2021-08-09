@@ -231,6 +231,8 @@ const GraphContainer = (props) => {
       ? new HammingMatrix(props.sequence).getHammingMatrix()
       : props.hammMatrix;
 
+    const seq_len = props.sequence ? props.sequence[0].size : null;
+
     //Look at param (method, seq, ), generate graph object: util functions
     //graphObject: {type:'mcg', mapData: edgeList object}
     const graphObject = createGraphObject(
@@ -240,7 +242,8 @@ const GraphContainer = (props) => {
       props.categoricalMap,
       props.patientMovement,
       props.metadata,
-      trans_locLevel
+      trans_locLevel,
+      seq_len
     );
 
     //generate cytoscape data
@@ -317,7 +320,18 @@ const GraphContainer = (props) => {
           },
         ],
       });
-      cy.layout(cy_layout).run();
+      if (graph_layout === "spread") {
+        let diverted_layout = {
+          name: "cose",
+          animate: false,
+          fit: true,
+          prelayout: false,
+        };
+        cy.layout(diverted_layout).run();
+      } else {
+        cy.layout(cy_layout).run();
+      }
+      //cy.layout(cy_layout).run();
       //save current Ref
       cytoscapeRef.current = cy;
 

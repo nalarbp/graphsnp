@@ -17,6 +17,13 @@ const snpDistSettingsReducer = (prevState, action) => {
       }
       return newState_dc;
 
+    case constant.DIST_DATA_COLUMN_LEVEL:
+      let newState_dc_lv = Object.assign({}, prevState);
+      if (action.payload && action.payload !== prevState.dataColumnLevel) {
+        newState_dc_lv.dataColumnLevel = action.payload;
+      }
+      return newState_dc_lv;
+
     case constant.DIST_CHART_ORIENTATION:
       let newState_co = Object.assign({}, prevState);
       if (action.payload !== prevState.chartOrientation) {

@@ -11,7 +11,7 @@ import * as d3Select from "d3-selection";
 //import useResizeObserver from "../hooks/hook_resizeObserver"; //Broken
 import GraphEdgeList from "../model/graphEdgeList_prop";
 import { vh, vw } from "../utils/utils";
-import { createBoxplot } from "./chart_boxplot_all";
+import { createBarPlot_all } from "./chart_barplot_all";
 import { createSNPdistCSVFile } from "../utils/create_exportFile";
 
 const _ = require("lodash");
@@ -24,15 +24,19 @@ const SNPdistViewer = (props) => {
   //Drawing constructor
   const dim_w = vw(100) - 200 - 20; //200 is sider width, 20 is just a nice margin
   const dim_h = vh(100) - 120 - 20;
-  const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+  const margin = { top: 20, right: 30, bottom: 30, left: 50 };
   const chartArea_width = dim_w - margin.left - margin.right;
   const chartArea_height = dim_h - margin.top - margin.bottom;
 
   //States
+  const metadata_arr = props.metadata
+    ? Array.from(props.metadata.values())
+    : null;
 
   //Settings
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
+  const dataColumnLevel = props.snpDistSettings.dataColumnLevel;
   const chartOrientation = props.snpDistSettings.chartOrientation;
   const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
   const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
@@ -73,34 +77,80 @@ const SNPdistViewer = (props) => {
     }
   }, [snpDistExportFormat, isUserExportSnpDist]);
 
+  //Functions
+  function getIsolatesByDataColumnAndLevel(meta_arr, dataCol, dataColLevel) {
+    let filteredRec = meta_arr.filter((rec) => {
+      if (rec[dataCol] === dataColLevel) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    let res = filteredRec.map((d) => d.sample_id);
+    return res;
+  }
+
   //DRAWING
   function draw() {
+    // console.log("draw", +new Date());
     //clean previous drawing artifacts
     d3Select.select("#snpdist_svgGroup").remove();
 
     //prepare data
     let edgeList = [];
     let nodeList = [];
+
+    // console.log("edgeList_construction", +new Date());
+
     props.hammingMatrix.forEach((v, k) => {
       nodeList.push(k);
       edgeList = edgeList.concat(v);
     });
+
+    // console.log("chart_data_construction", +new Date());
     let chart_data = new GraphEdgeList(nodeList, edgeList).getSymetricEdges()
       .edges;
+
     if (dataToDisplay === "all") {
-      const data_list = chart_data.map((d) => d.value);
+      // console.log("data_list_construction", +new Date());
+      let data_list = chart_data.map((d) => d.value);
+
       const svg = d3Select.select(snpdistSVGRef.current);
-      createBoxplot(
+      createBarPlot_all(
         svg,
         data_list,
         chartArea_width,
         chartArea_height,
-        margin,
-        chartOrientation,
-        null,
-        null
+        margin
       );
     } else {
+      //get column header and level
+      if (metadata_arr && dataColumn && dataColumnLevel) {
+        let includedIsolates = getIsolatesByDataColumnAndLevel(
+          metadata_arr,
+          dataColumn,
+          dataColumnLevel
+        );
+        let filtered_chart_data = chart_data.filter((d) => {
+          if (
+            includedIsolates.indexOf(d.source) !== -1 &&
+            includedIsolates.indexOf(d.target) !== -1
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        });
+        let data_list = filtered_chart_data.map((d) => d.value);
+        const svg = d3Select.select(snpdistSVGRef.current);
+        createBarPlot_all(
+          svg,
+          data_list,
+          chartArea_width,
+          chartArea_height,
+          margin
+        );
+      }
     }
 
     //set svg attributes
@@ -130,6 +180,7 @@ function mapStateToProps(state) {
   return {
     snpDistSettings: state.snpDistSettings,
     hammingMatrix: state.hammMatrix,
+    metadata: state.metadata,
   };
 }
 

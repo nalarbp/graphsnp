@@ -25,11 +25,17 @@ HammingMatrix.prototype.getHammingMatrix = function () {
           source: sourceTaxa.id,
           target: targetTaxa.id,
           value: snpDist,
+          part: "upper",
         });
         matrixMap.set(sourceTaxa.id, currentList);
       } else {
         let newList = [
-          { source: sourceTaxa.id, target: targetTaxa.id, value: snpDist },
+          {
+            source: sourceTaxa.id,
+            target: targetTaxa.id,
+            value: snpDist,
+            part: "upper",
+          },
         ];
         matrixMap.set(sourceTaxa.id, newList);
       }
@@ -40,11 +46,17 @@ HammingMatrix.prototype.getHammingMatrix = function () {
           source: targetTaxa.id,
           target: sourceTaxa.id,
           value: snpDist,
+          part: "lower",
         });
         matrixMap.set(targetTaxa.id, currentList);
       } else {
         let newList = [
-          { source: targetTaxa.id, target: sourceTaxa.id, value: snpDist },
+          {
+            source: targetTaxa.id,
+            target: sourceTaxa.id,
+            value: snpDist,
+            part: "lower",
+          },
         ];
         matrixMap.set(targetTaxa.id, newList);
       }

@@ -5,20 +5,29 @@ import { bindActionCreators } from "redux";
 import {
   dist_changeDataToDisplay,
   dist_changeDataColumn,
+  dist_changeDataColumnLevel,
   dist_changeChartOrientation,
   dist_changeExportFormat,
   dist_changeIsUserDraw,
   dist_changeIsUserExport,
 } from "../action/snpdistSettingsActions";
 
+import { filterUnique } from "../utils/utils";
+
 const { Option } = Select;
 
 const SNPdistSettings = (props) => {
+  //GLOBAL
+  const metadata_arr = props.metadata
+    ? Array.from(props.metadata.values())
+    : null;
+
   //STATES
 
   //SETTINGS
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
+  const dataColumnLevel = props.snpDistSettings.dataColumnLevel;
   const chartOrientation = props.snpDistSettings.chartOrientation;
   const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
   const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
@@ -31,6 +40,10 @@ const SNPdistSettings = (props) => {
 
   const dataColumnHandler = (val) => {
     props.dist_changeDataColumn(val);
+  };
+
+  const dataColumnLevelHandler = (val) => {
+    props.dist_changeDataColumnLevel(val);
   };
 
   const chartOrientationHandler = (val) => {
@@ -52,6 +65,46 @@ const SNPdistSettings = (props) => {
       props.dist_changeIsUserExport(true);
     }
   };
+  const getMetadataColumn = function (header, i) {
+    const excluded_headers = ["sample_date", "patient_id"];
+    if (excluded_headers.indexOf(header) === -1) {
+      return (
+        <Option key={i} disabled={false} value={header}>
+          {header}
+        </Option>
+      );
+    }
+  };
+
+  const getMetadataColumnLevels_arr = function (metadata_arr, dataColumn) {
+    if (metadata_arr && dataColumn) {
+      let dataColumnLevels_arr = metadata_arr
+        .map((d) => d[dataColumn])
+        .filter(filterUnique);
+
+      if (
+        Array.isArray(dataColumnLevels_arr) &&
+        dataColumnLevels_arr.length > 0
+      ) {
+        return dataColumnLevels_arr;
+      } else {
+        return ["#na_exluded!"];
+      }
+    } else {
+      return ["#na_exluded!"];
+    }
+  };
+
+  const getMetadataColumnLevel = function (level, idx) {
+    const excluded_headers = ["#na_exluded!"];
+    if (excluded_headers.indexOf(level) === -1) {
+      return (
+        <Option key={idx} disabled={false} value={level}>
+          {level}
+        </Option>
+      );
+    }
+  };
 
   return (
     <React.Fragment>
@@ -65,31 +118,70 @@ const SNPdistSettings = (props) => {
             disabled={props.hammingMatrix ? false : true}
             onChange={dataToDisplayHandler}
           >
-            <Option value="all">All</Option>
-            <Option value="per-category">Per metadata column</Option>
+            <Option value="all">All isolates</Option>
+            <Option
+              disabled={props.metadata ? false : true}
+              value="per-category"
+            >
+              Isolates in specific group (metadata)
+            </Option>
           </Select>
         </Col>
 
         <Col span={24}>
-          <p>Available metadata column</p>
+          <p>Select column in metadata</p>
           <Select
             value={dataColumn}
             style={{ width: "100%" }}
-            disabled={props.hammingMatrix ? false : true}
+            disabled={
+              dataToDisplay !== "all" && props.hammingMatrix && props.metadata
+                ? false
+                : true
+            }
             onChange={dataColumnHandler}
-          ></Select>
+          >
+            {props.colorLUT && Object.keys(props.colorLUT)
+              ? Object.keys(props.colorLUT).map((k, i) => {
+                  return getMetadataColumn(k, i);
+                })
+              : ["na"].map((l, j) => {
+                  return (
+                    <Option key={j} disabled={false} value={l}>
+                      {l}
+                    </Option>
+                  );
+                })}
+          </Select>
         </Col>
 
         <Col span={24}>
-          <p>Chart(s) orientation</p>
+          <p>Select group in the choosen column</p>
           <Select
-            value={chartOrientation}
+            value={dataColumnLevel}
             style={{ width: "100%" }}
-            disabled={props.hammingMatrix ? false : true}
-            onChange={chartOrientationHandler}
+            disabled={
+              dataToDisplay !== "all" &&
+              dataColumn &&
+              props.metadata &&
+              metadata_arr
+                ? false
+                : true
+            }
+            onChange={dataColumnLevelHandler}
           >
-            <Option value="horizontal">Horizontal</Option>
-            <Option value="vertical">Vertical</Option>
+            {dataColumn && metadata_arr
+              ? getMetadataColumnLevels_arr(metadata_arr, dataColumn).map(
+                  (e, x) => {
+                    return getMetadataColumnLevel(e, x);
+                  }
+                )
+              : ["na"].map((l, j) => {
+                  return (
+                    <Option key={j} disabled={false} value={l}>
+                      {l}
+                    </Option>
+                  );
+                })}
           </Select>
         </Col>
 
@@ -97,8 +189,9 @@ const SNPdistSettings = (props) => {
           <Button
             disabled={props.hammingMatrix ? false : true}
             onClick={drawChartHandler}
+            danger={true}
           >
-            Draw chart
+            Create bar chart
           </Button>
         </Col>
 
@@ -116,7 +209,7 @@ const SNPdistSettings = (props) => {
               disabled={props.hammingMatrix ? false : true}
               value="symSnpDist"
             >
-              Pair-wise SNPs differences
+              Pairwise SNP distances
             </Option>
             <Option value="svg">SVG Chart</Option>
             <Option value="png">PNG Chart</Option>
@@ -124,7 +217,9 @@ const SNPdistSettings = (props) => {
         </Col>
 
         <Col span={24}>
-          <Button onClick={exportChartHandler}>Download</Button>
+          <Button onClick={exportChartHandler} danger={true}>
+            Download
+          </Button>
         </Col>
       </Row>
     </React.Fragment>
@@ -136,6 +231,7 @@ function mapStateToProps(state) {
     snpDistSettings: state.snpDistSettings,
     hammingMatrix: state.hammMatrix,
     colorLUT: state.colorLUT,
+    metadata: state.metadata,
   };
 }
 
@@ -144,6 +240,7 @@ function mapDispatchToProps(dispatch) {
     {
       dist_changeDataToDisplay,
       dist_changeDataColumn,
+      dist_changeDataColumnLevel,
       dist_changeChartOrientation,
       dist_changeExportFormat,
       dist_changeIsUserDraw,
@@ -156,5 +253,16 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistSettings);
 
 /*
-
+<Col span={24}>
+          <p>Chart(s) orientation</p>
+          <Select
+            value={chartOrientation}
+            style={{ width: "100%" }}
+            disabled={props.hammingMatrix ? false : true}
+            onChange={chartOrientationHandler}
+          >
+            <Option value="horizontal">Horizontal</Option>
+            <Option value="vertical">Vertical</Option>
+          </Select>
+        </Col>
 */

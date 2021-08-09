@@ -2,6 +2,7 @@ import { createMCG } from "../algorithm/construct_mcg";
 import { createCATHAI } from "../algorithm/construct_cathai";
 import { createCGE } from "../algorithm/construct_cge";
 import { createSMSO } from "../algorithm/construct_smso";
+import { createSeqTrack } from "../algorithm/construct_seqtrack";
 
 /* Definition of graph object
 it always returns an object
@@ -20,7 +21,8 @@ export function createGraphObject(
   categoricalMap,
   patientMovementData,
   metadataMap,
-  trans_locLevel
+  trans_locLevel,
+  seq_len
 ) {
   let graphObject = { creator: null, nodes: null, edges: null };
   switch (method) {
@@ -41,6 +43,12 @@ export function createGraphObject(
       graphObject.creator = "cge";
       graphObject.nodes = cge_graph.nodes;
       graphObject.edges = cge_graph.edges;
+      break;
+    case "seqtrack":
+      let seqtk_graph = createSeqTrack(hammingMatrix, metadataMap, seq_len);
+      graphObject.creator = "seqtrack";
+      graphObject.nodes = seqtk_graph.nodes;
+      graphObject.edges = seqtk_graph.edges;
       break;
     case "hierSnpsMetaStayOverlap":
       let hierStayOverlap_graph = createSMSO(

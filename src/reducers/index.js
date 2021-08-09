@@ -41,6 +41,7 @@ export const initialState = {
   snpDistSettings: {
     dataToDisplay: "all",
     dataColumn: null,
+    dataColumnLevel: null,
     chartType: "violin",
     isUserGenerateMatrix: false,
     chartOrientation: "horizontal",

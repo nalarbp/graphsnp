@@ -14,6 +14,13 @@ export function dist_changeDataColumn(val) {
   };
 }
 
+export function dist_changeDataColumnLevel(val) {
+  return {
+    type: constant.DIST_DATA_COLUMN_LEVEL,
+    payload: val,
+  };
+}
+
 export function dist_changeChartOrientation(val) {
   return {
     type: constant.DIST_CHART_ORIENTATION,

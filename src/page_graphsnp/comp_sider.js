@@ -147,14 +147,20 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             onChange={changeMethodHandler}
           >
-            <Option value="mcg">MCG</Option>
+            <Option value="mcg">Clustering: MCG</Option>
             <Option
               disabled={props.sequence && props.metadata ? false : true}
               value="cge"
             >
-              MCG + metadata
+              Clustering: MCG + metadata
             </Option>
-            <Option value="cathai">CATHAI</Option>
+            <Option value="cathai">Clustering: CATHAI</Option>
+            <Option
+              disabled={props.sequence && props.metadata ? false : true}
+              value="seqtrack"
+            >
+              Transmission: SeqTrack
+            </Option>
             <Option
               disabled={
                 props.sequence && props.metadata && props.patientMovement
@@ -163,7 +169,7 @@ const SiderMenu = (props) => {
               }
               value="hierSnpsMetaStayOverlap"
             >
-              SNPs + Stay overlap (Transmission)
+              Transmission: SNPs + Stay overlap
             </Option>
           </Select>
         </Col>
@@ -175,7 +181,7 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             onChange={changeLayoutHandler}
           >
-            <Option value="cose">CoSE</Option>
+            <Option value="cose"> CoSE</Option>
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
             <Option value="random">Random</Option>
@@ -194,21 +200,26 @@ const SiderMenu = (props) => {
             style={{ marginBottom: "5px" }}
           />
         </Col>
-        <Col span={24}>
-          <p>Filter transmission edges from: (hierarchically) </p>
-          <Select
-            disabled={graph_method === "hierSnpsMetaStayOverlap" ? false : true}
-            value={trans_locLevel}
-            style={{ width: "100%" }}
-            onChange={changeTransLocLevelHandler}
-          >
-            <Option value={1}>SNPs</Option>
-            <Option value={2}>Hospital</Option>
-            <Option value={3}>Ward</Option>
-            <Option value={4}>Bay</Option>
-            <Option value={5}>Bed</Option>
-          </Select>
-        </Col>
+
+        {graph_method === "hierSnpsMetaStayOverlap" && (
+          <Col span={24}>
+            <p>Filter transmission edges from: (hierarchically) </p>
+            <Select
+              disabled={
+                graph_method === "hierSnpsMetaStayOverlap" ? false : true
+              }
+              value={trans_locLevel}
+              style={{ width: "100%" }}
+              onChange={changeTransLocLevelHandler}
+            >
+              <Option value={1}>SNPs</Option>
+              <Option value={2}>Hospital</Option>
+              <Option value={3}>Ward</Option>
+              <Option value={4}>Bay</Option>
+              <Option value={5}>Bed</Option>
+            </Select>
+          </Col>
+        )}
 
         <Col span={24}>
           <Button
@@ -216,7 +227,7 @@ const SiderMenu = (props) => {
             disabled={props.sequence ? false : true}
             onClick={drawingHandler}
           >
-            Draw graph
+            Create graph
           </Button>
         </Col>
 
@@ -241,7 +252,7 @@ const SiderMenu = (props) => {
             disabled={props.graphObject ? false : true}
             onClick={clusteringHandler}
           >
-            Find clusters
+            Detect clusters
           </Button>
         </Col>
 
@@ -279,6 +290,7 @@ const SiderMenu = (props) => {
             Hide some edges
           </Checkbox>
         </Col>
+
         <Col span={24}>
           <p>Cutoff to hide the edges</p>
           <InputNumber
@@ -337,6 +349,7 @@ const SiderMenu = (props) => {
           <Button
             disabled={props.graphClusters || props.graphObject ? false : true}
             onClick={exportingHandler}
+            danger={true}
           >
             Download
           </Button>
