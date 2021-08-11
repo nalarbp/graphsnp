@@ -105,9 +105,23 @@ export function changeTransIcludeLocLevel(val) {
   };
 }
 
-export function changeTypeOfAnalysis(val) {
+export function changeTypeOfAnalysisSetting(val) {
   return {
     type: constant.SETTING_TYPE_ANALYSIS,
+    payload: val,
+  };
+}
+
+export function changeChartSessionSetting(val) {
+  return {
+    type: constant.SETTING_CHART_SESSION,
+    payload: val,
+  };
+}
+
+export function changeIsUserLoadSessionSetting(val) {
+  return {
+    type: constant.SETTING_IS_USER_LOAD_SESSION,
     payload: val,
   };
 }

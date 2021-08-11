@@ -33,8 +33,8 @@ const graphSettingsReducer = (prevState, action) => {
 
     case constant.SETTING_IS_USER_FILTER_EDGES:
       let newState_isUserFilterEdges = Object.assign({}, prevState);
-      if (action.payload !== prevState.isUserFilterEdges) {
-        newState_isUserFilterEdges.isUserFilterEdges = action.payload;
+      if (action.payload !== prevState.isUserFilteringEdge) {
+        newState_isUserFilterEdges.isUserFilteringEdge = action.payload;
       }
       return newState_isUserFilterEdges;
 
@@ -107,12 +107,27 @@ const graphSettingsReducer = (prevState, action) => {
         newState_transLocLevel.transIncludeLocLevel = action.payload;
       }
       return newState_transLocLevel;
+
     case constant.SETTING_TYPE_ANALYSIS:
       let newState_typeOfAnalysis = Object.assign({}, prevState);
       if (action.payload && action.payload !== prevState.typeOfAnalysis) {
         newState_typeOfAnalysis.typeOfAnalysis = action.payload;
       }
       return newState_typeOfAnalysis;
+
+    case constant.SETTING_CHART_SESSION:
+      let newState_dcs = Object.assign({}, prevState);
+      if (action.payload !== prevState.chartSession) {
+        newState_dcs.chartSession = action.payload;
+      }
+      return newState_dcs;
+
+    case constant.SETTING_IS_USER_LOAD_SESSION:
+      let newState_iuls = Object.assign({}, prevState);
+      if (action.payload !== prevState.isUserReloadSession) {
+        newState_iuls.isUserReloadSession = action.payload;
+      }
+      return newState_iuls;
 
     default:
       if (prevState) {

@@ -1,5 +1,15 @@
 import React from "react";
-import { Button, Row, Col, Select, InputNumber, Checkbox, Divider } from "antd";
+import {
+  Button,
+  Row,
+  Col,
+  Select,
+  InputNumber,
+  Checkbox,
+  Divider,
+  Tooltip,
+} from "antd";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -21,18 +31,21 @@ import {
   changeIsHideEdgesByCutoff,
   changeEdgesHideCutoff,
   changeTransIcludeLocLevel,
-  changeTypeOfAnalysis,
+  changeTypeOfAnalysisSetting,
+  changeIsUserFilterEdgesSetting,
 } from "../action/graphSettingsActions";
 
 const { Option } = Select;
 
 const SiderMenu = (props) => {
+  //GLOBAL VAR
   //STATES
 
   //SETTINGS
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
+  const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
   const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
   const graph_clusterMethod = props.graphSettings.clusterMethod;
   const graph_isUserClustering = props.graphSettings.isUserClustering;
@@ -46,6 +59,15 @@ const SiderMenu = (props) => {
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
 
   //HANDLERS
+  const changeTypeOfAnalysisHandler = (val) => {
+    if (val === "clustering") {
+      props.changeMethodSetting("cathai");
+    } else {
+      props.changeMethodSetting("seqtrack");
+    }
+    props.changeTypeOfAnalysisSetting(val);
+  };
+
   const changeMethodHandler = (val) => {
     props.changeMethodSetting(val);
   };
@@ -58,6 +80,11 @@ const SiderMenu = (props) => {
     if (!graph_isUserReDraw) {
       props.changeIsUserReDrawSetting(true);
     }
+  };
+
+  const isUserFilterEdgesdHandler = (e) => {
+    let isChecked = e.target.checked;
+    props.changeIsUserFilterEdgesSetting(isChecked);
   };
 
   const edgeCutoffHandler = (val) => {
@@ -100,9 +127,17 @@ const SiderMenu = (props) => {
     props.changeIsHideEdgesByCutoff(isChecked);
   };
 
-  const edgesHideCutoffHandler = (val) => {
+  const edgesHideCutoffMinHandler = (val) => {
+    if (val >= 0) {
+      let newEdgeCutoff = { min: val, max: graph_edgesHideCutoff.max };
+      props.changeEdgesHideCutoff(newEdgeCutoff);
+    }
+  };
+
+  const edgesHideCutoffMaxHandler = (val) => {
     if (val > 0) {
-      props.changeEdgesHideCutoff(val);
+      let newEdgeCutoff = { min: graph_edgesHideCutoff.min, max: val };
+      props.changeEdgesHideCutoff(newEdgeCutoff);
     }
   };
 
@@ -142,61 +177,111 @@ const SiderMenu = (props) => {
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h5>Graph settings</h5>
-          <p>Type of analysis</p>
+          <p>
+            Type of analysis{" "}
+            <span>
+              <Tooltip
+                title="Analysis to be performed. [1]Clustering: construct an undirected graph and detect putative cluster(s). [2]Transmission: construct a directed graph to show the putative transmission flow"
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
             disabled={props.sequence ? false : true}
             value={graph_typeOfAnalysis}
             style={{ width: "100%" }}
-            onChange={changeLayoutHandler}
+            onChange={changeTypeOfAnalysisHandler}
           >
             <Option disabled={props.sequence ? false : true} value="clustering">
               {" "}
-              Cluster analysis{" "}
+              Clustering{" "}
             </Option>
             <Option
               disabled={props.sequence && props.metadata ? false : true}
               value="transmission"
             >
-              Transmission analysis
+              Transmission
             </Option>
           </Select>
         </Col>
+
+        {graph_typeOfAnalysis === "clustering" && (
+          <Col span={24}>
+            <p>
+              Method{" "}
+              <span>
+                <Tooltip
+                  title="Method to construct clustering graph. 
+                  [1]CATHAI: draw all pairwise SNP distances between nodes (cases) (Forde et al. 2021). 
+                  [2]Minimum CATHAI: Like CATHAI but only include the smallest pairwise SNP distance(s) as the representation of each node 
+                  [3]Weighted minimum CATHAI: Like minimum CATHAI but weighted with other categorical information from the metadata"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <Select
+              disabled={props.sequence && graph_typeOfAnalysis ? false : true}
+              value={graph_method}
+              style={{ width: "100%" }}
+              onChange={changeMethodHandler}
+            >
+              <Option value="cathai">CATHAI</Option>
+              <Option value="mcg">Minimum CATHAI</Option>
+              <Option
+                disabled={props.sequence && props.metadata ? false : true}
+                value="cge"
+              >
+                Weighted minimum CATHAI
+              </Option>
+            </Select>
+          </Col>
+        )}
+
+        {graph_typeOfAnalysis === "transmission" && (
+          <Col span={24}>
+            <p>
+              Method{" "}
+              <span>
+                <Tooltip
+                  title="Method to construct transmission graph. 
+                  [1]SeqTrack: construct a parsimonous transmission tree based on SNP distances and sampling dates (Jombart et al. 2014). 
+                  [2]SNPs and patient stay: construct a directed graph where edges were weighted by sum of SNPs distance weight and patient stays"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <Select
+              disabled={graph_typeOfAnalysis ? false : true}
+              value={graph_method}
+              style={{ width: "100%" }}
+              onChange={changeMethodHandler}
+            >
+              <Option value="seqtrack">SeqTrack</Option>
+              <Option value="hierSnpsMetaStayOverlap">
+                SNPs and patient stay
+              </Option>
+            </Select>
+          </Col>
+        )}
+
         <Col span={24}>
-          <p>Construction method</p>
-          <Select
-            disabled={props.sequence ? false : true}
-            value={graph_method}
-            style={{ width: "100%" }}
-            onChange={changeMethodHandler}
-          >
-            <Option value="mcg">Clustering: MCG</Option>
-            <Option
-              disabled={props.sequence && props.metadata ? false : true}
-              value="cge"
-            >
-              Clustering: MCG + metadata
-            </Option>
-            <Option value="cathai">Clustering: CATHAI</Option>
-            <Option
-              disabled={props.sequence && props.metadata ? false : true}
-              value="seqtrack"
-            >
-              Transmission: SeqTrack
-            </Option>
-            <Option
-              disabled={
-                props.sequence && props.metadata && props.patientMovement
-                  ? false
-                  : true
-              }
-              value="hierSnpsMetaStayOverlap"
-            >
-              Transmission: SNPs + Stay overlap
-            </Option>
-          </Select>
-        </Col>
-        <Col span={24}>
-          <p>Graph layout</p>
+          <p>
+            Layout{" "}
+            <span>
+              <Tooltip
+                title="Layout to display the graph."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
             disabled={props.sequence ? false : true}
             value={graph_layout}
@@ -206,21 +291,56 @@ const SiderMenu = (props) => {
             <Option value="cose"> CoSE</Option>
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
-            <Option value="concentric">Concentric</Option>
           </Select>
         </Col>
 
         <Col span={24}>
-          <p>SNPs cutoff</p>
-          <InputNumber
-            min={0}
-            disabled={props.sequence ? false : true}
-            step={1}
-            value={graph_edgeFilterCutoff}
-            onChange={edgeCutoffHandler}
-            style={{ marginBottom: "5px" }}
-          />
+          <Checkbox
+            style={{ fontSize: "10px" }}
+            onChange={isUserFilterEdgesdHandler}
+            checked={graph_isUserFilterEdges}
+            disabled={
+              props.sequence && graph_typeOfAnalysis === "clustering"
+                ? false
+                : true
+            }
+          >
+            Apply SNPs cutoff{" "}
+            <span>
+              <Tooltip
+                title="Apply a cutoff number to limit the maximum pairwise SNPs distance to be displayed."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </Checkbox>
         </Col>
+
+        {graph_isUserFilterEdges && (
+          <Col span={24}>
+            <p>
+              Cutoff number{" "}
+              <span>
+                <Tooltip
+                  title="Maximum pairwise SNPs distance to be included in graph 
+                  (e.g. 25 SNPs cutoff will include edges with 0 to 25 SNPs)."
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <InputNumber
+              min={0}
+              disabled={props.sequence ? false : true}
+              step={1}
+              value={graph_edgeFilterCutoff}
+              onChange={edgeCutoffHandler}
+              style={{ marginBottom: "5px" }}
+            />
+          </Col>
+        )}
 
         {graph_method === "hierSnpsMetaStayOverlap" && (
           <Col span={24}>
@@ -244,38 +364,57 @@ const SiderMenu = (props) => {
 
         <Col span={24}>
           <Button
-            danger={true}
             disabled={props.sequence ? false : true}
             onClick={drawingHandler}
+            type="primary"
           >
             Create graph
           </Button>
         </Col>
 
-        <Divider style={{ margin: "10px 0px 0px 0px" }} />
+        {graph_typeOfAnalysis === "clustering" && props.graphObject && (
+          <Divider style={{ margin: "10px 0px 0px 0px" }} />
+        )}
 
-        <Col span={24}>
-          <h5>Cluster Settings</h5>
-          <p>Clustering method </p>
-          <Select
-            disabled={props.graphObject ? false : true}
-            value={graph_clusterMethod}
-            style={{ width: "100%" }}
-            onChange={changeClusterMethodHandler}
-          >
-            <Option value="Connected Components">Connected Components</Option>
-            <Option value="Louvain">Louvain</Option>
-          </Select>
-        </Col>
+        {graph_typeOfAnalysis === "clustering" && props.graphObject && (
+          <Col span={24}>
+            <h5>Clustering settings</h5>
+            <p>
+              Method{" "}
+              <span>
+                <Tooltip
+                  title="Method to detect cluster in the constructed graph.
+                  [1]Connected components: using Breadth-first search algorithm (Zhou and Hansen,2006) to find cluster (all connected nodes)
+                  [2]Louvain: using Louvain algoritm (Subelj and Bajec, 2011) to find the cluster(s) "
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <Select
+              disabled={props.graphObject ? false : true}
+              value={graph_clusterMethod}
+              style={{ width: "100%" }}
+              onChange={changeClusterMethodHandler}
+            >
+              <Option value="Connected Components">Connected Components</Option>
+              <Option value="Louvain">Louvain</Option>
+            </Select>
+          </Col>
+        )}
 
-        <Col span={24}>
-          <Button
-            disabled={props.graphObject ? false : true}
-            onClick={clusteringHandler}
-          >
-            Detect clusters
-          </Button>
-        </Col>
+        {graph_typeOfAnalysis === "clustering" && props.graphObject && (
+          <Col span={24}>
+            <Button
+              type="primary"
+              disabled={props.graphObject ? false : true}
+              onClick={clusteringHandler}
+            >
+              Detect clusters
+            </Button>
+          </Col>
+        )}
 
         <Divider style={{ margin: "10px 0px 0px 0px" }} />
 
@@ -287,11 +426,30 @@ const SiderMenu = (props) => {
             checked={graph_isEdgeScaled}
             disabled={props.graphObject ? false : true}
           >
-            Scale edge to weight
+            Scale edge to its weight{" "}
+            <span>
+              <Tooltip
+                title="Change the thickness of the edge accordin to its weight.
+                  (e.g. the higher the transmission score the thicker the line)."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
           </Checkbox>
         </Col>
         <Col span={24}>
-          <p>Scale factor</p>
+          <p>
+            Scaling factor{" "}
+            <span>
+              <Tooltip
+                title="Multiply the thickness of the edge with the scaling factor (positive number greater than zero)"
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <InputNumber
             min={0.00001}
             disabled={props.graphObject ? false : true}
@@ -308,23 +466,58 @@ const SiderMenu = (props) => {
             checked={graph_isEdgesHideByCutoff}
             disabled={props.graphObject ? false : true}
           >
-            Hide some edges
+            Hide edges{" "}
+            <span>
+              <Tooltip
+                title="Hide edges which have weight within the specified range (min to max)
+                (Note: It doesn't remove the edges but only hide it to the background)"
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
           </Checkbox>
         </Col>
 
-        <Col span={24}>
-          <p>Cutoff to hide the edges</p>
-          <InputNumber
-            min={0}
-            disabled={props.graphObject ? false : true}
-            step={0.1}
-            value={graph_edgesHideCutoff}
-            onChange={edgesHideCutoffHandler}
-          />
-        </Col>
+        {graph_isEdgesHideByCutoff && (
+          <Col span={12}>
+            <p>Minimum</p>
+            <InputNumber
+              min={0}
+              disabled={props.graphObject ? false : true}
+              step={0.1}
+              value={graph_edgesHideCutoff.min}
+              onChange={edgesHideCutoffMinHandler}
+            />
+          </Col>
+        )}
+        {graph_isEdgesHideByCutoff && (
+          <Col span={12}>
+            <p>Maximum</p>
+            <InputNumber
+              min={0}
+              disabled={props.graphObject ? false : true}
+              step={0.1}
+              value={graph_edgesHideCutoff.max}
+              onChange={edgesHideCutoffMaxHandler}
+            />
+          </Col>
+        )}
 
         <Col span={24}>
-          <p>Color nodes by</p>
+          <p>
+            Nodes coloring{" "}
+            <span>
+              <Tooltip
+                title="Color nodes by the selected column in metadata or by the clustering result.
+                User can also specify the color manually
+                (e.g. To specify color on column 'patient_group' add new column called 'patient_group:color' in metadata)."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
             disabled={props.graphObject ? false : true}
             value={graph_colorNodeBy}
@@ -343,26 +536,37 @@ const SiderMenu = (props) => {
         </Col>
 
         <Col span={24}>
-          <p>Download format</p>
+          <h5>Download settings</h5>
+          <p>
+            Type{" "}
+            <span>
+              <Tooltip
+                title="Type of file to be downloaded: 
+                [1]Graph image (SVG)
+                [2]Graph object file (DOT format: suitable for visualization with HAIviz)
+                [3]Clustering result (CSV)."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
             value={graph_exportFormat}
             style={{ width: "100%" }}
             onChange={changeExportFormatHandler}
           >
-            <Option disabled={props.graphObject ? false : true} value="dot">
-              Graph (DOT)
-            </Option>
-            <Option disabled={true} value="edgeList">
-              Graph (Edge List)
-            </Option>
             <Option disabled={props.graphObject ? false : true} value="svg">
-              Graph (SVG)
+              Graph image (SVG)
+            </Option>
+            <Option disabled={props.graphObject ? false : true} value="dot">
+              Graph file (DOT)
             </Option>
             <Option
               disabled={props.graphClusters ? false : true}
               value="clusterID"
             >
-              Cluster IDs (CSV)
+              Clustering result (CSV)
             </Option>
           </Select>
         </Col>
@@ -370,7 +574,7 @@ const SiderMenu = (props) => {
           <Button
             disabled={props.graphClusters || props.graphObject ? false : true}
             onClick={exportingHandler}
-            danger={true}
+            type="primary"
           >
             Download
           </Button>
@@ -409,7 +613,8 @@ function mapDispatchToProps(dispatch) {
       changeIsHideEdgesByCutoff,
       changeEdgesHideCutoff,
       changeTransIcludeLocLevel,
-      changeTypeOfAnalysis,
+      changeTypeOfAnalysisSetting,
+      changeIsUserFilterEdgesSetting,
     },
     dispatch
   );

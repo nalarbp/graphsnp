@@ -8,14 +8,14 @@ import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
-import { Col, Empty, message } from "antd";
+import { Col, Empty, Button, message } from "antd";
 import { createGraphObject } from "../utils/create_graphObject";
 import { createCytoscapeData } from "../utils/create_cyData";
 import { createClusterCSVFile } from "../utils/create_exportFile";
 import { findClusters } from "../utils//find_clusters";
 import cytoscape from "cytoscape";
 import cy_svg from "cytoscape-svg";
-import { LoadingOutlined } from "@ant-design/icons";
+import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
 import {
   createColorLUT,
   getColorByColorIndex,
@@ -32,6 +32,8 @@ import {
   changeIsUserReDrawSetting,
   changeIsUserClusteringSetting,
   changeIsUserDownloadingSetting,
+  changeChartSessionSetting,
+  changeIsUserLoadSessionSetting,
 } from "../action/graphSettingsActions";
 
 const _ = require("lodash");
@@ -47,6 +49,7 @@ const GraphContainer = (props) => {
   const [processingGraph, setProcessingGraph] = useState(false);
 
   //Settings
+  const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
@@ -64,6 +67,10 @@ const GraphContainer = (props) => {
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };
   const cytoscapeRef = useRef(null);
+  const prevSessionData = props.graphSettings.chartSession;
+  const isUserReloadSession = props.graphSettings.isUserReloadSession;
+
+  //Automatic reloading if previous graph session data is a available
 
   useEffect(() => {
     if (graph_isUserReDraw) {
@@ -76,6 +83,18 @@ const GraphContainer = (props) => {
       }, 100);
     }
   }, [graph_isUserReDraw]);
+
+  useEffect(() => {
+    if (isUserReloadSession) {
+      setProcessingGraph(true);
+      setTimeout(() => {
+        redraw();
+        setGraphIsAvailable(true);
+        setProcessingGraph(false);
+        props.changeIsUserLoadSessionSetting(false);
+      }, 10);
+    }
+  }, [isUserReloadSession]);
 
   useEffect(() => {
     if (graph_isUserDownloading) {
@@ -180,7 +199,11 @@ const GraphContainer = (props) => {
             opacity: function (o) {
               let edgeWeight = o.data("weight");
               if (graph_isEdgesHideByCutoff) {
-                let res = edgeWeight <= graph_edgesHideCutoff ? 0 : 1;
+                let res =
+                  edgeWeight < graph_edgesHideCutoff.min ||
+                  edgeWeight > graph_edgesHideCutoff.max
+                    ? 0
+                    : 1;
                 return res;
               } else {
                 return 1;
@@ -223,6 +246,12 @@ const GraphContainer = (props) => {
       cytoscapeRef.current = cy;
     }
   }, [graph_colorNodeBy, props.colorLUT]);
+
+  const reloadChartHandler = (val) => {
+    if (!isUserReloadSession) {
+      props.changeIsUserLoadSessionSetting(true);
+    }
+  };
 
   //DRAW
   function draw() {
@@ -276,7 +305,11 @@ const GraphContainer = (props) => {
                 let edgeWeight = o.data("weight");
                 //console.log(edgeWeight);
                 if (graph_isEdgesHideByCutoff) {
-                  let res = edgeWeight <= graph_edgesHideCutoff ? 0 : 1;
+                  let res =
+                    edgeWeight < graph_edgesHideCutoff.min ||
+                    edgeWeight > graph_edgesHideCutoff.max
+                      ? 0
+                      : 1;
                   return res;
                 } else {
                   return 1;
@@ -340,6 +373,101 @@ const GraphContainer = (props) => {
         props.hmmMatrixToStore(hammingMatrix);
       }
       props.graphObjectToStore(graphObject);
+      props.changeChartSessionSetting(cytoscapeData);
+    }
+  }
+
+  function redraw() {
+    const cytoscapeData = prevSessionData;
+
+    //ReLoad and view cytoscape
+    if (cytoscapeData) {
+      const cy = cytoscape({
+        elements: cytoscapeData,
+        container: document.getElementById("graph-cont-cytoscape-canvas"),
+        pannable: true,
+        selected: true,
+        boxSelectionEnabled: false,
+        style: [
+          {
+            selector: "node",
+            style: {
+              label: "data(id)",
+              "border-width": 3,
+              "border-style": "solid",
+              "border-color": "black",
+              "background-color": "lightgray",
+            },
+          },
+          {
+            selector: "edge",
+            style: {
+              opacity: function (o) {
+                let edgeWeight = o.data("weight");
+                //console.log(edgeWeight);
+                if (graph_isEdgesHideByCutoff) {
+                  let res =
+                    edgeWeight < graph_edgesHideCutoff.min ||
+                    edgeWeight > graph_edgesHideCutoff.max
+                      ? 0
+                      : 1;
+                  return res;
+                } else {
+                  return 1;
+                }
+              },
+              label: "data(weight)",
+              "font-size": "10px",
+              "text-background-color": "#F5E372",
+              color: "red",
+              width: function (e) {
+                return getEdgeAndArrowWidth(
+                  graph_isEdgeScaled,
+                  e.data("weight"),
+                  graph_edgeScaleFactor,
+                  "edge"
+                );
+              },
+              "target-arrow-color": "black",
+              "target-arrow-shape": (e) => {
+                return e.data("dir") === "forward" ? "triangle" : "none";
+              },
+              "curve-style": "bezier",
+              "arrow-scale": function (e) {
+                return getEdgeAndArrowWidth(
+                  graph_isEdgeScaled,
+                  e.data("weight"),
+                  graph_edgeScaleFactor,
+                  "arrow"
+                );
+              },
+            },
+          },
+          {
+            selector: ":selected",
+            style: {
+              "border-width": "5",
+              "border-color": "red",
+              "border-style": "dashed",
+              padding: "8px",
+            },
+          },
+        ],
+      });
+      if (graph_layout === "spread") {
+        let diverted_layout = {
+          name: "cose",
+          animate: false,
+          fit: true,
+          prelayout: false,
+        };
+        cy.layout(diverted_layout).run();
+      } else {
+        cy.layout(cy_layout).run();
+      }
+      //cy.layout(cy_layout).run();
+      //save current Ref
+      cytoscapeRef.current = cy;
     }
   }
 
@@ -351,9 +479,17 @@ const GraphContainer = (props) => {
           style={{ display: graphIsAvailable ? "none" : "block" }}
         >
           <Empty
-            description={"No previous graph found: click draw to create one"}
+            description={
+              prevSessionData ? "Reload previous graph" : "No graph. Create one"
+            }
             image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
+          >
+            {prevSessionData && (
+              <Button onClick={reloadChartHandler} type="primary">
+                <ReloadOutlined />
+              </Button>
+            )}
+          </Empty>
         </div>
         <div
           id="graph-cont-is-processing"
@@ -368,7 +504,7 @@ const GraphContainer = (props) => {
                 spin
               />
             </span>{" "}
-            Processing ...
+            Creating graph ...
           </p>
         </div>
       </Col>
@@ -401,6 +537,8 @@ function mapDispatchToProps(dispatch) {
       graphClusterToStore,
       colorLUTtoStore,
       changeIsUserDownloadingSetting,
+      changeChartSessionSetting,
+      changeIsUserLoadSessionSetting,
     },
     dispatch
   );
