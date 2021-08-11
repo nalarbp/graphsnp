@@ -22,6 +22,7 @@ export const initialState = {
   graphObject: null,
   graphClusters: null,
   graphSettings: {
+    typeOfAnalysis: "clustering", //clustering;transmission
     method: "mcg",
     layout: "cose",
     isUserReDraw: false,
@@ -42,12 +43,14 @@ export const initialState = {
     dataToDisplay: "all",
     dataColumn: null,
     dataColumnLevel: null,
-    chartType: "violin",
+    chartType: "barplot",
     isUserGenerateMatrix: false,
     chartOrientation: "horizontal",
     isUserDrawChart: false,
-    snpDistExportFormat: "svg",
+    snpDistExportFormat: "symSnpDist",
     isUserExportSnpDist: false,
+    chartSession: null,
+    isUserReloadSession: false,
   },
   navSettings: {
     navLocation: null,

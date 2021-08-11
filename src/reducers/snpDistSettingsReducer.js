@@ -66,6 +66,20 @@ const snpDistSettingsReducer = (prevState, action) => {
       }
       return newState_iue;
 
+    case constant.DIST_CHART_SESSION:
+      let newState_dcs = Object.assign({}, prevState);
+      if (action.payload !== prevState.chartSession) {
+        newState_dcs.chartSession = action.payload;
+      }
+      return newState_dcs;
+
+    case constant.DIST_IS_USER_LOAD_SESSION:
+      let newState_iuls = Object.assign({}, prevState);
+      if (action.payload !== prevState.isUserReloadSession) {
+        newState_iuls.isUserReloadSession = action.payload;
+      }
+      return newState_iuls;
+
     default:
       if (prevState) {
         return prevState;

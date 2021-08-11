@@ -104,3 +104,10 @@ export function changeTransIcludeLocLevel(val) {
     payload: val,
   };
 }
+
+export function changeTypeOfAnalysis(val) {
+  return {
+    type: constant.SETTING_TYPE_ANALYSIS,
+    payload: val,
+  };
+}

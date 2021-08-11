@@ -107,6 +107,12 @@ const graphSettingsReducer = (prevState, action) => {
         newState_transLocLevel.transIncludeLocLevel = action.payload;
       }
       return newState_transLocLevel;
+    case constant.SETTING_TYPE_ANALYSIS:
+      let newState_typeOfAnalysis = Object.assign({}, prevState);
+      if (action.payload && action.payload !== prevState.typeOfAnalysis) {
+        newState_typeOfAnalysis.typeOfAnalysis = action.payload;
+      }
+      return newState_typeOfAnalysis;
 
     default:
       if (prevState) {

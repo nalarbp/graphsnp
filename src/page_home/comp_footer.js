@@ -37,7 +37,6 @@ const FooterComponent = (props) => {
             The University of Queensland
           </a>{" "}
           | Australia
-          <br /> {new Date().getFullYear()}
         </p>
       </Col>
     </Row>
@@ -45,3 +44,4 @@ const FooterComponent = (props) => {
 };
 
 export default FooterComponent;
+// <br /> {new Date().getFullYear()}

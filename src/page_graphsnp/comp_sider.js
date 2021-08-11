@@ -21,6 +21,7 @@ import {
   changeIsHideEdgesByCutoff,
   changeEdgesHideCutoff,
   changeTransIcludeLocLevel,
+  changeTypeOfAnalysis,
 } from "../action/graphSettingsActions";
 
 const { Option } = Select;
@@ -42,6 +43,7 @@ const SiderMenu = (props) => {
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
   const trans_locLevel = props.graphSettings.transIncludeLocLevel;
+  const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
 
   //HANDLERS
   const changeMethodHandler = (val) => {
@@ -140,6 +142,26 @@ const SiderMenu = (props) => {
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h5>Graph settings</h5>
+          <p>Type of analysis</p>
+          <Select
+            disabled={props.sequence ? false : true}
+            value={graph_typeOfAnalysis}
+            style={{ width: "100%" }}
+            onChange={changeLayoutHandler}
+          >
+            <Option disabled={props.sequence ? false : true} value="clustering">
+              {" "}
+              Cluster analysis{" "}
+            </Option>
+            <Option
+              disabled={props.sequence && props.metadata ? false : true}
+              value="transmission"
+            >
+              Transmission analysis
+            </Option>
+          </Select>
+        </Col>
+        <Col span={24}>
           <p>Construction method</p>
           <Select
             disabled={props.sequence ? false : true}
@@ -184,7 +206,6 @@ const SiderMenu = (props) => {
             <Option value="cose"> CoSE</Option>
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
-            <Option value="random">Random</Option>
             <Option value="concentric">Concentric</Option>
           </Select>
         </Col>
@@ -388,6 +409,7 @@ function mapDispatchToProps(dispatch) {
       changeIsHideEdgesByCutoff,
       changeEdgesHideCutoff,
       changeTransIcludeLocLevel,
+      changeTypeOfAnalysis,
     },
     dispatch
   );

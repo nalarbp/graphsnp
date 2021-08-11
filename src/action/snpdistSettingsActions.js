@@ -62,3 +62,17 @@ export function dist_changeIsUserGenerateMatrix(val) {
     payload: val,
   };
 }
+
+export function dist_changeChartSession(val) {
+  return {
+    type: constant.DIST_CHART_SESSION,
+    payload: val,
+  };
+}
+
+export function dist_changeIsUserLoadSession(val) {
+  return {
+    type: constant.DIST_IS_USER_LOAD_SESSION,
+    payload: val,
+  };
+}

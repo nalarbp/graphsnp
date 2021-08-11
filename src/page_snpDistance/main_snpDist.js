@@ -1,5 +1,6 @@
 import React from "react";
-import { Layout } from "antd";
+import { Layout, Row, Col, Empty } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import "./style_snpDist.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
@@ -18,6 +19,18 @@ const SNPdistance = (props) => {
         </Sider>
         <Layout>
           <Content>{props.hammingMatrix && <SNPdistViewer />}</Content>
+          <Content>
+            {!props.hammingMatrix && (
+              <Col span={24}>
+                <div id="bar-chart-cont-is-empty" style={{ display: "block" }}>
+                  <Empty
+                    description={"No SNPs alignment input: Please load one."}
+                    image={Empty.PRESENTED_IMAGE_SIMPLE}
+                  />
+                </div>
+              </Col>
+            )}
+          </Content>
         </Layout>
       </Layout>
     </React.Fragment>

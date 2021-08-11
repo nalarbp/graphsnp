@@ -1,17 +1,20 @@
-import React, { useEffect, useRef } from "react";
-import { Row, Col } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { Row, Col, Empty, Button } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 import "./style_snpDist.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
   dist_changeIsUserDraw,
   dist_changeIsUserExport,
+  dist_changeIsUserLoadSession,
+  dist_changeChartSession,
 } from "../action/snpdistSettingsActions";
 import * as d3Select from "d3-selection";
 //import useResizeObserver from "../hooks/hook_resizeObserver"; //Broken
 import GraphEdgeList from "../model/graphEdgeList_prop";
-import { vh, vw } from "../utils/utils";
-import { createBarPlot_all } from "./chart_barplot_all";
+import { vh, vw, downloadSVG } from "../utils/utils";
+import { createBarPlot_all, recreateChart } from "./chart_barplot_all";
 import { createSNPdistCSVFile } from "../utils/create_exportFile";
 
 const _ = require("lodash");
@@ -24,11 +27,14 @@ const SNPdistViewer = (props) => {
   //Drawing constructor
   const dim_w = vw(100) - 200 - 20; //200 is sider width, 20 is just a nice margin
   const dim_h = vh(100) - 120 - 20;
-  const margin = { top: 20, right: 30, bottom: 30, left: 50 };
+  const margin = { top: 20, right: 20, bottom: 40, left: 60 };
   const chartArea_width = dim_w - margin.left - margin.right;
   const chartArea_height = dim_h - margin.top - margin.bottom;
 
   //States
+  //state
+  const [chartIsDisplayed, setChartIsDisplayed] = useState(false);
+
   const metadata_arr = props.metadata
     ? Array.from(props.metadata.values())
     : null;
@@ -41,16 +47,37 @@ const SNPdistViewer = (props) => {
   const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
   const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
   const isUserExportSnpDist = props.snpDistSettings.isUserExportSnpDist;
+  const prevSessionData = props.snpDistSettings.chartSession;
+  const isUserReloadSession = props.snpDistSettings.isUserReloadSession;
+
+  //Automatic reload if we have previous session
+  if (prevSessionData) {
+    setTimeout(() => {
+      redraw();
+      setChartIsDisplayed(true);
+    }, 10);
+  }
 
   //UseEffect
   useEffect(() => {
     if (isUserDrawChart) {
       setTimeout(() => {
         draw();
+        setChartIsDisplayed(true);
         props.dist_changeIsUserDraw(false);
       }, 10);
     }
   }, [isUserDrawChart]);
+
+  useEffect(() => {
+    if (isUserReloadSession) {
+      setTimeout(() => {
+        redraw();
+        setChartIsDisplayed(true);
+        props.dist_changeIsUserLoadSession(false);
+      }, 10);
+    }
+  }, [isUserReloadSession]);
 
   useEffect(() => {
     if (isUserExportSnpDist) {
@@ -71,6 +98,10 @@ const SNPdistViewer = (props) => {
           props.dist_changeIsUserExport(false);
           break;
 
+        case "barChartSvg":
+          downloadSVG("snpdist-chart-svg");
+          break;
+
         default:
           break;
       }
@@ -78,6 +109,12 @@ const SNPdistViewer = (props) => {
   }, [snpDistExportFormat, isUserExportSnpDist]);
 
   //Functions
+  const reloadChartHandler = (val) => {
+    if (!isUserReloadSession) {
+      props.dist_changeIsUserLoadSession(true);
+    }
+  };
+
   function getIsolatesByDataColumnAndLevel(meta_arr, dataCol, dataColLevel) {
     let filteredRec = meta_arr.filter((rec) => {
       if (rec[dataCol] === dataColLevel) {
@@ -121,7 +158,8 @@ const SNPdistViewer = (props) => {
         data_list,
         chartArea_width,
         chartArea_height,
-        margin
+        margin,
+        props.dist_changeChartSession
       );
     } else {
       //get column header and level
@@ -148,7 +186,8 @@ const SNPdistViewer = (props) => {
           data_list,
           chartArea_width,
           chartArea_height,
-          margin
+          margin,
+          props.dist_changeChartSession
         );
       }
     }
@@ -162,8 +201,30 @@ const SNPdistViewer = (props) => {
     // }
   }
 
+  //RE-DRAWING
+  function redraw() {
+    // console.log("draw", +new Date());
+    //clean previous drawing artifacts
+    d3Select.select("#snpdist_svgGroup").remove();
+    const svg = d3Select.select(snpdistSVGRef.current);
+    recreateChart(svg, prevSessionData);
+  }
+
   return (
     <Row>
+      <Col span={24}>
+        <div id="bar-chart-cont-is-empty" style={{ display: "block" }}>
+          <Empty
+            style={{ display: chartIsDisplayed ? "none" : "block" }}
+            description={
+              prevSessionData
+                ? "Reload previous chart"
+                : "No chart, create one "
+            }
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          ></Empty>
+        </div>
+      </Col>
       <Col ref={chartContainerRef} sm={24}>
         <div
           id="snpdist-chart-container"
@@ -189,9 +250,17 @@ function mapDispatchToProps(dispatch) {
     {
       dist_changeIsUserDraw,
       dist_changeIsUserExport,
+      dist_changeChartSession,
+      dist_changeIsUserLoadSession,
     },
     dispatch
   );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistViewer);
+
+/*
+<Button onClick={reloadChartHandler} type="primary">
+              Reload
+            </Button>
+*/

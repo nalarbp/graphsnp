@@ -201,3 +201,14 @@ export function downloadFileAsText(filename, text) {
 
   document.body.removeChild(element);
 }
+
+export function downloadSVG(id) {
+  //const svgsaver = new SVGSaver();
+  let svg_node = document.querySelector(`#${id}`);
+  let XMLS = new XMLSerializer();
+  if (id === "summary-piechart") {
+    svg_node = document.querySelector(`#${id} svg`);
+  }
+  let svgString = XMLS.serializeToString(svg_node);
+  downloadFileAsText(`GraphSNP-${id}.svg`, svgString);
+}

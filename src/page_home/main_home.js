@@ -84,6 +84,11 @@ const Home = (props) => {
         <Col xs={24} sm={8}>
           <PatientMovementLoader />
         </Col>
+        <Col xs={24} style={{ padding: "5px 0 0 5px" }}>
+          <h5>
+            Click the input button or drag and drop input file(s) to start
+          </h5>
+        </Col>
       </Row>
       <FooterComponent />
     </React.Fragment>

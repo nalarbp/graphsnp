@@ -1,7 +1,8 @@
 import React from "react";
-import { Button, Row, Col, Select, Divider } from "antd";
+import { Button, Row, Col, Select, Divider, Tooltip } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import {
   dist_changeDataToDisplay,
   dist_changeDataColumn,
@@ -61,6 +62,7 @@ const SNPdistSettings = (props) => {
   };
 
   const exportChartHandler = (val) => {
+    console.log("downlaod handlers");
     if (!isUserExportSnpDist) {
       props.dist_changeIsUserExport(true);
     }
@@ -110,8 +112,18 @@ const SNPdistSettings = (props) => {
     <React.Fragment>
       <Row gutter={[8, 8]}>
         <Col span={24}>
-          <h5>Pair-wise SNPs distance settings</h5>
-          <p>Show distribution for:</p>
+          <h5>Bar chart settings</h5>
+          <p>
+            Select isolates{" "}
+            <span>
+              <Tooltip
+                title="Select group of isolates for bar chart visualization."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
             value={dataToDisplay}
             style={{ width: "100%" }}
@@ -123,75 +135,106 @@ const SNPdistSettings = (props) => {
               disabled={props.metadata ? false : true}
               value="per-category"
             >
-              Isolates in specific group (metadata)
+              Specific group (metadata)
             </Option>
           </Select>
         </Col>
 
-        <Col span={24}>
-          <p>Select column in metadata</p>
-          <Select
-            value={dataColumn}
-            style={{ width: "100%" }}
-            disabled={
-              dataToDisplay !== "all" && props.hammingMatrix && props.metadata
-                ? false
-                : true
-            }
-            onChange={dataColumnHandler}
-          >
-            {props.colorLUT && Object.keys(props.colorLUT)
-              ? Object.keys(props.colorLUT).map((k, i) => {
-                  return getMetadataColumn(k, i);
-                })
-              : ["na"].map((l, j) => {
-                  return (
-                    <Option key={j} disabled={false} value={l}>
-                      {l}
-                    </Option>
-                  );
-                })}
-          </Select>
-        </Col>
+        {dataToDisplay === "per-category" &&
+          props.hammingMatrix &&
+          props.metadata && (
+            <Col span={24}>
+              <p>
+                Select metadata column{" "}
+                <span>
+                  <Tooltip
+                    title="Column in metadata which group of isolates to be displayed"
+                    placement="rightTop"
+                  >
+                    <QuestionCircleOutlined style={{ color: "red" }} />
+                  </Tooltip>
+                </span>
+              </p>
+              <Select
+                value={dataColumn}
+                style={{ width: "100%" }}
+                disabled={
+                  dataToDisplay === "per-category" &&
+                  props.hammingMatrix &&
+                  props.metadata
+                    ? false
+                    : true
+                }
+                onChange={dataColumnHandler}
+              >
+                {props.colorLUT && Object.keys(props.colorLUT)
+                  ? Object.keys(props.colorLUT).map((k, i) => {
+                      return getMetadataColumn(k, i);
+                    })
+                  : ["na"].map((l, j) => {
+                      return (
+                        <Option key={j} disabled={false} value={l}>
+                          {l}
+                        </Option>
+                      );
+                    })}
+              </Select>
+            </Col>
+          )}
 
-        <Col span={24}>
-          <p>Select group in the choosen column</p>
-          <Select
-            value={dataColumnLevel}
-            style={{ width: "100%" }}
-            disabled={
-              dataToDisplay !== "all" &&
-              dataColumn &&
-              props.metadata &&
-              metadata_arr
-                ? false
-                : true
-            }
-            onChange={dataColumnLevelHandler}
-          >
-            {dataColumn && metadata_arr
-              ? getMetadataColumnLevels_arr(metadata_arr, dataColumn).map(
-                  (e, x) => {
-                    return getMetadataColumnLevel(e, x);
-                  }
-                )
-              : ["na"].map((l, j) => {
-                  return (
-                    <Option key={j} disabled={false} value={l}>
-                      {l}
-                    </Option>
-                  );
-                })}
-          </Select>
-        </Col>
+        {dataToDisplay === "per-category" &&
+          dataColumn &&
+          props.metadata &&
+          metadata_arr && (
+            <Col span={24}>
+              <p>
+                Select group{" "}
+                <span>
+                  <Tooltip
+                    title="Categorical group from the selected metadata column"
+                    placement="rightTop"
+                  >
+                    <QuestionCircleOutlined style={{ color: "red" }} />
+                  </Tooltip>
+                </span>
+              </p>
+              <Select
+                value={dataColumnLevel}
+                style={{ width: "100%" }}
+                disabled={
+                  dataToDisplay !== "all" &&
+                  dataColumn &&
+                  props.metadata &&
+                  metadata_arr
+                    ? false
+                    : true
+                }
+                onChange={dataColumnLevelHandler}
+              >
+                {dataColumn && metadata_arr
+                  ? getMetadataColumnLevels_arr(metadata_arr, dataColumn).map(
+                      (e, x) => {
+                        return getMetadataColumnLevel(e, x);
+                      }
+                    )
+                  : ["na"].map((l, j) => {
+                      return (
+                        <Option key={j} disabled={false} value={l}>
+                          {l}
+                        </Option>
+                      );
+                    })}
+              </Select>
+            </Col>
+          )}
 
         <Col span={24}>
           <Button
             disabled={props.hammingMatrix ? false : true}
             onClick={drawChartHandler}
-            danger={true}
+            type="primary"
           >
-            Create bar chart
+            Create chart
           </Button>
         </Col>
 
@@ -199,8 +242,19 @@ const SNPdistSettings = (props) => {
 
         <Col span={24}>
           <h5>Download settings</h5>
-          <p>Format </p>
+          <p>
+            Type{" "}
+            <span>
+              <Tooltip
+                title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
           <Select
+            disabled={props.hammingMatrix ? false : true}
             value={snpDistExportFormat}
             onChange={exportFormatHandler}
             style={{ width: "100%" }}
@@ -209,15 +263,18 @@ const SNPdistSettings = (props) => {
               disabled={props.hammingMatrix ? false : true}
               value="symSnpDist"
             >
-              Pairwise SNP distances
+              Table of pairwise SNP distances (CSV)
             </Option>
-            <Option value="svg">SVG Chart</Option>
-            <Option value="png">PNG Chart</Option>
+            <Option value="barChartSvg">Bar chart (SVG)</Option>
           </Select>
         </Col>
 
         <Col span={24}>
-          <Button onClick={exportChartHandler} danger={true}>
+          <Button
+            disabled={props.hammingMatrix ? false : true}
+            onClick={exportChartHandler}
+            type="primary"
+          >
             Download
           </Button>
         </Col>
