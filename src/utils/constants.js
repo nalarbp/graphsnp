@@ -22,6 +22,8 @@ export const TIME_TREE_DATA = "TIME_TREE_DATA";
 export const COLOR_LUT = "COLOR_LUT";
 //Demo dataset selection
 export const SELECT_DEMO_DATA = "SELECT_DEMO_DATA";
+//Selected Node
+export const SELECTED_NODE = "SELECTED_NODE";
 
 //Graph Settings
 export const SETTING_METHOD = "SETTING_METHOD";
@@ -42,7 +44,6 @@ export const SETTING_TRANS_LOC_LEVEL = "SETTING_TRANS_LOC_LEVEL";
 export const SETTING_TYPE_ANALYSIS = "SETTING_TYPE_ANALYSIS";
 export const SETTING_CHART_SESSION = "SETTING_CHART_SESSION";
 export const SETTING_IS_USER_LOAD_SESSION = "SETTING_IS_USER_LOAD_SESSION";
-export const SETTING_SELECTED_NODE = "SETTING_SELECTED_NODE";
 
 //Snp dist settings
 export const DIST_DATA_TO_DISPLAY = "DIST_DATA_TO_DISPLAY";

@@ -129,13 +129,6 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_iuls;
 
-    case constant.SETTING_SELECTED_NODE:
-      let newState_ssn = Object.assign({}, prevState);
-      if (action.payload !== prevState.selectedNode) {
-        newState_ssn.selectedNode = action.payload;
-      }
-      return newState_ssn;
-
     default:
       if (prevState) {
         return prevState;

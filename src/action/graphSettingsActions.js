@@ -126,9 +126,9 @@ export function changeIsUserLoadSessionSetting(val) {
   };
 }
 
-export function changeSelectedNodeSetting(val) {
+export function changeSelectedNode(val) {
   return {
-    type: constant.SETTING_SELECTED_NODE,
+    type: constant.SELECTED_NODE,
     payload: val,
   };
 }

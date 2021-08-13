@@ -34,6 +34,7 @@ import {
   changeIsUserDownloadingSetting,
   changeChartSessionSetting,
   changeIsUserLoadSessionSetting,
+  changeSelectedNode,
 } from "../action/graphSettingsActions";
 
 const _ = require("lodash");
@@ -379,7 +380,22 @@ const GraphContainer = (props) => {
           //console.log("7. Cytoscape running with layout ##", +new Date());
           cy.layout(cy_layout).run();
         }
+        //node event click listener
+        cy.selectionType("single");
+        cy.nodes().bind("click", function (evt) {
+          let clickedNode = [evt.target.data("id")];
+          // get isolate object by source name
+          console.log("clicked", clickedNode);
+          props.changeSelectedNode(clickedNode);
+        });
+        //click on background listener
+        cy.on("click", function (evt) {
+          if (evt.target === cy) {
+            props.changeSelectedNode([]);
+          }
+        });
         //cy.layout(cy_layout).run();
+        //save current Ref
         //save current Ref
         cytoscapeRef.current = cy;
 
@@ -481,6 +497,18 @@ const GraphContainer = (props) => {
       } else {
         cy.layout(cy_layout).run();
       }
+      //node event click listener
+      cy.selectionType("single");
+      cy.nodes().bind("click", function (evt) {
+        let clickedNode = [evt.target.data("id")];
+        props.changeSelectedNode(clickedNode);
+      });
+      //click on background listener
+      cy.on("click", function (evt) {
+        if (evt.target === cy) {
+          props.changeSelectedNode([]);
+        }
+      });
       //cy.layout(cy_layout).run();
       //save current Ref
       cytoscapeRef.current = cy;
@@ -511,7 +539,11 @@ const GraphContainer = (props) => {
           id="graph-cont-is-processing"
           style={{ display: processingGraph ? "block" : "none" }}
         >
-          <p>
+          <p
+            style={{
+              textAlign: "right",
+            }}
+          >
             <span>
               <LoadingOutlined
                 style={{
@@ -555,6 +587,7 @@ function mapDispatchToProps(dispatch) {
       changeIsUserDownloadingSetting,
       changeChartSessionSetting,
       changeIsUserLoadSessionSetting,
+      changeSelectedNode,
     },
     dispatch
   );

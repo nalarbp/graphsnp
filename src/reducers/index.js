@@ -12,6 +12,7 @@ import categoricalMapReducer from "./categoricalMapReducer";
 import colorLUTReducer from "./colorLUTReducer";
 import snpDistSettingsReducer from "./snpDistSettingsReducer";
 import selectDemoDataReducer from "./selectDemoDataReducer";
+import selectedNodeReducer from "./selectedNodeReducer";
 
 export const initialState = {
   sequence: null,
@@ -23,9 +24,10 @@ export const initialState = {
   hammMatrix: null,
   graphObject: null,
   graphClusters: null,
+  selectedNode: null, //exception, reducers and action were on
   graphSettings: {
     typeOfAnalysis: "clustering", //clustering;transmission
-    method: "cathai",
+    method: "mcg",
     layout: "cose",
     isUserReDraw: false,
     isUserFilteringEdge: true,
@@ -42,7 +44,6 @@ export const initialState = {
     transIncludeLocLevel: 1,
     chartSession: null,
     isUserReloadSession: false,
-    selectedNode: null,
   },
   snpDistSettings: {
     dataToDisplay: "all",
@@ -77,6 +78,7 @@ const rootReducer = combineReducers(
     isInputLoading: isInputLoadingReducer,
     colorLUT: colorLUTReducer,
     snpDistSettings: snpDistSettingsReducer,
+    selectedNode: selectedNodeReducer,
   },
   initialState
 );
