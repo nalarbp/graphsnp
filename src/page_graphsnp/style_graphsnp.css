@@ -1,6 +1,6 @@
 #graphsnp-container {
   background-color: rgb(243, 243, 243);
-  padding: 0px 15px;
+  padding: 0px;
   height: calc(100vh - 130px);
   width: 100%;
 }

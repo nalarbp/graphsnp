@@ -1,7 +1,7 @@
 import React from "react";
 import { Layout } from "antd";
 import "./style_graphsnp.css";
-
+import MetadataBox from "./comp_metadataBox";
 import SiderMenu from "./comp_sider";
 import GraphContainer from "./comp_graphContainer";
 
@@ -17,6 +17,7 @@ const GraphSNP = () => {
         </Sider>
         <Layout>
           <Content id="graphsnp-container">
+            <MetadataBox />
             <GraphContainer />
           </Content>
         </Layout>

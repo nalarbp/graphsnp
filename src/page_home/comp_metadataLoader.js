@@ -1,6 +1,11 @@
 import React from "react";
-import { Upload, Button, message } from "antd";
-import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { Upload, Button, message, Tooltip } from "antd";
+import {
+  StopOutlined,
+  CheckCircleFilled,
+  DeleteOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
@@ -49,30 +54,61 @@ const MetadataInputLoader = (props) => {
     }
   };
 
+  const removeMetadataHandler = (val) => {
+    props.metadataToStore(null);
+    props.colorLUTtoStore(null);
+    props.categoricalMapToStore(null);
+  };
+
   return (
     <React.Fragment>
-      <Dragger
-        accept={".csv"}
-        showUploadList={false}
-        style={{
-          height: "500px",
-          backgroundColor: "transparent",
-        }}
-        name="file"
-        multiple={false}
-        action="dummy-post"
-        beforeUpload={beforeUploadHandler}
-      >
-        <div id="input-loader-metadata">
+      <div>
+        <Dragger
+          accept={".csv"}
+          showUploadList={false}
+          style={{
+            height: "500px",
+            backgroundColor: "transparent",
+          }}
+          name="file"
+          multiple={false}
+          action="dummy-post"
+          beforeUpload={beforeUploadHandler}
+        >
+          <div id="input-loader-metadata">
+            <Button
+              id="input-loader-button-metadata"
+              shape={"round"}
+              size={"large"}
+            >
+              {getIconStatus()} Metadata{" "}
+              <span style={{ marginLeft: "5px" }}>
+                <Tooltip
+                  title="Input or drag and drop metadata file (CSV) here"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined
+                    style={{ fontSize: "14px", color: "white" }}
+                  />
+                </Tooltip>
+              </span>
+            </Button>
+          </div>
+        </Dragger>
+        <div className="remove-button-container">
           <Button
-            id="input-loader-button-metadata"
-            shape={"round"}
-            size={"large"}
+            disabled={props.metadata ? false : true}
+            title={"Remove loaded metadata"}
+            type={"ghost"}
+            className="input-loader-remove-button "
+            shape={"circle"}
+            size={"small"}
+            onClick={removeMetadataHandler}
           >
-            {getIconStatus()} Metadata
+            <DeleteOutlined />
           </Button>
         </div>
-      </Dragger>
+      </div>
     </React.Fragment>
   );
 };

@@ -53,7 +53,10 @@ const GraphContainer = (props) => {
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
-  const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
+  const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
+  const graph_edgeFilterCutoff = graph_isUserFilterEdges
+    ? props.graphSettings.edgeFilterCutoff
+    : null;
   const graph_clusterMethod = props.graphSettings.clusterMethod;
   const graph_isUserClustering = props.graphSettings.isUserClustering;
   const graph_isEdgesHideByCutoff = props.graphSettings.isHideEdgesByCutoff;
@@ -74,13 +77,17 @@ const GraphContainer = (props) => {
 
   useEffect(() => {
     if (graph_isUserReDraw) {
-      setProcessingGraph(true);
+      //console.log("1. START: user click draw ##", +new Date());
+      setProcessingGraph(true); // set time out to delay drawing and let processing graph state run
       setTimeout(function () {
+        //console.log("2. setTimeout start and draw start ##", +new Date());
         draw();
+        //console.log("8. Draw end in setTimeout ##", +new Date());
         setGraphIsAvailable(true);
         setProcessingGraph(false);
         props.changeIsUserReDrawSetting(false);
-      }, 100);
+        //console.log("9. SetTimeout end ##", +new Date());
+      }, 10);
     }
   }, [graph_isUserReDraw]);
 
@@ -255,6 +262,7 @@ const GraphContainer = (props) => {
 
   //DRAW
   function draw() {
+    //console.log("3. Start drawing, creating hammingMatrix ##", +new Date());
     //check hamming distance ? if not create one, send to store at the end.
     const hammingMatrix = !props.hammMatrix
       ? new HammingMatrix(props.sequence).getHammingMatrix()
@@ -264,6 +272,8 @@ const GraphContainer = (props) => {
 
     //Look at param (method, seq, ), generate graph object: util functions
     //graphObject: {type:'mcg', mapData: edgeList object}
+    //console.log("4. Creating graph object ##", +new Date());
+
     const graphObject = createGraphObject(
       hammingMatrix,
       graph_method,
@@ -276,104 +286,110 @@ const GraphContainer = (props) => {
     );
 
     //generate cytoscape data
-    //graphObject = [{data:{id:id, nodeType:'singleton', data:[]}}, { data: {source: s, target: t, weight: w} } ]
-    const cytoscapeData = createCytoscapeData(graphObject);
+    if (graphObject && graphObject.nodes && graphObject.edges) {
+      //cytoscapeData = [{data:{id:id, nodeType:'singleton', data:[]}}, { data: {source: s, target: t, weight: w} } ]
+      //console.log("5. Creating cytoscape data ##", +new Date());
+      const cytoscapeData = createCytoscapeData(graphObject);
 
-    //Load and view cytoscape
-    if (cytoscapeData) {
-      const cy = cytoscape({
-        elements: cytoscapeData,
-        container: document.getElementById("graph-cont-cytoscape-canvas"),
-        pannable: true,
-        selected: true,
-        boxSelectionEnabled: false,
-        style: [
-          {
-            selector: "node",
-            style: {
-              label: "data(id)",
-              "border-width": 3,
-              "border-style": "solid",
-              "border-color": "black",
-              "background-color": "lightgray",
-            },
-          },
-          {
-            selector: "edge",
-            style: {
-              opacity: function (o) {
-                let edgeWeight = o.data("weight");
-                //console.log(edgeWeight);
-                if (graph_isEdgesHideByCutoff) {
-                  let res =
-                    edgeWeight < graph_edgesHideCutoff.min ||
-                    edgeWeight > graph_edgesHideCutoff.max
-                      ? 0
-                      : 1;
-                  return res;
-                } else {
-                  return 1;
-                }
-              },
-              label: "data(weight)",
-              "font-size": "10px",
-              "text-background-color": "#F5E372",
-              color: "red",
-              width: function (e) {
-                return getEdgeAndArrowWidth(
-                  graph_isEdgeScaled,
-                  e.data("weight"),
-                  graph_edgeScaleFactor,
-                  "edge"
-                );
-              },
-              "target-arrow-color": "black",
-              "target-arrow-shape": (e) => {
-                return e.data("dir") === "forward" ? "triangle" : "none";
-              },
-              "curve-style": "bezier",
-              "arrow-scale": function (e) {
-                return getEdgeAndArrowWidth(
-                  graph_isEdgeScaled,
-                  e.data("weight"),
-                  graph_edgeScaleFactor,
-                  "arrow"
-                );
+      //Load and view cytoscape
+      if (cytoscapeData) {
+        //console.log("6. Cytoscape data mapping ##", +new Date());
+        const cy = cytoscape({
+          elements: cytoscapeData,
+          container: document.getElementById("graph-cont-cytoscape-canvas"),
+          pannable: true,
+          selected: true,
+          boxSelectionEnabled: false,
+          style: [
+            {
+              selector: "node",
+              style: {
+                label: "data(id)",
+                "border-width": 3,
+                "border-style": "solid",
+                "border-color": "black",
+                "background-color": "lightgray",
               },
             },
-          },
-          {
-            selector: ":selected",
-            style: {
-              "border-width": "5",
-              "border-color": "red",
-              "border-style": "dashed",
-              padding: "8px",
+            {
+              selector: "edge",
+              style: {
+                opacity: function (o) {
+                  let edgeWeight = o.data("weight");
+                  //console.log(edgeWeight);
+                  if (graph_isEdgesHideByCutoff) {
+                    let res =
+                      edgeWeight < graph_edgesHideCutoff.min ||
+                      edgeWeight > graph_edgesHideCutoff.max
+                        ? 0
+                        : 1;
+                    return res;
+                  } else {
+                    return 1;
+                  }
+                },
+                label: "data(weight)",
+                "font-size": "10px",
+                "text-background-color": "#F5E372",
+                color: "red",
+                width: function (e) {
+                  return getEdgeAndArrowWidth(
+                    graph_isEdgeScaled,
+                    e.data("weight"),
+                    graph_edgeScaleFactor,
+                    "edge"
+                  );
+                },
+                "target-arrow-color": "black",
+                "target-arrow-shape": (e) => {
+                  return e.data("dir") === "forward" ? "triangle" : "none";
+                },
+                "curve-style": "bezier",
+                "arrow-scale": function (e) {
+                  return getEdgeAndArrowWidth(
+                    graph_isEdgeScaled,
+                    e.data("weight"),
+                    graph_edgeScaleFactor,
+                    "arrow"
+                  );
+                },
+              },
             },
-          },
-        ],
-      });
-      if (graph_layout === "spread") {
-        let diverted_layout = {
-          name: "cose",
-          animate: false,
-          fit: true,
-          prelayout: false,
-        };
-        cy.layout(diverted_layout).run();
-      } else {
-        cy.layout(cy_layout).run();
-      }
-      //cy.layout(cy_layout).run();
-      //save current Ref
-      cytoscapeRef.current = cy;
+            {
+              selector: ":selected",
+              style: {
+                "border-width": "5",
+                "border-color": "red",
+                "border-style": "dashed",
+                padding: "8px",
+              },
+            },
+          ],
+        });
+        if (graph_layout === "spread") {
+          let diverted_layout = {
+            name: "cose",
+            animate: false,
+            fit: true,
+            prelayout: false,
+          };
 
-      //==== SEND TO STORE ====
-      if (props.hammMatrix) {
-        props.hmmMatrixToStore(hammingMatrix);
+          cy.layout(diverted_layout).run();
+        } else {
+          //console.log("7. Cytoscape running with layout ##", +new Date());
+          cy.layout(cy_layout).run();
+        }
+        //cy.layout(cy_layout).run();
+        //save current Ref
+        cytoscapeRef.current = cy;
+
+        //==== SEND TO STORE ====
+        if (props.hammMatrix) {
+          props.hmmMatrixToStore(hammingMatrix);
+        }
+        props.graphObjectToStore(graphObject);
+        props.changeChartSessionSetting(cytoscapeData);
       }
-      props.graphObjectToStore(graphObject);
-      props.changeChartSessionSetting(cytoscapeData);
     }
   }
 

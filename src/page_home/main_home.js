@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, Col, Modal, Spin } from "antd";
+import { Row, Col, Modal, Spin, Select } from "antd";
 import "./style_home.css";
 import { connect } from "react-redux";
 //import { Link, NavLink } from "react-router-dom";
@@ -10,6 +10,7 @@ import SNPsLoader from "./comp_snpsLoader";
 import TitleHeader from "./comp_titleHeader";
 import MetadataLoader from "./comp_metadataLoader";
 import PatientMovementLoader from "./comp_patientMovementLoader";
+import SelectDemoData from "./comp_selectDemoData";
 import FooterComponent from "./comp_footer";
 import Particles from "react-particles-js";
 import { vh } from "../utils/utils";
@@ -84,11 +85,9 @@ const Home = (props) => {
         <Col xs={24} sm={8}>
           <PatientMovementLoader />
         </Col>
-        <Col xs={24} style={{ padding: "5px 0 0 5px" }}>
-          <h5>
-            Click the input button or drag and drop input file(s) to start
-          </h5>
-        </Col>
+      </Row>
+      <Row id="demo-selection">
+        <SelectDemoData />
       </Row>
       <FooterComponent />
     </React.Fragment>
@@ -116,5 +115,10 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
 /*
 <Col xs={24}>
           <TitleHeader />
+        </Col>
+        <Col xs={24} style={{ padding: "5px 0 0 5px" }}>
+          <h5>
+            Click the input button or drag and drop input file(s) to start
+          </h5>
         </Col>
 */

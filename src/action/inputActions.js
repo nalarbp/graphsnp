@@ -27,3 +27,10 @@ export function isinputLoadingToStore(val) {
     payload: val,
   };
 }
+
+export function selectDemoDataToStore(val) {
+  return {
+    type: constant.SELECT_DEMO_DATA,
+    payload: val,
+  };
+}

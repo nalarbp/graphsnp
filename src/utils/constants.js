@@ -20,6 +20,8 @@ export const METADATA_CATEGORICAL = "METADATA_CATEGORICAL";
 export const TIME_TREE_DATA = "TIME_TREE_DATA";
 //Color LUT
 export const COLOR_LUT = "COLOR_LUT";
+//Demo dataset selection
+export const SELECT_DEMO_DATA = "SELECT_DEMO_DATA";
 
 //Graph Settings
 export const SETTING_METHOD = "SETTING_METHOD";
@@ -40,6 +42,7 @@ export const SETTING_TRANS_LOC_LEVEL = "SETTING_TRANS_LOC_LEVEL";
 export const SETTING_TYPE_ANALYSIS = "SETTING_TYPE_ANALYSIS";
 export const SETTING_CHART_SESSION = "SETTING_CHART_SESSION";
 export const SETTING_IS_USER_LOAD_SESSION = "SETTING_IS_USER_LOAD_SESSION";
+export const SETTING_SELECTED_NODE = "SETTING_SELECTED_NODE";
 
 //Snp dist settings
 export const DIST_DATA_TO_DISPLAY = "DIST_DATA_TO_DISPLAY";
@@ -53,3 +56,24 @@ export const DIST_IS_USER_DRAW = "DIST_IS_USER_DRAW";
 export const DIST_IS_USER_EXPORT = "DIST_IS_USER_EXPORT";
 export const DIST_CHART_SESSION = "DIST_CHART_SESSION";
 export const DIST_IS_USER_LOAD_SESSION = "DIST_IS_USER_LOAD_SESSION";
+
+//Demonstration dataset
+export const DEMO = {
+  demo1: {
+    snps: "./data/demoFile/1/st78_snps_input.fa",
+    metadata: "./data/demoFile/1/st78_metadata_input.csv",
+    stayTimeline: "./data/demoFile/1/st78_patientStayTimeline_input.csv",
+  },
+  demo2: {
+    snps: "./data/demoFile/2/seqtk_snps_input.fa",
+    metadata: "./data/demoFile/2/seqtk_metadata_input.csv",
+    stayTimeline: null,
+  },
+};
+
+//Input files template
+export const TEMPLATE = {
+  snps: "./data/templateFile/snps_input.fa",
+  metadata: "./data/templateFile/metadata_input.csv",
+  stayTimeline: "./data/templateFile/patientStayTimeline_input.csv",
+};

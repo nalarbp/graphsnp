@@ -10,21 +10,21 @@
 }
 
 #input-loader-snps {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 420px);
 }
 /*
 background-color: rgba(255, 164, 164, 0.3);
 */
 
 #input-loader-metadata {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 420px);
 }
 /*
 background-color: rgba(255, 194, 115, 0.3);
 */
 
 #input-loader-patientMovement {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 420px);
 }
 /*
 background-color: rgba(104, 220, 255, 0.3);
@@ -41,12 +41,27 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
   background: url("../img/bg_content_header.png") no-repeat fixed center,
     linear-gradient(90deg, rgb(238, 173, 76) 10%, rgb(226, 88, 69) 100%);
 */
+.remove-button-container {
+  width: 100%;
+  font-size: 9px;
+  margin: auto;
+  text-align: center;
+}
+
+.input-loader-remove-button {
+  color: white;
+  border: 0px solid white;
+  border-color: none;
+  background-color: rgb(25, 180, 89);
+  margin: 5px auto;
+  text-align: center;
+}
 
 #input-loader-button-snps {
   color: white;
   background-color: rgb(255, 94, 88);
   border: 1px solid white;
-  margin-top: calc((100vh - 380px) / 2);
+  margin-top: calc((100vh - 420px) / 2);
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -57,7 +72,7 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
   color: white;
   background-color: rgb(255, 160, 16);
   border: 1px solid white;
-  margin-top: calc((100vh - 380px) / 2);
+  margin-top: calc((100vh - 420px) / 2);
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -68,7 +83,7 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
   color: white;
   background-color: rgb(4, 205, 219);
   border: 1px solid white;
-  margin-top: calc((100vh - 380px) / 2);
+  margin-top: calc((100vh - 420px) / 2);
   margin-left: auto;
   margin-right: auto;
   text-align: center;
@@ -82,13 +97,23 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
   margin: 0px;
 }
 
+#demo-selection {
+  width: 100vw;
+  height: auto;
+  text-align: left;
+  padding-left: 40px;
+  margin: auto;
+  padding-top: 15px;
+  background-color: rgb(255, 255, 255);
+}
+
 #footer-component {
   width: 100vw;
   height: auto;
   text-align: left;
   padding-left: 50px;
   margin: auto;
-  padding-top: 34px;
+  padding-top: 15px;
   background-color: rgb(255, 255, 255);
 }
 
@@ -117,5 +142,5 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
 */
 
 .particles-bg {
-  height: calc(100vh - 380px);
+  height: calc(100vh - 420px);
 }

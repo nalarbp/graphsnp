@@ -1,0 +1,93 @@
+import React from "react";
+import { Typography, Divider } from "antd";
+import "./style_documentation.css";
+
+const { Title, Text } = Typography;
+
+const Extra = (props) => {
+  return (
+    <React.Fragment>
+      <div className="graphsnp-docs-content">
+        <Title level={2} underline>
+          Browser compatibility{" "}
+        </Title>
+        GraphSNP was developed using on a create react app (CRA) tool and so it
+        works on majority of modern browsers. Except Internet Explorer (IE),
+        GraphSNP was tested and compatible on the following desktop browsers:
+        <ul>
+          <li> Microsoft Edge (v.xx) </li>
+          <li> Safari (v.xx)</li>
+          <li> Chrome (v.xx) </li>
+          <li> Firefox (v.90.0)</li>
+          <li> Opera (v.xx) </li>
+        </ul>
+        <Title level={3}>Core libraries</Title>
+        <Text>
+          Thanks to all awesome web frameworks and libraries run on the
+          background, HAIviz is now up and running and available worldwide. The
+          following are some of the core libraries used by HAIviz:
+          <ul>
+            <li>
+              <a
+                href="https://reactjs.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                React.js
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://d3js.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Data-Driven Documents (D3.js)
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://ant.design/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Ant design UI
+              </a>
+            </li>
+            <li>
+              <a
+                href="https://js.cytoscape.org/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Cytoscape
+              </a>
+            </li>
+            <li>
+              awesome CRA, cytoscape-svg, dotparser, export-to-csv, lodash,
+              moment, moment-range, react-color, react-faux-dom, react-measure,
+              react-player, redux, etc.
+            </li>
+          </ul>
+        </Text>
+        <Title level={3}>Have any questions? </Title>
+        <Text>
+          Please feel free to send it to my email:{" "}
+          <span style={{ weight: "bold", color: "blue" }}>
+            b.permana@uq.edu.au
+          </span>
+        </Text>
+        <Title level={2} underline>
+          Cite us{" "}
+        </Title>
+        <Text>
+          If you use GraphSNP in your publication, please cite our papers
+          [available soon] and [CATHAI paper]
+        </Text>
+        <Divider />
+      </div>
+    </React.Fragment>
+  );
+};
+
+export default Extra;

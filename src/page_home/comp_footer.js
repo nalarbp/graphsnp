@@ -10,7 +10,7 @@ const FooterComponent = (props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            GraphSNP v.0.1
+            <b>GraphSNP v.1 (beta) </b>
           </a>
           <br />
           <b>

@@ -5,7 +5,6 @@ export function createMCG(rawMatrix, edgeCutoff) {
   //Assumed the input is true
   //Take an adjacency Map of pair-wise SNVs distance and edgecutoff (number > 0)
   //Return graph with only edge that have minimum value among other pair-wise sibling edges (format adjacency list)
-
   let mat = _.cloneDeep(rawMatrix);
   let edgeList = [];
   let nodeList = [];
@@ -34,7 +33,7 @@ export function createMCG(rawMatrix, edgeCutoff) {
     sortedRow.splice(indexOnValueGreaterThanCutoff);
 
     //Filter by cut-off
-    if (edgeCutoff && edgeCutoff > 0) {
+    if (edgeCutoff !== null && edgeCutoff > 0) {
       sortedRow = sortedRow.filter((e) => {
         return e.value <= edgeCutoff;
       });

@@ -13,7 +13,7 @@ export function createCATHAI(rawMatrix, edgeCutoff) {
     let sortedRow = val;
 
     //Filter by cut-off
-    if (edgeCutoff && edgeCutoff > 0) {
+    if (edgeCutoff !== null && edgeCutoff > 0) {
       sortedRow = sortedRow.filter((e) => {
         return e.value <= edgeCutoff;
       });

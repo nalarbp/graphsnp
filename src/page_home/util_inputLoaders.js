@@ -1,13 +1,98 @@
 import { csv } from "d3-fetch";
 import { utcParse } from "d3-time-format";
 import Moment from "moment";
+import { message } from "antd";
 import { extendMoment } from "moment-range";
 import * as util from "../utils/utils";
+import HammingMatrix from "../model/hammingMatrix_prop";
 
 const _ = require("lodash");
 const moment = extendMoment(Moment);
+const fastaToJson = require("bio-parsers").fastaToJson;
 
 export const isoDateParser = utcParse("%Y-%m-%d");
+//========================== SNPS ============================
+export async function snpsLoader(
+  fastaString,
+  propsSequenceToStore,
+  propsHmmMatrixToStore,
+  propsIsinputLoadingToStore
+) {
+  //console.log("async");
+  const sequenceJSON = await fastaToJson(fastaString);
+  const snpsSequence = [];
+  if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
+    //console.log(sequenceJSON);
+    //check all error message, alert, and no seq to store
+    let isolateName = {};
+    let seqLen = [];
+    let noErr = true;
+    for (let index = 0; index < sequenceJSON.length; index++) {
+      let messages = sequenceJSON[index].messages;
+      let parsedSequence = sequenceJSON[index].parsedSequence;
+      let success = sequenceJSON[index].success;
+      //tracking size
+      if (seqLen.indexOf(parsedSequence.size) === -1) {
+        seqLen.push(parsedSequence.size);
+      }
+      //check success parsing
+      if (!success) {
+        noErr = false;
+        alert("Parsing error:", parsedSequence.name);
+        break;
+      }
+      //check err messages
+      if (messages.length > 0) {
+        noErr = false;
+        alert(messages[0]);
+        break;
+      }
+      //check sequence length
+      if (seqLen.length > 1) {
+        noErr = false;
+        alert("Size error: Alignment required sequence with same length");
+        break;
+      }
+      //check duplicated isolate
+      if (!isolateName[parsedSequence.name]) {
+        isolateName[parsedSequence.name] = true;
+      } else {
+        noErr = false;
+        alert("Sequence error: Duplicated sequence");
+        break;
+      }
+      //making snpsSequence
+      if (noErr) {
+        snpsSequence.push({
+          id: parsedSequence.name,
+          size: parsedSequence.size,
+          sequence: parsedSequence.sequence.toLowerCase(),
+        });
+      }
+    }
+
+    if (noErr) {
+      //display success message
+      message.success(
+        "The sequences have been loaded, now building distance matrix ..",
+        1
+      );
+      setTimeout(() => {
+        const hammingMatrix = new HammingMatrix(
+          snpsSequence
+        ).getHammingMatrix();
+        message.success("Pair-wise SNP distance matrix has been created", 1);
+        propsSequenceToStore(snpsSequence);
+        propsHmmMatrixToStore(hammingMatrix);
+        propsIsinputLoadingToStore(false);
+      }, 100);
+
+      //load to store
+    }
+  } else {
+    alert("Error: Required at least 2 sequences");
+  }
+}
 //========================== METADATA ============================
 export async function getMetadataInput(
   fileURL,

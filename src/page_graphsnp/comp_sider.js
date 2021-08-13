@@ -317,34 +317,53 @@ const SiderMenu = (props) => {
           </Checkbox>
         </Col>
 
-        {graph_isUserFilterEdges && (
+        <Col span={24}>
+          <p>
+            Cutoff number{" "}
+            <span>
+              <Tooltip
+                title="Maximum pairwise SNPs distance to be included in graph 
+                  (e.g. 25 SNPs cutoff will include edges with 0 to 25 SNPs)."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <InputNumber
+            min={0}
+            disabled={graph_isUserFilterEdges && props.sequence ? false : true}
+            step={1}
+            value={graph_edgeFilterCutoff}
+            onChange={edgeCutoffHandler}
+            style={{ marginBottom: "5px" }}
+          />
+        </Col>
+
+        {graph_method === "hierSnpsMetaStayOverlap" && (
           <Col span={24}>
             <p>
-              Cutoff number{" "}
+              Filter weighted edges
               <span>
                 <Tooltip
-                  title="Maximum pairwise SNPs distance to be included in graph 
-                  (e.g. 25 SNPs cutoff will include edges with 0 to 25 SNPs)."
+                  title="Filter edges based on its weight. 
+                The weight is a combination score computed from pairwise SNP distances and stay overlap in hierarhical order.
+                The weight assignation are: 
+                #1 (all SNP distances), 
+                #2 (#1+SNP distances less and equal to cutoff),
+                #3 (#2+They had overlap stay at hospital level),
+                #4 (#3+They had overlap stay at ward level),
+                #5 (#4+They had overlap stay at bay level), and
+                #6 (#5+They had overlap stay at bed level).
+                So an edge with weight of #6 represents the highest score for a possible transmission
+                based on their SNPs distance and stay overlap in bed level.
+                *Stay overlap is considered in 7 days range (REF)"
                   placement="rightTop"
                 >
                   <QuestionCircleOutlined style={{ color: "red" }} />
                 </Tooltip>
               </span>
             </p>
-            <InputNumber
-              min={0}
-              disabled={props.sequence ? false : true}
-              step={1}
-              value={graph_edgeFilterCutoff}
-              onChange={edgeCutoffHandler}
-              style={{ marginBottom: "5px" }}
-            />
-          </Col>
-        )}
-
-        {graph_method === "hierSnpsMetaStayOverlap" && (
-          <Col span={24}>
-            <p>Filter transmission edges from: (hierarchically) </p>
             <Select
               disabled={
                 graph_method === "hierSnpsMetaStayOverlap" ? false : true
@@ -452,7 +471,7 @@ const SiderMenu = (props) => {
           </p>
           <InputNumber
             min={0.00001}
-            disabled={props.graphObject ? false : true}
+            disabled={graph_isEdgeScaled && props.graphObject ? false : true}
             step={0.1}
             value={graph_edgeScaleFactor}
             onChange={edgeScaleFactorHandler}
@@ -479,30 +498,31 @@ const SiderMenu = (props) => {
           </Checkbox>
         </Col>
 
-        {graph_isEdgesHideByCutoff && (
-          <Col span={12}>
-            <p>Minimum</p>
-            <InputNumber
-              min={0}
-              disabled={props.graphObject ? false : true}
-              step={0.1}
-              value={graph_edgesHideCutoff.min}
-              onChange={edgesHideCutoffMinHandler}
-            />
-          </Col>
-        )}
-        {graph_isEdgesHideByCutoff && (
-          <Col span={12}>
-            <p>Maximum</p>
-            <InputNumber
-              min={0}
-              disabled={props.graphObject ? false : true}
-              step={0.1}
-              value={graph_edgesHideCutoff.max}
-              onChange={edgesHideCutoffMaxHandler}
-            />
-          </Col>
-        )}
+        <Col span={12}>
+          <p>Minimum</p>
+          <InputNumber
+            min={0}
+            disabled={
+              graph_isEdgesHideByCutoff && props.graphObject ? false : true
+            }
+            step={0.1}
+            value={graph_edgesHideCutoff.min}
+            onChange={edgesHideCutoffMinHandler}
+          />
+        </Col>
+
+        <Col span={12}>
+          <p>Maximum</p>
+          <InputNumber
+            min={0}
+            disabled={
+              graph_isEdgesHideByCutoff && props.graphObject ? false : true
+            }
+            step={0.1}
+            value={graph_edgesHideCutoff.max}
+            onChange={edgesHideCutoffMaxHandler}
+          />
+        </Col>
 
         <Col span={24}>
           <p>
@@ -555,6 +575,7 @@ const SiderMenu = (props) => {
             value={graph_exportFormat}
             style={{ width: "100%" }}
             onChange={changeExportFormatHandler}
+            disabled={props.graphObject || props.graphClusters ? false : true}
           >
             <Option disabled={props.graphObject ? false : true} value="svg">
               Graph image (SVG)

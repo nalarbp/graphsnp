@@ -1,19 +1,143 @@
 import React from "react";
-import { Upload, Button, message } from "antd";
-import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { Upload, Button, message, Tooltip } from "antd";
+import {
+  StopOutlined,
+  CheckCircleFilled,
+  DeleteFilled,
+  DeleteOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { sequenceToStore, isinputLoadingToStore } from "../action/inputActions";
-import HammingMatrix from "../model/hammingMatrix_prop";
 import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import { snpsLoader } from "./util_inputLoaders";
 
-const fastaToJson = require("bio-parsers").fastaToJson;
 const { Dragger } = Upload;
 
 const InputLoader = (props) => {
   //console.log("Input Loader - init");
 
-  async function readFastaToJSON(fastaString) {
+  const beforeUploadHandler = (file) => {
+    if (file) {
+      let inputType = "seq";
+
+      //check extension
+      //check content
+
+      switch (inputType) {
+        case "seq":
+          const reader = new FileReader();
+          reader.readAsText(file);
+          //console.log(reader.readAsText(file));
+          props.isinputLoadingToStore(true);
+          reader.onloadend = function (evt) {
+            console.log(evt);
+            const dataText = evt.target.result;
+            snpsLoader(
+              dataText,
+              props.sequenceToStore,
+              props.hmmMatrixToStore,
+              props.isinputLoadingToStore
+            );
+          };
+          break;
+
+        default:
+          message.error("Invalid input file", 0.5);
+          break;
+      }
+    }
+    return false; //to avoid upload action (we parse and load it to store instead)
+  };
+
+  const getIconStatus = function () {
+    if (props.sequence) {
+      return <CheckCircleFilled style={{ fontSize: "14pt" }} />;
+    } else {
+      return <StopOutlined />;
+    }
+  };
+
+  const removeSNPHandler = (val) => {
+    props.sequenceToStore(null);
+    props.hmmMatrixToStore(null);
+  };
+
+  return (
+    <React.Fragment>
+      <div>
+        <Dragger
+          accept={".fa, .fasta, .fna, .mfa"}
+          showUploadList={false}
+          style={{
+            backgroundColor: "transparent",
+            height: "500px",
+          }}
+          name="file"
+          multiple={false}
+          action="dummy-post"
+          beforeUpload={beforeUploadHandler}
+        >
+          <div id="input-loader-snps">
+            <Button
+              id="input-loader-button-snps"
+              shape={"round"}
+              size={"large"}
+            >
+              {getIconStatus()} SNPs {"  "}
+              <span style={{ marginLeft: "5px" }}>
+                <Tooltip
+                  title="Input or drag and drop non-ambiguous multi-fasta SNPs alignment file here"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined
+                    style={{ fontSize: "14px", color: "white" }}
+                  />
+                </Tooltip>
+              </span>
+            </Button>
+          </div>
+        </Dragger>
+        <div className="remove-button-container">
+          <Button
+            disabled={props.sequence ? false : true}
+            title={"Remove loaded SNPs alignment"}
+            type={"ghost"}
+            className="input-loader-remove-button "
+            shape={"circle"}
+            size={"small"}
+            onClick={removeSNPHandler}
+          >
+            <DeleteOutlined />
+          </Button>
+        </div>
+      </div>
+    </React.Fragment>
+  );
+};
+
+function mapStateToProps(state) {
+  return {
+    sequence: state.sequence,
+    patientMovement: state.patientMovement,
+  };
+}
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators(
+    {
+      sequenceToStore,
+      isinputLoadingToStore,
+      hmmMatrixToStore,
+    },
+    dispatch
+  );
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputLoader);
+
+/*
+async function readFastaToJSON(fastaString) {
     if (props.sequence === null) {
       //console.log("async");
       const sequenceJSON = await fastaToJson(fastaString);
@@ -96,85 +220,6 @@ const InputLoader = (props) => {
       alert("Sequences have been loaded. Refresh to re-load a new one");
     }
   }
-
-  const beforeUploadHandler = (file) => {
-    if (file) {
-      let inputType = "seq";
-
-      //check extension
-      //check content
-
-      switch (inputType) {
-        case "seq":
-          const reader = new FileReader();
-          reader.readAsText(file);
-          props.isinputLoadingToStore(true);
-          reader.onloadend = function (evt) {
-            const dataText = evt.target.result;
-            readFastaToJSON(dataText);
-          };
-          break;
-
-        default:
-          message.error("Invalid input file", 0.5);
-          break;
-      }
-    }
-    return false; //to avoid upload action (we parse and load it to store instead)
-  };
-
-  const getIconStatus = function () {
-    if (props.sequence) {
-      return <CheckCircleFilled style={{ fontSize: "14pt" }} />;
-    } else {
-      return <StopOutlined />;
-    }
-  };
-
-  return (
-    <React.Fragment>
-      <Dragger
-        accept={".fa, .fasta, .fna, .mfa"}
-        showUploadList={false}
-        style={{
-          backgroundColor: "transparent",
-          height: "500px",
-        }}
-        name="file"
-        multiple={false}
-        action="dummy-post"
-        beforeUpload={beforeUploadHandler}
-      >
-        <div id="input-loader-snps">
-          <Button id="input-loader-button-snps" shape={"round"} size={"large"}>
-            {getIconStatus()} SNPs
-          </Button>
-        </div>
-      </Dragger>
-    </React.Fragment>
-  );
-};
-
-function mapStateToProps(state) {
-  return {
-    sequence: state.sequence,
-    patientMovement: state.patientMovement,
-  };
-}
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(
-    {
-      sequenceToStore,
-      isinputLoadingToStore,
-      hmmMatrixToStore,
-    },
-    dispatch
-  );
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InputLoader);
-
-/*
 
         */
 

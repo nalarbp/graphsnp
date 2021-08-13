@@ -38,7 +38,7 @@ export function createSMSO(
     let sortedRow = val;
 
     //Filter by cut-off
-    if (edgeCutoff && edgeCutoff > 0) {
+    if (edgeCutoff !== null && edgeCutoff > 0) {
       sortedRow = sortedRow.filter((e) => {
         return e.value <= edgeCutoff;
       });
@@ -208,21 +208,21 @@ function calculateTransScore(p1, p2, p1_stays, p2_stays, common_locLevel) {
           if (p1 === "P-13" && p2 === "P-18") {
             //console.log("???", is_stays_overlap);
             //console.log("+++", overlapDur, "days");
-            console.log(loc_comm_score);
-            console.log(
-              "p1",
-              p1_stay.hospital_id,
-              p1_stay.ward_id,
-              p1_stay.bay_id,
-              p1_stay.bed_id
-            );
-            console.log(
-              "p2",
-              p2_stay.hospital_id,
-              p2_stay.ward_id,
-              p2_stay.bay_id,
-              p2_stay.bed_id
-            );
+            // console.log(loc_comm_score);
+            // console.log(
+            //   "p1",
+            //   p1_stay.hospital_id,
+            //   p1_stay.ward_id,
+            //   p1_stay.bay_id,
+            //   p1_stay.bed_id
+            // );
+            // console.log(
+            //   "p2",
+            //   p2_stay.hospital_id,
+            //   p2_stay.ward_id,
+            //   p2_stay.bay_id,
+            //   p2_stay.bed_id
+            // );
           }
           if (loc_comm_score > scoreOverlap) {
             scoreOverlap = loc_comm_score;

@@ -24,11 +24,22 @@ export function createSeqTrack(
   });
   // console.log("cases:", cases);
 
-  // arguments check
-  // check for consistency of id between sequence and metadata
-  // check for every case must have proper collection dates
-  //
-  // process start
+  //error check
+  let paramsError = false;
+  //check for consistency of id between sequence and metadata
+  for (let i = 0; i < cases.length; i++) {
+    let aCase = cases[i];
+    let caseInAlignment = hammingDistMat.has(aCase.id);
+    if (!caseInAlignment) {
+      paramsError = true;
+      alert(
+        "Case id in metadata is not consistent with taxa id in alignment:" +
+          aCase.id
+      );
+      break;
+    }
+  }
+  //other check
 
   //Fun 4: Running selAmongAncestors
   function selAmongAncestors(
@@ -52,7 +63,6 @@ export function createSeqTrack(
       // if mutation rate not available, choose the oldest one
 
       if (!mut_rate || !snpLen) {
-        console.log("no mutation");
         let oldestAnces = ancesWithLowestSNPdist_wDate[0];
         return { ances: oldestAnces.id, snpDist: oldestAnces.snpDist };
       } else {
@@ -111,6 +121,7 @@ export function createSeqTrack(
     // console.log("lowestSNPdistAnces", lowestSNPdistAnces);
     return lowestSNPdistAnces;
   }
+
   //Fun 2: Running and calling selAmongAncestors
   function findAncestor(aCase, cases, hammingDistMat) {
     //Search and return 1 best ancestor for a caseID, from the list of available cases
@@ -173,32 +184,37 @@ export function createSeqTrack(
   }
 
   // PERFORM THIS FUN IF ALL REQUIREMENTS ARE MET
-  //initial result
-  let res = new Map();
-  for (let index = 0; index < cases.length; index++) {
-    const thisCase = cases[index];
-    //Fun 1: calling findAncestor function
-    let ancestor = findAncestor(thisCase, cases, hammingDistMat); //must return one best ancestor object for this caseId {ances: sample_id, snpDist= null}
-    //set the ancestor of this case to the result map
-    res.set(thisCase.id, ancestor);
-  }
-
-  //create a final graph object from the res map object
-  let final_graph = { nodes: [], edges: [] };
-  res.forEach((v, k) => {
-    final_graph.nodes.push(k);
-    if (v.ances !== "NA") {
-      final_graph.edges.push({
-        source: v.ances,
-        target: k,
-        value: v.snpDist,
-        dir: "forward",
-      });
+  if (!paramsError) {
+    //initial result
+    let res = new Map();
+    for (let index = 0; index < cases.length; index++) {
+      const thisCase = cases[index];
+      //Fun 1: calling findAncestor function
+      let ancestor = findAncestor(thisCase, cases, hammingDistMat); //must return one best ancestor object for this caseId {ances: sample_id, snpDist= null}
+      //set the ancestor of this case to the result map
+      res.set(thisCase.id, ancestor);
     }
-  });
-  //final_graph.nodes.push("NA");
 
-  //return final graph
+    //create a final graph object from the res map object
+    let final_graph = { nodes: [], edges: [] };
+    res.forEach((v, k) => {
+      final_graph.nodes.push(k);
+      if (v.ances !== "NA") {
+        final_graph.edges.push({
+          source: v.ances,
+          target: k,
+          value: v.snpDist,
+          dir: "forward",
+        });
+      }
+    });
+    //final_graph.nodes.push("NA");
 
-  return final_graph;
+    //return final graph
+
+    return final_graph;
+  } else {
+    let final_graph = { nodes: null, edges: null };
+    return final_graph;
+  }
 }

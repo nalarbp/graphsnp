@@ -11,12 +11,14 @@ import hammMatrixReducer from "./hammMatrixReducer";
 import categoricalMapReducer from "./categoricalMapReducer";
 import colorLUTReducer from "./colorLUTReducer";
 import snpDistSettingsReducer from "./snpDistSettingsReducer";
+import selectDemoDataReducer from "./selectDemoDataReducer";
 
 export const initialState = {
   sequence: null,
   metadata: null,
-  categoricalMap: null,
   patientMovement: null,
+  selectDemoData: null,
+  categoricalMap: null,
   isInputLoading: false,
   hammMatrix: null,
   graphObject: null,
@@ -40,6 +42,7 @@ export const initialState = {
     transIncludeLocLevel: 1,
     chartSession: null,
     isUserReloadSession: false,
+    selectedNode: null,
   },
   snpDistSettings: {
     dataToDisplay: "all",
@@ -63,6 +66,7 @@ const rootReducer = combineReducers(
   {
     sequence: sequenceReducer,
     metadata: metadataReducer,
+    selectDemoData: selectDemoDataReducer,
     categoricalMap: categoricalMapReducer,
     patientMovement: patientMovementReducer,
     navSettings: navSettingsReducer,

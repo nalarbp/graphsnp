@@ -44,10 +44,11 @@ export function createCGE(rawMatrix, categoricalMap, edgeCutoff) {
 
   let newEdges = graphEdgeList.edges;
   newEdges.forEach((pe) => {
-    pe.value = 1;
-    if (pe.value <= edgeCutoff) {
-      pe.value = pe.value + 1;
+    pe.value = 1; // we give all edges with SNPs distance score 1 (as genetic/SNPs)
+    if (edgeCutoff !== null && pe.value <= edgeCutoff) {
+      pe.value = pe.value + 1; // Next we add 1 score if cuttof is applied and the SNPs is below the cutoff (significant SNPs)
     }
+    //For every caterogical data available from metadata column add score 1 if they are in the same categorical group
     categoricalMap.forEach((val, key) => {
       if (val.indexOf(pe.source) !== -1 && val.indexOf(pe.target) !== -1) {
         pe.value = pe.value + 1;

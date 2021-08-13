@@ -1,6 +1,11 @@
 import React from "react";
-import { Upload, Button, message } from "antd";
-import { StopOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { Upload, Button, message, Tooltip } from "antd";
+import {
+  StopOutlined,
+  CheckCircleFilled,
+  DeleteOutlined,
+  QuestionCircleOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -50,30 +55,59 @@ const PatientMovementInputLoader = (props) => {
     }
   };
 
+  const removeStayTimelineHandler = (val) => {
+    props.patientMovementToStore(null);
+  };
+
   return (
     <React.Fragment>
-      <Dragger
-        accept={".csv"}
-        showUploadList={false}
-        style={{
-          height: "500px",
-          backgroundColor: "transparent",
-        }}
-        name="file"
-        multiple={false}
-        action="dummy-post"
-        beforeUpload={beforeUploadHandler}
-      >
-        <div id="input-loader-patientMovement">
+      <div>
+        <Dragger
+          accept={".csv"}
+          showUploadList={false}
+          style={{
+            height: "500px",
+            backgroundColor: "transparent",
+          }}
+          name="file"
+          multiple={false}
+          action="dummy-post"
+          beforeUpload={beforeUploadHandler}
+        >
+          <div id="input-loader-patientMovement">
+            <Button
+              id="input-loader-button-patientMovement"
+              shape={"round"}
+              size={"large"}
+            >
+              {getIconStatus()} Patient stay timeline{" "}
+              <span style={{ marginLeft: "5px" }}>
+                <Tooltip
+                  title="Input or drag and drop patient stay timeline (CSV) here"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined
+                    style={{ fontSize: "14px", color: "white" }}
+                  />
+                </Tooltip>
+              </span>
+            </Button>
+          </div>
+        </Dragger>
+        <div className="remove-button-container">
           <Button
-            id="input-loader-button-patientMovement"
-            shape={"round"}
-            size={"large"}
+            disabled={props.patientMovement ? false : true}
+            title={"Remove loaded timeline"}
+            type={"ghost"}
+            className="input-loader-remove-button "
+            shape={"circle"}
+            size={"small"}
+            onClick={removeStayTimelineHandler}
           >
-            {getIconStatus()} Stays Overlap
+            <DeleteOutlined />
           </Button>
         </div>
-      </Dragger>
+      </div>
     </React.Fragment>
   );
 };
