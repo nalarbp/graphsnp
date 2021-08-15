@@ -110,7 +110,7 @@ const SelectDemoData = (props) => {
       <Col xs={24}>
         <Select value={selectedDemoData} onChange={selectDemoDataHandler}>
           <Option value={null}>Select sample data</Option>
-          <Option value="demo1">ST78</Option>
+          <Option value="demo1">VRE ST78 outbreak</Option>
           <Option value="demo2">SeqTrack demonstration</Option>
         </Select>
       </Col>

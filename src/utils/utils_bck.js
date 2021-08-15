@@ -12,24 +12,28 @@ export function filterUnique(value, index, self) {
   return self.indexOf(value) === index;
 }
 
+// export function colorOrdinalInterpolator(domainList) {
+//   //domainList: [locA, locB, locC]
+//   //d3ChromaInterpolator: d3.InterpolateSpectral
+//   //return a function (interpolator) from a given domain and d3 interpolator
+//   // var domainInterpolator = scaleSequential()
+//   //   .domain([0, domainList.length])
+//   //   .interpolator(d3ChromaInterpolator);
+//   // var colorList = [];
+//   // for (var i = 0; i < domainList.length; i++) {
+//   //   colorList.push(domainInterpolator(i));
+//   // }
+//   var colorScale = scaleOrdinal().domain(domainList).range(d3Chroma.schemeSet3);
+//   return colorScale;
+// }
+
 export function colorInterpolatorDateSeq(dateRange) {
-  //domainInRange: [DateMin, max] to be converted into list of isoWeekAndYear
+  //domainInRange: [DateMin, max]
+  //d3ChromaInterpolator: d3.interpolateBuGn
   //return a function (interpolator) from a given domain and d3 interpolator
-  let momentStartDate = moment(dateRange[0]);
-  let momentEndDate = moment(dateRange[1]);
-  let isoWeek_start = momentStartDate.isoWeek().toString();
-  let isoWeek_end = momentEndDate.isoWeek().toString();
-
-  let isoWeekYear_start = momentStartDate.isoWeekYear().toString();
-  let isoWeekYear_end = momentEndDate.isoWeekYear().toString();
-
-  let isoWeekAndYear_start = parseInt(isoWeekYear_start + isoWeek_start);
-  let isoWeekAndYear_end = parseInt(isoWeekYear_end + isoWeek_end);
-
-  let domainInterpolator = scaleSequential(d3Chroma.interpolateYlOrRd).domain([
-    isoWeekAndYear_start,
-    isoWeekAndYear_end,
-  ]);
+  var domainInterpolator = scaleSequential()
+    .domain([domainInRange[0], domainInRange[1]])
+    .range(d3ChromaInterpolator);
 
   return domainInterpolator;
 }
@@ -50,33 +54,33 @@ export function createColorLUT(raw_sampleJSON, colorIndex) {
     let sampleDates = [];
     sampleJSON.forEach((d) => {
       groupsAll.push(d[colorIndex]);
-      if (colorIndex === "sample_date") {
+      if (d.sample_date) {
         sampleDates.push(d.sample_date);
       }
     });
 
     let groups = groupsAll.filter(filterUnique); // array of unique element as the group (levels)
-    let sampleDateRange =
-      sampleDates.length > 0 ? d3Array.extent(sampleDates) : null;
+    let sampleDateRange = d3Array.extent(sampleDates);
 
-    //d3Chroma.schemeSet3 only has 12 color, if you have 13 dateset, the 13th will be same as the 1st
-    let colorInterpolatorOrd = scaleOrdinal(d3Chroma.schemeSet3).domain(groups);
+    let colorInterpolatorOrd = scaleOrdinal()
+      .domain(groups)
+      .range(d3Chroma.schemeSet3);
 
-    let colorInterpolatorSeq = sampleDateRange
-      ? colorInterpolatorDateSeq(sampleDateRange)
-      : null; //required input: a isoWeekAndYear, output: color
+    //colorOrdinalInterpolator(groups);
+    //colorInterpolatorOrd is a scale function, input row (e.g. vanA or vanB) in the column (e.g vanType): output: color
+    //console.log("ordinal:", colorInterpolatorOrd);
+
+    let colorInterpolatorSeq = colorInterpolatorDateSeq(sampleDateRange); //required input: a isoWeekAndYear, output: color
+    //console.log("seq:", colorInterpolatorSeq);
 
     let colorMap = new Map();
     sampleJSON.forEach((d) => {
       if (colorIndex === "sample_date") {
-        let momentDate = moment(d[colorIndex]);
-        let isoWeek = momentDate.isoWeek().toString();
-        let isoWeekYear = momentDate.isoWeekYear().toString();
-        let isoWeekAndYear = parseInt(isoWeekYear + isoWeek);
-        let resultColor = color(
-          colorInterpolatorSeq(isoWeekAndYear)
-        ).formatHex();
-        colorMap.set(d.sample, resultColor); //return sample_id as key, and color in
+        // let momentDate = moment(d[colorIndex])
+        // let isoWeek = momentDate.isoWeek().toString()
+        // let isoWeekYear =momentDate.isoWeekYear().toString()
+        // let isoWeekAndYear = isoWeek+isoWeekYear
+        colorMap.set(d.sample, colorInterpolatorSeq(d[colorIndex])); //return sample_id as key, and color in
       } else {
         colorMap.set(d.sample, colorInterpolatorOrd(d[colorIndex]));
       }

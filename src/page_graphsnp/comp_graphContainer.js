@@ -385,7 +385,6 @@ const GraphContainer = (props) => {
         cy.nodes().bind("click", function (evt) {
           let clickedNode = [evt.target.data("id")];
           // get isolate object by source name
-          console.log("clicked", clickedNode);
           props.changeSelectedNode(clickedNode);
         });
         //click on background listener

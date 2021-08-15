@@ -45,7 +45,6 @@ const MetadataBox = (props) => {
 
   //USEEFFECTS
   useEffect(() => {
-    console.log("updated selected node", props.selectedNode);
     if (props.selectedNode) {
       if (props.selectedNode.length > 0) {
         let selectedNodeList = props.selectedNode.map((n) =>

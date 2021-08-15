@@ -43,7 +43,6 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
 */
 .remove-button-container {
   width: 100%;
-  font-size: 9px;
   margin: auto;
   text-align: center;
 }

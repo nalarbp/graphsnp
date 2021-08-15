@@ -215,7 +215,7 @@ const SiderMenu = (props) => {
                 <Tooltip
                   title="Method to construct clustering graph. 
                   [1]CATHAI: draw all pairwise SNP distances between nodes (cases) (Forde et al. 2021). 
-                  [2]Minimum CATHAI: Like CATHAI but only include the smallest pairwise SNP distance(s) as the representation of each node 
+                  [2]Minimum CATHAI: Like CATHAI but only include the lowest pairwise SNP distance(s) as the representation of each node 
                   [3]Weighted minimum CATHAI: Like minimum CATHAI but weighted with other categorical information from the metadata"
                   placement="rightTop"
                 >
@@ -332,7 +332,13 @@ const SiderMenu = (props) => {
           </p>
           <InputNumber
             min={0}
-            disabled={graph_isUserFilterEdges && props.sequence ? false : true}
+            disabled={
+              graph_isUserFilterEdges &&
+              props.sequence &&
+              graph_typeOfAnalysis === "clustering"
+                ? false
+                : true
+            }
             step={1}
             value={graph_edgeFilterCutoff}
             onChange={edgeCutoffHandler}
@@ -526,12 +532,12 @@ const SiderMenu = (props) => {
 
         <Col span={24}>
           <p>
-            Nodes coloring{" "}
+            Node color{" "}
             <span>
               <Tooltip
                 title="Color nodes by the selected column in metadata or by the clustering result.
                 User can also specify the color manually
-                (e.g. To specify color on column 'patient_group' add new column called 'patient_group:color' in metadata)."
+                (e.g. To specify color on column 'patient_group', add new column named 'patient_group:color' in metadata)."
                 placement="rightTop"
               >
                 <QuestionCircleOutlined style={{ color: "red" }} />

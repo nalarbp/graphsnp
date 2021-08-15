@@ -30,10 +30,14 @@ x metadata input OK
 #PAGE-SNP-DIST 
 
 #PAGE-GRAPH-SNP 
+- need to be able to save the reconstructed graph, so no wasting time to repeat reconstruction
+- add example case dataset
 ## Construction
+ - add option for cluster or transmission network reconstruction
 ### Method 
 ### Layout
     - Fix buh in Spread algorithm 
+    - Add update layout next to layout option: user need to click the update button to update the layout
 ### User drawing 
 
 ## Clustering 
