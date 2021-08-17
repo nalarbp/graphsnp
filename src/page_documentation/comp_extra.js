@@ -11,7 +11,7 @@ const Extra = (props) => {
         <Title level={2} underline>
           Browser compatibility{" "}
         </Title>
-        GraphSNP was developed using on a create react app (CRA) tool and so it
+        GraphSNP was boostrapped using Create React App (CRA) tool and so it
         works on majority of modern browsers. Except Internet Explorer (IE),
         GraphSNP was tested and compatible on the following desktop browsers:
         <ul>
@@ -23,9 +23,9 @@ const Extra = (props) => {
         </ul>
         <Title level={3}>Core libraries</Title>
         <Text>
-          Thanks to all awesome web frameworks and libraries run on the
-          background, HAIviz is now up and running and available worldwide. The
-          following are some of the core libraries used by HAIviz:
+          Thanks to all the frameworks and libraries run on the background,
+          GraphSNP is now up and running and available worldwide. These are some
+          of key frameworks and libraries used by GraphSNP:
           <ul>
             <li>
               <a
@@ -64,9 +64,9 @@ const Extra = (props) => {
               </a>
             </li>
             <li>
-              awesome CRA, cytoscape-svg, dotparser, export-to-csv, lodash,
+              Create React App, cytoscape-svg, dotparser, export-to-csv, lodash,
               moment, moment-range, react-color, react-faux-dom, react-measure,
-              react-player, redux, etc.
+              react-player, redux, react router etc.
             </li>
           </ul>
         </Text>

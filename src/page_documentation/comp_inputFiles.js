@@ -14,7 +14,10 @@ const InputFiles = (props) => {
           Input file(s){" "}
         </Title>
         <Title level={3}>A multi-fasta SNPs alignment</Title>
-        <Text>SNPs alignment</Text>
+        <Text>
+          SNPs alignment file must contain at least two equally length of
+          fasta-formatted non-gap nucleotide sequences.
+        </Text>
         <br />
         <br />
         <Button type={"primary"} href={constant.TEMPLATE.snps}>
@@ -24,7 +27,11 @@ const InputFiles = (props) => {
         <br />
 
         <Title level={3}>Metadata table</Title>
-        <Text>The metadata contains</Text>
+        <Text>
+          Metadata table must contain at least three non-empty columns:
+          sampleID, sampleDate, and sampleSource. Sample identifier must be
+          identical on both metadata and SNPs alignment.
+        </Text>
         <br />
         <br />
         <Button type={"primary"} href={constant.TEMPLATE.metadata}>
@@ -35,10 +42,9 @@ const InputFiles = (props) => {
 
         <Title level={3}>Patient stay timeline table </Title>
         <Text>
-          The phylogenetic tree input requires a Newick formatted tree with the
-          branch length and the name of the taxa. The taxa name is compulsory to
-          label the tree and link it with the metadata, while the branch length
-          is optional to scale an additive tree.
+          Patient stay timeline table (for nosocomial transmission analysis)
+          should list the period and location of patient stay in the hospital.
+          Such information must be provided in CSV-formatted file .
         </Text>
         <br />
         <br />

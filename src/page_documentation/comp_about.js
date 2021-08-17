@@ -18,7 +18,7 @@ const About = (props) => {
           pairwise SNP distances for outbreak cluster and transmission analysis.
           It is a client-side and standalone version of integrated cluster
           analysis platform CATHAI: Cluster Analysis for Healthcare Associated
-          Infenction (Forde et al., 2021)
+          Infection (REF:Forde et al., 2021)
         </Text>
         <Title level={3}>When to use </Title>
         <Text>You can use GraphSNP for:</Text>
