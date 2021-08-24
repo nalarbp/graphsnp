@@ -36,6 +36,7 @@ import {
   changeIsUserLoadSessionSetting,
   changeSelectedNode,
 } from "../action/graphSettingsActions";
+import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
 const _ = require("lodash");
 const fcose = require("cytoscape-fcose");
@@ -79,28 +80,31 @@ const GraphContainer = (props) => {
   useEffect(() => {
     if (graph_isUserReDraw) {
       //console.log("1. START: user click draw ##", +new Date());
-      setProcessingGraph(true); // set time out to delay drawing and let processing graph state run
+      //setProcessingGraph(true); // set time out to delay drawing and let processing graph state run
+
       setTimeout(function () {
         //console.log("2. setTimeout start and draw start ##", +new Date());
         draw();
         //console.log("8. Draw end in setTimeout ##", +new Date());
         setGraphIsAvailable(true);
-        setProcessingGraph(false);
+        //setProcessingGraph(false);
         props.changeIsUserReDrawSetting(false);
+        props.isShowingLoadingModalToStore(false);
         //console.log("9. SetTimeout end ##", +new Date());
-      }, 10);
+      }, 100);
     }
   }, [graph_isUserReDraw]);
 
   useEffect(() => {
     if (isUserReloadSession) {
-      setProcessingGraph(true);
+      //setProcessingGraph(true);
       setTimeout(() => {
         redraw();
         setGraphIsAvailable(true);
-        setProcessingGraph(false);
+        //setProcessingGraph(false);
         props.changeIsUserLoadSessionSetting(false);
-      }, 10);
+        props.isShowingLoadingModalToStore(false);
+      }, 100);
     }
   }, [isUserReloadSession]);
 
@@ -257,6 +261,7 @@ const GraphContainer = (props) => {
 
   const reloadChartHandler = (val) => {
     if (!isUserReloadSession) {
+      props.isShowingLoadingModalToStore(true);
       props.changeIsUserLoadSessionSetting(true);
     }
   };
@@ -295,6 +300,10 @@ const GraphContainer = (props) => {
       //Load and view cytoscape
       if (cytoscapeData) {
         //console.log("6. Cytoscape data mapping ##", +new Date());
+        if (prevSessionData) {
+          let cy = prevSessionData;
+          cy.unmount();
+        }
         const cy = cytoscape({
           elements: cytoscapeData,
           container: document.getElementById("graph-cont-cytoscape-canvas"),
@@ -309,7 +318,19 @@ const GraphContainer = (props) => {
                 "border-width": 3,
                 "border-style": "solid",
                 "border-color": "black",
-                "background-color": "lightgray",
+                "background-color": function (d) {
+                  if (graph_colorNodeBy && props.colorLUT) {
+                    let isolate_name = d.data("id");
+                    let col = getColorByColorIndex(
+                      isolate_name,
+                      graph_colorNodeBy,
+                      props.colorLUT
+                    );
+                    return col;
+                  } else {
+                    return "lightgray";
+                  }
+                },
               },
             },
             {
@@ -367,6 +388,7 @@ const GraphContainer = (props) => {
             },
           ],
         });
+
         if (graph_layout === "spread") {
           let diverted_layout = {
             name: "cose",
@@ -403,116 +425,122 @@ const GraphContainer = (props) => {
           props.hmmMatrixToStore(hammingMatrix);
         }
         props.graphObjectToStore(graphObject);
-        props.changeChartSessionSetting(cytoscapeData);
+        props.changeChartSessionSetting(cy);
       }
     }
   }
-
   function redraw() {
-    const cytoscapeData = prevSessionData;
-
-    //ReLoad and view cytoscape
-    if (cytoscapeData) {
-      const cy = cytoscape({
-        elements: cytoscapeData,
-        container: document.getElementById("graph-cont-cytoscape-canvas"),
-        pannable: true,
-        selected: true,
-        boxSelectionEnabled: false,
-        style: [
-          {
-            selector: "node",
-            style: {
-              label: "data(id)",
-              "border-width": 3,
-              "border-style": "solid",
-              "border-color": "black",
-              "background-color": "lightgray",
-            },
-          },
-          {
-            selector: "edge",
-            style: {
-              opacity: function (o) {
-                let edgeWeight = o.data("weight");
-                //console.log(edgeWeight);
-                if (graph_isEdgesHideByCutoff) {
-                  let res =
-                    edgeWeight < graph_edgesHideCutoff.min ||
-                    edgeWeight > graph_edgesHideCutoff.max
-                      ? 0
-                      : 1;
-                  return res;
-                } else {
-                  return 1;
-                }
-              },
-              label: "data(weight)",
-              "font-size": "10px",
-              "text-background-color": "#F5E372",
-              color: "red",
-              width: function (e) {
-                return getEdgeAndArrowWidth(
-                  graph_isEdgeScaled,
-                  e.data("weight"),
-                  graph_edgeScaleFactor,
-                  "edge"
-                );
-              },
-              "target-arrow-color": "black",
-              "target-arrow-shape": (e) => {
-                return e.data("dir") === "forward" ? "triangle" : "none";
-              },
-              "curve-style": "bezier",
-              "arrow-scale": function (e) {
-                return getEdgeAndArrowWidth(
-                  graph_isEdgeScaled,
-                  e.data("weight"),
-                  graph_edgeScaleFactor,
-                  "arrow"
-                );
-              },
-            },
-          },
-          {
-            selector: ":selected",
-            style: {
-              "border-width": "5",
-              "border-color": "red",
-              "border-style": "dashed",
-              padding: "8px",
-            },
-          },
-        ],
-      });
-      if (graph_layout === "spread") {
-        let diverted_layout = {
-          name: "cose",
-          animate: false,
-          fit: true,
-          prelayout: false,
-        };
-        cy.layout(diverted_layout).run();
-      } else {
-        cy.layout(cy_layout).run();
-      }
-      //node event click listener
-      cy.selectionType("single");
-      cy.nodes().bind("tap", function (evt) {
-        let clickedNode = [evt.target.data("id")];
-        props.changeSelectedNode(clickedNode);
-      });
-      //click on background listener
-      cy.on("tap", function (evt) {
-        if (evt.target === cy) {
-          props.changeSelectedNode([]);
-        }
-      });
-      //cy.layout(cy_layout).run();
-      //save current Ref
-      cytoscapeRef.current = cy;
-    }
+    let cy = prevSessionData;
+    cy.unmount();
+    cy.mount(document.getElementById("graph-cont-cytoscape-canvas"));
+    cytoscapeRef.current = cy;
   }
+
+  // function redraw() {
+  //   const cytoscapeData = prevSessionData;
+
+  //   //ReLoad and view cytoscape
+  //   if (cytoscapeData) {
+  //     const cy = cytoscape({
+  //       elements: cytoscapeData,
+  //       container: document.getElementById("graph-cont-cytoscape-canvas"),
+  //       pannable: true,
+  //       selected: true,
+  //       boxSelectionEnabled: false,
+  //       style: [
+  //         {
+  //           selector: "node",
+  //           style: {
+  //             label: "data(id)",
+  //             "border-width": 3,
+  //             "border-style": "solid",
+  //             "border-color": "black",
+  //             "background-color": "lightgray",
+  //           },
+  //         },
+  //         {
+  //           selector: "edge",
+  //           style: {
+  //             opacity: function (o) {
+  //               let edgeWeight = o.data("weight");
+  //               //console.log(edgeWeight);
+  //               if (graph_isEdgesHideByCutoff) {
+  //                 let res =
+  //                   edgeWeight < graph_edgesHideCutoff.min ||
+  //                   edgeWeight > graph_edgesHideCutoff.max
+  //                     ? 0
+  //                     : 1;
+  //                 return res;
+  //               } else {
+  //                 return 1;
+  //               }
+  //             },
+  //             label: "data(weight)",
+  //             "font-size": "10px",
+  //             "text-background-color": "#F5E372",
+  //             color: "red",
+  //             width: function (e) {
+  //               return getEdgeAndArrowWidth(
+  //                 graph_isEdgeScaled,
+  //                 e.data("weight"),
+  //                 graph_edgeScaleFactor,
+  //                 "edge"
+  //               );
+  //             },
+  //             "target-arrow-color": "black",
+  //             "target-arrow-shape": (e) => {
+  //               return e.data("dir") === "forward" ? "triangle" : "none";
+  //             },
+  //             "curve-style": "bezier",
+  //             "arrow-scale": function (e) {
+  //               return getEdgeAndArrowWidth(
+  //                 graph_isEdgeScaled,
+  //                 e.data("weight"),
+  //                 graph_edgeScaleFactor,
+  //                 "arrow"
+  //               );
+  //             },
+  //           },
+  //         },
+  //         {
+  //           selector: ":selected",
+  //           style: {
+  //             "border-width": "5",
+  //             "border-color": "red",
+  //             "border-style": "dashed",
+  //             padding: "8px",
+  //           },
+  //         },
+  //       ],
+  //     });
+  //     if (graph_layout === "spread") {
+  //       let diverted_layout = {
+  //         name: "cose",
+  //         animate: false,
+  //         fit: true,
+  //         prelayout: false,
+  //       };
+  //       cy.layout(diverted_layout).run();
+  //     } else {
+  //       cy.layout(cy_layout).run();
+  //     }
+  //     //node event click listener
+  //     cy.selectionType("single");
+  //     cy.nodes().bind("tap", function (evt) {
+  //       let clickedNode = [evt.target.data("id")];
+  //       props.changeSelectedNode(clickedNode);
+  //     });
+  //     //click on background listener
+  //     cy.on("tap", function (evt) {
+  //       if (evt.target === cy) {
+  //         props.changeSelectedNode([]);
+  //       }
+  //     });
+  //     //cy.layout(cy_layout).run();
+  //     //save current Ref
+  //     cytoscapeRef.current = cy;
+  //   }
+  // }
 
   return (
     <React.Fragment>
@@ -587,6 +615,7 @@ function mapDispatchToProps(dispatch) {
       changeChartSessionSetting,
       changeIsUserLoadSessionSetting,
       changeSelectedNode,
+      isShowingLoadingModalToStore,
     },
     dispatch
   );

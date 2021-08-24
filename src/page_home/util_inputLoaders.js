@@ -39,18 +39,21 @@ export async function snpsLoader(
       if (!success) {
         noErr = false;
         alert("Parsing error:", parsedSequence.name);
+        propsIsinputLoadingToStore(false);
         break;
       }
       //check err messages
       if (messages.length > 0) {
         noErr = false;
         alert(messages[0]);
+        propsIsinputLoadingToStore(false);
         break;
       }
       //check sequence length
       if (seqLen.length > 1) {
         noErr = false;
-        alert("Size error: Alignment required sequence with same length");
+        alert("Size error: Alignment required sequences with same length");
+        propsIsinputLoadingToStore(false);
         break;
       }
       //check duplicated isolate
@@ -59,6 +62,7 @@ export async function snpsLoader(
       } else {
         noErr = false;
         alert("Sequence error: Duplicated sequence");
+        propsIsinputLoadingToStore(false);
         break;
       }
       //making snpsSequence
@@ -91,6 +95,7 @@ export async function snpsLoader(
     }
   } else {
     alert("Error: Required at least 2 sequences");
+    propsIsinputLoadingToStore(false);
   }
 }
 //========================== METADATA ============================

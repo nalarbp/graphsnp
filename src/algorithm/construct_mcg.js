@@ -12,6 +12,7 @@ export function createMCG(rawMatrix, edgeCutoff) {
   mat.forEach((val, key) => {
     nodeList.push(key);
     //console.log("@@ --", key);
+    //sortedRow = [{a.xx: yy, a.value: 3}, {b.xx: yy, b.value: 4}]
     let sortedRow = val.sort((a, b) => a.value - b.value);
 
     let minDist = sortedRow[0].value;
@@ -24,13 +25,15 @@ export function createMCG(rawMatrix, edgeCutoff) {
       if (cell.value === minDist) {
         indexOnValueGreaterThanCutoff = i;
       } else {
-        indexOnValueGreaterThanCutoff = i;
+        indexOnValueGreaterThanCutoff = i; //return array containing deleted elements
         //console.log("++break", indexOnValueGreaterThanCutoff);
         break;
       }
     }
-    //remove based on index
-    sortedRow.splice(indexOnValueGreaterThanCutoff);
+    //remove element(s) equal or greater than the cutoff: IF index > 0
+    if (indexOnValueGreaterThanCutoff > 0) {
+      sortedRow.splice(indexOnValueGreaterThanCutoff);
+    }
 
     //Filter by cut-off
     if (edgeCutoff !== null && edgeCutoff > 0) {

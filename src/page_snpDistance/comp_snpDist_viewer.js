@@ -10,6 +10,7 @@ import {
   dist_changeIsUserLoadSession,
   dist_changeChartSession,
 } from "../action/snpdistSettingsActions";
+import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions.js";
 import * as d3Select from "d3-selection";
 //import useResizeObserver from "../hooks/hook_resizeObserver"; //Broken
 import GraphEdgeList from "../model/graphEdgeList_prop";
@@ -61,10 +62,12 @@ const SNPdistViewer = (props) => {
   //UseEffect
   useEffect(() => {
     if (isUserDrawChart) {
+      props.isShowingLoadingModalToStore(true);
       setTimeout(() => {
         draw();
         setChartIsDisplayed(true);
         props.dist_changeIsUserDraw(false);
+        props.isShowingLoadingModalToStore(false);
       }, 10);
     }
   }, [isUserDrawChart]);
@@ -164,31 +167,34 @@ const SNPdistViewer = (props) => {
     } else {
       //get column header and level
       if (metadata_arr && dataColumn && dataColumnLevel) {
-        let includedIsolates = getIsolatesByDataColumnAndLevel(
-          metadata_arr,
-          dataColumn,
-          dataColumnLevel
-        );
-        let filtered_chart_data = chart_data.filter((d) => {
-          if (
-            includedIsolates.indexOf(d.source) !== -1 &&
-            includedIsolates.indexOf(d.target) !== -1
-          ) {
-            return true;
-          } else {
-            return false;
-          }
-        });
-        let data_list = filtered_chart_data.map((d) => d.value);
-        const svg = d3Select.select(snpdistSVGRef.current);
-        createBarPlot_all(
-          svg,
-          data_list,
-          chartArea_width,
-          chartArea_height,
-          margin,
-          props.dist_changeChartSession
-        );
+        if (dataColumnLevel === "Intra-inter-group") {
+        } else {
+          let includedIsolates = getIsolatesByDataColumnAndLevel(
+            metadata_arr,
+            dataColumn,
+            dataColumnLevel
+          );
+          let filtered_chart_data = chart_data.filter((d) => {
+            if (
+              includedIsolates.indexOf(d.source) !== -1 &&
+              includedIsolates.indexOf(d.target) !== -1
+            ) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+          let data_list = filtered_chart_data.map((d) => d.value);
+          const svg = d3Select.select(snpdistSVGRef.current);
+          createBarPlot_all(
+            svg,
+            data_list,
+            chartArea_width,
+            chartArea_height,
+            margin,
+            props.dist_changeChartSession
+          );
+        }
       }
     }
 
@@ -207,7 +213,10 @@ const SNPdistViewer = (props) => {
     //clean previous drawing artifacts
     d3Select.select("#snpdist_svgGroup").remove();
     const svg = d3Select.select(snpdistSVGRef.current);
-    recreateChart(svg, prevSessionData);
+    if (dataColumnLevel === "Intra-inter-group") {
+    } else {
+      recreateChart(svg, prevSessionData);
+    }
   }
 
   return (
@@ -252,6 +261,7 @@ function mapDispatchToProps(dispatch) {
       dist_changeIsUserExport,
       dist_changeChartSession,
       dist_changeIsUserLoadSession,
+      isShowingLoadingModalToStore,
     },
     dispatch
   );

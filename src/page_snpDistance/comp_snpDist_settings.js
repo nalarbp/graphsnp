@@ -1,8 +1,8 @@
 import React from "react";
-import { Button, Row, Col, Select, Divider, Tooltip } from "antd";
+import { Button, Row, Col, Select, Divider, Tooltip, Modal, Spin } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
   dist_changeDataToDisplay,
   dist_changeDataColumn,
@@ -16,6 +16,7 @@ import {
 import { filterUnique } from "../utils/utils";
 
 const { Option } = Select;
+const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const SNPdistSettings = (props) => {
   //GLOBAL
@@ -88,6 +89,7 @@ const SNPdistSettings = (props) => {
         Array.isArray(dataColumnLevels_arr) &&
         dataColumnLevels_arr.length > 0
       ) {
+        dataColumnLevels_arr.unshift("Intra-inter-group");
         return dataColumnLevels_arr;
       } else {
         return ["#na_exluded!"];
@@ -110,6 +112,28 @@ const SNPdistSettings = (props) => {
 
   return (
     <React.Fragment>
+      <Row>
+        <Col xs={24} id="header-content">
+          <Modal
+            visible={props.isShowingLoadingModal}
+            closable={false}
+            centered={true}
+            width={0}
+            footer={null}
+            bodyStyle={{
+              textAlign: "center",
+              padding: "0px",
+            }}
+          >
+            <Spin
+              indicator={loadingIcon}
+              style={{ color: "white" }}
+              tip="Processing..."
+              size="large"
+            />
+          </Modal>
+        </Col>
+      </Row>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h5>Bar chart settings</h5>
@@ -289,6 +313,7 @@ function mapStateToProps(state) {
     hammingMatrix: state.hammMatrix,
     colorLUT: state.colorLUT,
     metadata: state.metadata,
+    isShowingLoadingModal: state.isShowingLoadingModal,
   };
 }
 

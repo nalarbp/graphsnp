@@ -1,5 +1,7 @@
 //Is input loading
 export const INPUT_LOADING = "INPUT_LOADING";
+//Is loading modal being displayed
+export const IS_SHOWING_LOADING_MODAL = "IS_SHOWING_LOADING_MODAL";
 //Graph matrix
 export const GRAPH_OBJECT = "GRAPH_OBJECT";
 //Graph cluster

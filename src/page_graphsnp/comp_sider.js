@@ -8,8 +8,10 @@ import {
   Checkbox,
   Divider,
   Tooltip,
+  Modal,
+  Spin,
 } from "antd";
-import { QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -34,8 +36,10 @@ import {
   changeTypeOfAnalysisSetting,
   changeIsUserFilterEdgesSetting,
 } from "../action/graphSettingsActions";
+import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
 const { Option } = Select;
+const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const SiderMenu = (props) => {
   //GLOBAL VAR
@@ -78,6 +82,7 @@ const SiderMenu = (props) => {
 
   const drawingHandler = () => {
     if (!graph_isUserReDraw) {
+      props.isShowingLoadingModalToStore(true);
       props.changeIsUserReDrawSetting(true);
     }
   };
@@ -174,6 +179,28 @@ const SiderMenu = (props) => {
 
   return (
     <React.Fragment>
+      <Row>
+        <Col xs={24} id="header-content">
+          <Modal
+            visible={props.isShowingLoadingModal}
+            closable={false}
+            centered={true}
+            width={0}
+            footer={null}
+            bodyStyle={{
+              textAlign: "center",
+              padding: "0px",
+            }}
+          >
+            <Spin
+              indicator={loadingIcon}
+              style={{ color: "white" }}
+              tip="Processing..."
+              size="large"
+            />
+          </Modal>
+        </Col>
+      </Row>
       <Row gutter={[8, 8]}>
         <Col span={24}>
           <h5>Graph settings</h5>
@@ -230,12 +257,11 @@ const SiderMenu = (props) => {
               onChange={changeMethodHandler}
             >
               <Option value="cathai">CATHAI</Option>
-              <Option value="mcg">Minimum CATHAI</Option>
               <Option
                 disabled={props.sequence && props.metadata ? false : true}
                 value="cge"
               >
-                Weighted minimum CATHAI
+                CATHAI + metadata
               </Option>
             </Select>
           </Col>
@@ -620,6 +646,7 @@ function mapStateToProps(state) {
     graphObject: state.graphObject,
     graphClusters: state.graphClusters,
     colorLUT: state.colorLUT,
+    isShowingLoadingModal: state.isShowingLoadingModal,
   };
 }
 
@@ -642,6 +669,7 @@ function mapDispatchToProps(dispatch) {
       changeTransIcludeLocLevel,
       changeTypeOfAnalysisSetting,
       changeIsUserFilterEdgesSetting,
+      isShowingLoadingModalToStore,
     },
     dispatch
   );

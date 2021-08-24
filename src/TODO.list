@@ -9,7 +9,6 @@
 x separate or all in one? separate is fine, if the tool works, user wont bother to load 1 or 2 more times
 x sequence input, and directly create hamming matrix, OK
 x metadata input OK 
-- tree input, not yet
 
 #DATA-MODEL 
 ##Hamming-Matrix 
@@ -23,33 +22,22 @@ x metadata input OK
 
 ## Cluster-Object
 
-##
-
 #ALGORITHM 
 
 #PAGE-SNP-DIST 
+- intra and inter genetic diversity
 
 #PAGE-GRAPH-SNP 
-- need to be able to save the reconstructed graph, so no wasting time to repeat reconstruction
-- add example case dataset
-## Construction
- - add option for cluster or transmission network reconstruction
-### Method 
-### Layout
-    - Fix buh in Spread algorithm 
-    - Add update layout next to layout option: user need to click the update button to update the layout
-### User drawing 
+x need to be able to save the reconstructed graph, so no wasting time to repeat reconstruction
+x add example case dataset
+x add option for cluster or transmission network reconstruction
 
-## Clustering 
-### Method 
-### Coloring 
-### Exporting 
+- Fix buh in Spread algorithm 
+- Add update layout next to layout option: user need to click the update button to update the layout
+- Add color legend below the selected data info box
+- Add legend about nodes, edges, edge label, selected node
+x always use current color when draw the graph
 
-## Visualizing 
-### Edge 
-### Node 
-
-# PAGE-TIME-TREE 
 
 # Graph drawing
 ## Create HammingMatrixMap 

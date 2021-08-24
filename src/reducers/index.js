@@ -13,6 +13,7 @@ import colorLUTReducer from "./colorLUTReducer";
 import snpDistSettingsReducer from "./snpDistSettingsReducer";
 import selectDemoDataReducer from "./selectDemoDataReducer";
 import selectedNodeReducer from "./selectedNodeReducer";
+import isShowingLoadingModalReducer from "./isShowingLoadingModalReducer";
 
 export const initialState = {
   sequence: null,
@@ -27,7 +28,7 @@ export const initialState = {
   selectedNode: null, //exception, reducers and action were on
   graphSettings: {
     typeOfAnalysis: "clustering", //clustering;transmission
-    method: "mcg",
+    method: "cathai",
     layout: "cose",
     isUserReDraw: false,
     isUserFilteringEdge: true,
@@ -62,6 +63,7 @@ export const initialState = {
     navLocation: null,
   },
   colorLUT: null,
+  isShowingLoadingModal: false,
 };
 const rootReducer = combineReducers(
   {
@@ -79,6 +81,7 @@ const rootReducer = combineReducers(
     colorLUT: colorLUTReducer,
     snpDistSettings: snpDistSettingsReducer,
     selectedNode: selectedNodeReducer,
+    isShowingLoadingModal: isShowingLoadingModalReducer,
   },
   initialState
 );
