@@ -89,7 +89,7 @@ const SNPdistSettings = (props) => {
         Array.isArray(dataColumnLevels_arr) &&
         dataColumnLevels_arr.length > 0
       ) {
-        dataColumnLevels_arr.unshift("Intra-inter-group");
+        dataColumnLevels_arr.unshift("intra-inter-group");
         return dataColumnLevels_arr;
       } else {
         return ["#na_exluded!"];

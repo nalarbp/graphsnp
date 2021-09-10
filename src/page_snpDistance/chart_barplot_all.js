@@ -1,6 +1,7 @@
 import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
+import { getBarChartTickValues } from "../utils/utils";
 
 export function createBarPlot_all(
   svg,
@@ -56,11 +57,7 @@ export function createBarPlot_all(
   const bar_axis_y = d3Axis
     .axisBottom()
     .scale(bar_band_scale_y)
-    .tickValues(
-      bar_band_scale_y.domain().filter(function (d, i) {
-        return !(i % 10);
-      })
-    );
+    .tickValues(getBarChartTickValues(bar_band_scale_y.domain()));
 
   //DRAWING
   //set svg dimension
@@ -194,6 +191,7 @@ export function createBarPlot_all(
   //console.log("finish", +new Date());
   //save this session to store
   let thisSessionData = {
+    type: "regular",
     w,
     h,
     margin,

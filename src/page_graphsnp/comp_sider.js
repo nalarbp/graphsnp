@@ -288,9 +288,11 @@ const SiderMenu = (props) => {
               style={{ width: "100%" }}
               onChange={changeMethodHandler}
             >
-              <Option value="seqtrack">SeqTrack</Option>
-              <Option value="hierSnpsMetaStayOverlap">
-                SNPs and patient stay
+              <Option
+                disabled={props.sequence && props.metadata ? false : true}
+                value="seqtrack"
+              >
+                SeqTrack
               </Option>
             </Select>
           </Col>
@@ -517,10 +519,10 @@ const SiderMenu = (props) => {
             checked={graph_isEdgesHideByCutoff}
             disabled={props.graphObject ? false : true}
           >
-            Hide edges{" "}
+            Show partial edges{" "}
             <span>
               <Tooltip
-                title="Hide edges which have weight within the specified range (min to max)
+                title="Only show edges which have weight within the specified range (min to max)
                 (Note: It doesn't remove the edges but only hide it to the background)"
                 placement="rightTop"
               >
@@ -678,5 +680,7 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SiderMenu);
 
 /*
-
+<Option disabled={props.sequence && props.metadata ? false : true} value="hierSnpsMetaStayOverlap">
+                SNPs and patient stay
+              </Option>
 */

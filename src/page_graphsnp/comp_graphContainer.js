@@ -405,9 +405,11 @@ const GraphContainer = (props) => {
         //node event click listener
         cy.selectionType("single");
         cy.nodes().bind("tap", function (evt) {
-          let clickedNode = [evt.target.data("id")];
-          // get isolate object by source name
-          props.changeSelectedNode(clickedNode);
+          if (props.metadata) {
+            // get isolate object by source name
+            let clickedNode = [evt.target.data("id")];
+            props.changeSelectedNode(clickedNode);
+          }
         });
         //click on background listener
         cy.on("tap", function (evt) {

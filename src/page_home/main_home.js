@@ -76,14 +76,11 @@ const Home = (props) => {
           height={getParticleHeight}
           style={{ position: "absolute", height: "200px" }}
         />
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={12}>
           <SNPsLoader />
         </Col>
-        <Col xs={24} sm={8}>
+        <Col xs={24} sm={12}>
           <MetadataLoader />
-        </Col>
-        <Col xs={24} sm={8}>
-          <PatientMovementLoader />
         </Col>
       </Row>
       <Row id="demo-selection">
@@ -120,5 +117,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(Home);
           <h5>
             Click the input button or drag and drop input file(s) to start
           </h5>
+        </Col>
+        <Col xs={24} sm={8}>
+          <PatientMovementLoader />
         </Col>
 */

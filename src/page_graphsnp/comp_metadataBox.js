@@ -45,7 +45,7 @@ const MetadataBox = (props) => {
 
   //USEEFFECTS
   useEffect(() => {
-    if (props.selectedNode) {
+    if (props.metadata && props.selectedNode) {
       if (props.selectedNode.length > 0) {
         let selectedNodeList = props.selectedNode.map((n) =>
           props.metadata.get(n)

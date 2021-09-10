@@ -65,7 +65,7 @@ export const DEMO = {
   demo1: {
     snps: "./data/demoFile/1/st78_snps_input.fa",
     metadata: "./data/demoFile/1/st78_metadata_input.csv",
-    stayTimeline: "./data/demoFile/1/st78_patientStayTimeline_input.csv",
+    stayTimeline: null,
   },
   demo2: {
     snps: "./data/demoFile/2/seqtk_snps_input.fa",

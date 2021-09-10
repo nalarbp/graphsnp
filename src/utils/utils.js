@@ -243,3 +243,43 @@ export function downloadSVG(id) {
   let svgString = XMLS.serializeToString(svg_node);
   downloadFileAsText(`GraphSNP-${id}.svg`, svgString);
 }
+
+export function getBarChartTickValues(domain_arr) {
+  let domain_len = domain_arr.length;
+  let res = [];
+  //if 10 => %1, 100 => %10, 1000 => %100, 10.000 => %1000
+  if (domain_len <= 10) {
+    res = domain_arr.filter(function (d, i) {
+      return !(i % 1);
+    });
+    return res;
+  }
+
+  if (domain_len > 10 && domain_len <= 100) {
+    res = domain_arr.filter(function (d, i) {
+      return !(i % 5);
+    });
+    return res;
+  }
+
+  if (domain_len > 100 && domain_len <= 1000) {
+    res = domain_arr.filter(function (d, i) {
+      return !(i % 25);
+    });
+    return res;
+  }
+
+  if (domain_len > 1000 && domain_len <= 10000) {
+    res = domain_arr.filter(function (d, i) {
+      return !(i % 50);
+    });
+    return res;
+  }
+
+  if (domain_len > 10000) {
+    res = domain_arr.filter(function (d, i) {
+      return !(i % 100);
+    });
+    return res;
+  }
+}
