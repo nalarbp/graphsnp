@@ -4,6 +4,8 @@ import * as d3Axis from "d3-axis";
 import { getBarChartTickValues } from "../utils/utils";
 
 export function createBarPlot_all(
+  dataColumn,
+  dataColumnLevel,
   svg,
   chart_data,
   w,
@@ -27,7 +29,6 @@ export function createBarPlot_all(
 
   // ++++++++++++++ BAR +++++++++++++
   //prepare data
-  //console.log("prepare data", +new Date());
   const barMap = d3Array.rollup(
     chart_data,
     (v) => v.length,
@@ -51,7 +52,6 @@ export function createBarPlot_all(
   bar_band_scale_y.domain(d3Array.range(0, d3Array.max(barSNP_dist) + 1));
 
   // create axis
-  //axis
   const bar_axis_x = d3Axis.axisLeft().scale(bar_linear_scale_x);
 
   const bar_axis_y = d3Axis
@@ -59,138 +59,10 @@ export function createBarPlot_all(
     .scale(bar_band_scale_y)
     .tickValues(getBarChartTickValues(bar_band_scale_y.domain()));
 
-  //DRAWING
-  //set svg dimension
-  //console.log("drawing", +new Date());
-  svg
-    .attr("width", w + margin.left + margin.right)
-    .attr("height", h + margin.top + margin.bottom);
-  //make group root of svg for transformation purpose
-  let svgGroup = svg
-    .append("g")
-    .attr("id", "snpdist_svgGroup")
-    .attr(
-      "transform",
-      "translate(" + margin.left + "," + margin.top + ")scale(1)"
-    );
-
-  // ========= Statistics text ==========
-  let stats_text = [
-    "Pairwise distances (n:",
-    data_len,
-    "), Min: ",
-    data_min,
-    ", Q1:",
-    data_q1,
-    ", Mean:",
-    data_mean,
-    ", Median:",
-    data_median,
-    ", Q3:",
-    data_q3,
-    ", Max:",
-    data_max,
-  ].join("");
-
-  let barchart_stats_g = svgGroup.append("g").attr("id", "barchart-stats-g");
-  barchart_stats_g
-    .append("text")
-    .attr("x", 0)
-    .attr("y", margin_stats / 2)
-    .text(stats_text);
-
-  // ========= BAR ==========
-  let barchart_g = svgGroup
-    .append("g")
-    .attr("id", "barchart-g")
-    .attr("transform", "translate(" + 0 + "," + margin_stats + ")scale(1)");
-
-  //barchart horizontal axis
-  let h_axis_g = barchart_g
-    .append("g")
-    .attr("id", "barchart-axis-y")
-    .attr("transform", "translate(" + 0 + "," + cont_bar_h + ")scale(1)")
-    .call(bar_axis_y);
-  //h axis label
-  h_axis_g
-    .append("text")
-    .attr("class", "h_axis_label")
-    .attr("text-anchor", "end")
-    .attr("x", 6)
-    .attr("y", 6)
-    .text("income per capita, inflation-adjusted (dollars)");
-
-  //h axis label
-  let h_axis_label_g = barchart_g
-    .append("g")
-    .attr("id", "h-axis-label-g")
-    .attr(
-      "transform",
-      "translate(" + cont_bar_w / 2 + "," + cont_bar_h + ")scale(1)"
-    );
-  h_axis_label_g
-    .append("text")
-    .attr("id", "h-axis-label")
-    .attr("text-anchor", "middle")
-    .attr("x", 0)
-    .attr("y", 35)
-    .style("font-size", "8pt")
-    .text("Pairwise SNP distance");
-
-  //barchart vertical axis
-  barchart_g
-    .append("g")
-    .attr("id", "barchart-axis-x")
-    .attr("transform", "translate(" + -5 + "," + 0 + ")scale(1)")
-    .call(bar_axis_x);
-
-  //v axis label
-  let v_axis_label_g = barchart_g
-    .append("g")
-    .attr("id", "v-axis-label-g")
-    .attr(
-      "transform",
-      "translate(" + -5 + "," + cont_bar_h / 2 + ")scale(1) rotate(-90)"
-    );
-  v_axis_label_g
-    .append("text")
-    .attr("id", "v-axis-label")
-    .attr("text-anchor", "middle")
-    .attr("x", 0)
-    .attr("y", -35)
-    .style("font-size", "8pt")
-    .text("Frequency");
-
-  //add bar chart
-  let bar_g = barchart_g.append("g").attr("id", "bar-group");
-  bar_g
-    .selectAll(".barchart-bar")
-    .data(barData)
-    .enter()
-    .append("rect")
-    .attr("class", "barchart-bar")
-    .attr("stroke", "white")
-    .attr("stroke-width", "0.5px")
-    .attr("fill", "gray")
-    .attr("x", function (d) {
-      let res = bar_band_scale_y(d[0]);
-      return res;
-    })
-    .attr("y", function (d) {
-      let res = bar_linear_scale_x(d[1]);
-      return res;
-    })
-    .attr("width", function (d) {
-      let res = bar_bandWidth;
-      return res;
-    })
-    .attr("height", function (d) {
-      let res = Math.abs(bar_linear_scale_x(d[1]) - bar_linear_scale_x(0));
-      return res;
-    });
-  //console.log("finish", +new Date());
-  //save this session to store
+  //save as session
   let thisSessionData = {
+    dataColumn,
+    dataColumnLevel,
     type: "regular",
     w,
     h,
@@ -205,24 +77,24 @@ export function createBarPlot_all(
     margin_stats,
     cont_bar_w,
     cont_bar_h,
-    barMap,
     barData,
-    barSNP_dist,
-    barSNP_freq,
-    bar_linear_scale_v,
-    bar_band_scale_h,
     bar_bandWidth,
     bar_linear_scale_x,
     bar_band_scale_y,
     bar_axis_x,
     bar_axis_y,
   };
+  //create chart based in this session data
+  createChart(svg, thisSessionData);
+  //send to store
   chartSessionToStore(thisSessionData);
 }
 
-export function recreateChart(svg, prevSessionData) {
+export function createChart(svg, prevSessionData) {
   //Data we need:
   //console.log("create plot", +new Date());
+  let dataColumn = prevSessionData.dataColumn;
+  let dataColumnLevel = prevSessionData.dataColumnLevel;
   let w = prevSessionData.w;
   let h = prevSessionData.h;
   let margin = prevSessionData.margin;
@@ -242,14 +114,10 @@ export function recreateChart(svg, prevSessionData) {
   // ++++++++++++++ BAR +++++++++++++
   //prepare data
   //console.log("prepare data", +new Date());
-  const barMap = prevSessionData.barMap;
+
   const barData = prevSessionData.barData;
-  const barSNP_dist = prevSessionData.barSNP_dist;
-  const barSNP_freq = prevSessionData.barSNP_freq;
 
   //scales
-  const bar_linear_scale_v = prevSessionData.bar_linear_scale_v;
-  const bar_band_scale_h = prevSessionData.bar_band_scale_h;
   const bar_bandWidth = prevSessionData.bar_bandWidth;
 
   //create scale
@@ -278,9 +146,10 @@ export function recreateChart(svg, prevSessionData) {
 
   // ========= Statistics text ==========
   let stats_text = [
-    "Pairwise distances (n:",
+    "Pairwise SNP-distances: (n=",
     data_len,
-    "), Min: ",
+    "); ",
+    " Min: ",
     data_min,
     ", Q1:",
     data_q1,
@@ -329,7 +198,15 @@ export function recreateChart(svg, prevSessionData) {
     .attr("x", 0)
     .attr("y", 35)
     .style("font-size", "8pt")
-    .text("Pairwise SNP distance");
+    .text(function () {
+      if (dataColumn && dataColumn === "All samples") {
+        return "Pairwise SNP-distance (All samples)";
+      } else {
+        return (
+          `Pairwise SNP-distance (` + dataColumn + `: ` + dataColumnLevel + `)`
+        );
+      }
+    });
 
   //barchart vertical axis
   barchart_g
@@ -353,7 +230,7 @@ export function recreateChart(svg, prevSessionData) {
     .attr("x", 0)
     .attr("y", -35)
     .style("font-size", "8pt")
-    .text("Frequency");
+    .text("Count");
 
   //add bar chart
   let bar_g = barchart_g.append("g").attr("id", "bar-group");

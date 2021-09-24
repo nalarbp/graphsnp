@@ -46,6 +46,7 @@ export const SETTING_TRANS_LOC_LEVEL = "SETTING_TRANS_LOC_LEVEL";
 export const SETTING_TYPE_ANALYSIS = "SETTING_TYPE_ANALYSIS";
 export const SETTING_CHART_SESSION = "SETTING_CHART_SESSION";
 export const SETTING_IS_USER_LOAD_SESSION = "SETTING_IS_USER_LOAD_SESSION";
+export const SETTING_IS_USER_RELAYOUT = "SETTING_IS_USER_RELAYOUT";
 
 //Snp dist settings
 export const DIST_DATA_TO_DISPLAY = "DIST_DATA_TO_DISPLAY";
@@ -68,8 +69,8 @@ export const DEMO = {
     stayTimeline: null,
   },
   demo2: {
-    snps: "./data/demoFile/2/seqtk_snps_input.fa",
-    metadata: "./data/demoFile/2/seqtk_metadata_input.csv",
+    snps: "./data/demoFile/2/esbl_KM_snps_input.fa",
+    metadata: "./data/demoFile/2/esbl_KM_metadata_input.csv",
     stayTimeline: null,
   },
 };

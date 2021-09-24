@@ -10,14 +10,13 @@ const FooterComponent = (props) => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <b>GraphSNP v.1 (beta) </b>
+            <b>GraphSNP v1.0</b>
           </a>
           <br />
           <b>
             {" "}
-            Graph-based outbreak cluster and transmission
-            <br /> detection and visualization using single-nucleotide
-            polymorphisms (SNPs) in web browser
+            Graph-based, drag and drop web visualization tool for <br />
+            cluster and transmission analysis using pairwise SNP-distance.
           </b>
           <br /> Developed by Budi Permana at{" "}
           <a

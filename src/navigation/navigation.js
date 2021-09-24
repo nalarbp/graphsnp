@@ -47,7 +47,7 @@ const NavigationMenu = (props) => {
           }}
         >
           <NavLink to="/" exact>
-            Home
+            Input
           </NavLink>
         </Menu.Item>
 
@@ -58,7 +58,7 @@ const NavigationMenu = (props) => {
             props.changeNavLocation(e.key);
           }}
         >
-          <NavLink to="/snpdistance">SNP distance</NavLink>
+          <NavLink to="/snpdistance">SNP-distances</NavLink>
         </Menu.Item>
 
         <Menu.Item
@@ -68,7 +68,7 @@ const NavigationMenu = (props) => {
             props.changeNavLocation(e.key);
           }}
         >
-          <NavLink to="/graphsnp">GraphSNP</NavLink>
+          <NavLink to="/graphsnp">Graph</NavLink>
         </Menu.Item>
         <Menu.Item
           key="documentation"

@@ -45,6 +45,7 @@ export const initialState = {
     transIncludeLocLevel: 1,
     chartSession: null,
     isUserReloadSession: false,
+    isUserRelayout: false,
   },
   snpDistSettings: {
     dataToDisplay: "all",

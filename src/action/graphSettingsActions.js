@@ -132,3 +132,10 @@ export function changeSelectedNode(val) {
     payload: val,
   };
 }
+
+export function changeIsUserRelayoutSetting(val) {
+  return {
+    type: constant.SETTING_IS_USER_RELAYOUT,
+    payload: val,
+  };
+}

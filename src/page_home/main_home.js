@@ -7,9 +7,9 @@ import { bindActionCreators } from "redux";
 import { changeNavLocation } from "../action/navigationActions";
 import { LoadingOutlined } from "@ant-design/icons";
 import SNPsLoader from "./comp_snpsLoader";
-import TitleHeader from "./comp_titleHeader";
+//import TitleHeader from "./comp_titleHeader";
 import MetadataLoader from "./comp_metadataLoader";
-import PatientMovementLoader from "./comp_patientMovementLoader";
+//import PatientMovementLoader from "./comp_patientMovementLoader";
 import SelectDemoData from "./comp_selectDemoData";
 import FooterComponent from "./comp_footer";
 import Particles from "react-particles-js";
@@ -107,9 +107,10 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
 
+/*
 //Home called when navigating
 //Called when input is loaded (cause it subsribed to the store, so when the connected state change it will be re-called)
-/*
+
 <Col xs={24}>
           <TitleHeader />
         </Col>

@@ -60,9 +60,7 @@ export function createDOTGraph(graphObject) {
     edges.forEach((e) => {
       let source = e.source;
       let target = e.target;
-
-      let weight = e.value ? e.value : "null";
-      console.log(weight);
+      let weight = e.value === 0 || e.value ? e.value : "null";
       let dir = isDirected ? "forward" : "none";
       digraph.setEdge(source, target, { weight: weight, dir: dir });
     });

@@ -11,7 +11,11 @@ import {
   Modal,
   Spin,
 } from "antd";
-import { QuestionCircleOutlined, LoadingOutlined } from "@ant-design/icons";
+import {
+  QuestionCircleOutlined,
+  LoadingOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -35,6 +39,7 @@ import {
   changeTransIcludeLocLevel,
   changeTypeOfAnalysisSetting,
   changeIsUserFilterEdgesSetting,
+  changeIsUserRelayoutSetting,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
@@ -61,6 +66,7 @@ const SiderMenu = (props) => {
   const graph_exportFormat = props.graphSettings.exportFormat;
   const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
+  const graph_isUserRelayout = props.graphSettings.isUserRelayout;
 
   //HANDLERS
   const changeTypeOfAnalysisHandler = (val) => {
@@ -78,6 +84,13 @@ const SiderMenu = (props) => {
 
   const changeLayoutHandler = (val) => {
     props.changeLayoutSetting(val);
+  };
+
+  const reloadLayoutHandler = () => {
+    if (!graph_isUserRelayout) {
+      props.isShowingLoadingModalToStore(true);
+      props.changeIsUserRelayoutSetting(true);
+    }
   };
 
   const drawingHandler = () => {
@@ -241,9 +254,7 @@ const SiderMenu = (props) => {
               <span>
                 <Tooltip
                   title="Method to construct clustering graph. 
-                  [1]CATHAI: draw all pairwise SNP distances between nodes (cases) (Forde et al. 2021). 
-                  [2]Minimum CATHAI: Like CATHAI but only include the lowest pairwise SNP distance(s) as the representation of each node 
-                  [3]Weighted minimum CATHAI: Like minimum CATHAI but weighted with other categorical information from the metadata"
+                  [1] CATHAI: given the SNP cut-off, create networks of pairwise SNP-distances between samples (Forde et al. 2021)"
                   placement="rightTop"
                 >
                   <QuestionCircleOutlined style={{ color: "red" }} />
@@ -257,12 +268,6 @@ const SiderMenu = (props) => {
               onChange={changeMethodHandler}
             >
               <Option value="cathai">CATHAI</Option>
-              <Option
-                disabled={props.sequence && props.metadata ? false : true}
-                value="cge"
-              >
-                CATHAI + metadata
-              </Option>
             </Select>
           </Col>
         )}
@@ -298,7 +303,7 @@ const SiderMenu = (props) => {
           </Col>
         )}
 
-        <Col span={24}>
+        <Col span={16}>
           <p>
             Layout{" "}
             <span>
@@ -320,6 +325,26 @@ const SiderMenu = (props) => {
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
           </Select>
+        </Col>
+        <Col span={8}>
+          <p>
+            Refresh{" "}
+            <span>
+              <Tooltip
+                title="Apply selected layout to current graph."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Button
+            disabled={props.graphObject ? false : true}
+            onClick={reloadLayoutHandler}
+            type="primary"
+          >
+            <ReloadOutlined />
+          </Button>
         </Col>
 
         <Col span={24}>
@@ -671,6 +696,7 @@ function mapDispatchToProps(dispatch) {
       changeTransIcludeLocLevel,
       changeTypeOfAnalysisSetting,
       changeIsUserFilterEdgesSetting,
+      changeIsUserRelayoutSetting,
       isShowingLoadingModalToStore,
     },
     dispatch
@@ -682,5 +708,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(SiderMenu);
 /*
 <Option disabled={props.sequence && props.metadata ? false : true} value="hierSnpsMetaStayOverlap">
                 SNPs and patient stay
+              </Option>
+
+                            <Option
+                disabled={props.sequence && props.metadata ? false : true}
+                value="cge"
+              >
+                CATHAI + metadata
               </Option>
 */

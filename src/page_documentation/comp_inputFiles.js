@@ -39,20 +39,6 @@ const InputFiles = (props) => {
         </Button>
         <br />
         <br />
-
-        <Title level={3}>Patient stay timeline table </Title>
-        <Text>
-          Patient stay timeline table (for nosocomial transmission analysis)
-          should list the period and location of patient stay in the hospital.
-          Such information must be provided in CSV-formatted file .
-        </Text>
-        <br />
-        <br />
-        <Button type={"primary"} href={constant.TEMPLATE.stayTimeline}>
-          Download Patient stay timeline example file
-        </Button>
-
-        <Divider />
       </div>
     </React.Fragment>
   );

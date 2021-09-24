@@ -94,7 +94,7 @@ export async function snpsLoader(
       //load to store
     }
   } else {
-    alert("Error: Required at least 2 sequences");
+    alert("Error: Check the SNP alignment input requirements");
     propsIsinputLoadingToStore(false);
   }
 }
@@ -109,7 +109,7 @@ export async function getMetadataInput(
   let data_promise_raw = await csv(fileURL).then(function (result) {
     return result;
   });
-  const validHeaders = ["sample_id", "sample_date", "patient_id"];
+  const validHeaders = ["sample_id", "sample_date"];
   const inputHeaders = Object.keys(data_promise_raw[0]);
   let header_is_valid = true;
   validHeaders.forEach((item) => {
@@ -123,6 +123,9 @@ export async function getMetadataInput(
     setisLoading(false);
     return;
   }
+  //header transformation
+
+  //
 
   // no duplicate in isolate name
   const sample_id = _.countBy(data_promise_raw, "sample_id");

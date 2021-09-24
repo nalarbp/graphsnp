@@ -26,4 +26,3 @@ const Header = (props) => {
 };
 
 export default Header;
-//Called once, didn't reload when navivation is changed

@@ -129,6 +129,13 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_iuls;
 
+    case constant.SETTING_IS_USER_RELAYOUT:
+      let newState_iurl = Object.assign({}, prevState);
+      if (action.payload !== prevState.isUserRelayout) {
+        newState_iurl.isUserRelayout = action.payload;
+      }
+      return newState_iurl;
+
     default:
       if (prevState) {
         return prevState;

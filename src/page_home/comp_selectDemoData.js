@@ -109,9 +109,13 @@ const SelectDemoData = (props) => {
     <React.Fragment>
       <Col xs={24}>
         <Select value={selectedDemoData} onChange={selectDemoDataHandler}>
-          <Option value={null}>Select sample data</Option>
-          <Option value="demo1">VRE ST78 outbreak</Option>
-          <Option value="demo2">SeqTrack demonstration</Option>
+          <Option value={null}>Select demo data</Option>
+          <Option value="demo2">
+            ESBL K. michiganensis outbreak (Chapman et al., 2020)
+          </Option>
+          <Option value="demo1">
+            VRE ST78 outbreak (Permana et al., 2021)
+          </Option>
         </Select>
       </Col>
     </React.Fragment>

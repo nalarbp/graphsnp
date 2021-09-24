@@ -15,11 +15,7 @@ import * as d3Select from "d3-selection";
 //import useResizeObserver from "../hooks/hook_resizeObserver"; //Broken
 import GraphEdgeList from "../model/graphEdgeList_prop";
 import { vh, vw, downloadSVG, filterUnique } from "../utils/utils";
-import { createBarPlot_all, recreateChart } from "./chart_barplot_all";
-import {
-  createBar_intraInter,
-  recreateBar_intraInter,
-} from "./chart_barplot_intra_inter";
+import { createBarPlot_all, createChart } from "./chart_barplot_all";
 import { createSNPdistCSVFile } from "../utils/create_exportFile";
 
 const _ = require("lodash");
@@ -48,7 +44,6 @@ const SNPdistViewer = (props) => {
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
   const dataColumnLevel = props.snpDistSettings.dataColumnLevel;
-  const chartOrientation = props.snpDistSettings.chartOrientation;
   const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
   const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
   const isUserExportSnpDist = props.snpDistSettings.isUserExportSnpDist;
@@ -162,6 +157,8 @@ const SNPdistViewer = (props) => {
 
       const svg = d3Select.select(snpdistSVGRef.current);
       createBarPlot_all(
+        "All samples",
+        null,
         svg,
         data_list,
         chartArea_width,
@@ -170,80 +167,87 @@ const SNPdistViewer = (props) => {
         props.dist_changeChartSession
       );
     } else {
-      //get column header and level
-      if (metadata_arr && dataColumn && dataColumnLevel) {
-        if (dataColumnLevel === "intra-inter-group") {
-          //exclude non-group record e.g null, NA, N/A, #N/A, #NA, "", "null"
-          let nonGroup_ColLevel = [
-            null,
-            "NA",
-            "N/A",
-            "#N/A",
-            "#NA",
-            "",
-            "null",
-            undefined,
-          ];
-          let groupLUT = new Map();
-          metadata_arr.forEach((d) => {
-            if (nonGroup_ColLevel.indexOf(d[dataColumn]) === -1) {
-              //console.log(d[dataColumn]);
-              groupLUT.set(d.sample_id, d[dataColumn]);
-            }
-          });
+      let filtered_chart_data = null;
+      // When column level is artificially intra or inter group
+      if (
+        dataColumnLevel === "INTRA-Group" ||
+        dataColumnLevel === "INTER-Group"
+      ) {
+        let nonGroup_ColLevel = [
+          null,
+          "NA",
+          "N/A",
+          "#N/A",
+          "#NA",
+          "",
+          false,
+          "false",
+          "nil",
+          "null",
+          undefined,
+        ];
 
-          let data_list_intra = [];
-          let data_list_inter = [];
-
-          chart_data.forEach((e) => {
-            //intra
-            let sourceGroup = groupLUT.get(e.source);
-            let targetGroup = groupLUT.get(e.target);
-            if (sourceGroup === targetGroup) {
-              //console.log("sama", sourceGroup, targetGroup);
-              data_list_intra.push(e.value);
-            } else {
-              data_list_inter.push(e.value);
-            }
-          });
-          const svg = d3Select.select(snpdistSVGRef.current);
-          createBar_intraInter(
-            svg,
-            data_list_intra,
-            data_list_inter,
-            chartArea_width,
-            chartArea_height,
-            margin,
-            props.dist_changeChartSession
-          );
-        } else {
-          let includedIsolates = getIsolatesByDataColumnAndLevel(
-            metadata_arr,
-            dataColumn,
-            dataColumnLevel
-          );
-          let filtered_chart_data = chart_data.filter((d) => {
-            if (
-              includedIsolates.indexOf(d.source) !== -1 &&
-              includedIsolates.indexOf(d.target) !== -1
-            ) {
+        let groupLUT = new Map();
+        metadata_arr.forEach((d) => {
+          if (nonGroup_ColLevel.indexOf(d[dataColumn]) === -1) {
+            //console.log(d[dataColumn]);
+            groupLUT.set(d.sample_id, d[dataColumn]);
+          }
+        });
+        //When intra
+        if (dataColumnLevel === "INTRA-Group") {
+          filtered_chart_data = chart_data.filter((d) => {
+            if (groupLUT.get(d.source) === groupLUT.get(d.target)) {
               return true;
             } else {
               return false;
             }
           });
-          let data_list = filtered_chart_data.map((d) => d.value);
-          const svg = d3Select.select(snpdistSVGRef.current);
-          createBarPlot_all(
-            svg,
-            data_list,
-            chartArea_width,
-            chartArea_height,
-            margin,
-            props.dist_changeChartSession
-          );
         }
+        //When inter
+        else {
+          filtered_chart_data = chart_data.filter((d) => {
+            if (groupLUT.get(d.source) !== groupLUT.get(d.target)) {
+              return true;
+            } else {
+              return false;
+            }
+          });
+        }
+      } else {
+        // When colum level is the actual level
+        let includedIsolates = getIsolatesByDataColumnAndLevel(
+          metadata_arr,
+          dataColumn,
+          dataColumnLevel
+        );
+
+        filtered_chart_data = chart_data.filter((d) => {
+          if (
+            includedIsolates.indexOf(d.source) !== -1 &&
+            includedIsolates.indexOf(d.target) !== -1
+          ) {
+            return true;
+          } else {
+            return false;
+          }
+        });
       }
+
+      let data_list = filtered_chart_data
+        ? filtered_chart_data.map((d) => d.value)
+        : [];
+      const svg = d3Select.select(snpdistSVGRef.current);
+      createBarPlot_all(
+        dataColumn,
+        dataColumnLevel,
+        svg,
+        data_list,
+        chartArea_width,
+        chartArea_height,
+        margin,
+        props.dist_changeChartSession
+      );
     }
 
     //set svg attributes
@@ -257,22 +261,16 @@ const SNPdistViewer = (props) => {
 
   //RE-DRAWING
   function redraw() {
-    // console.log("draw", +new Date());
     //clean previous drawing artifacts
     d3Select.select("#snpdist_svgGroup").remove();
     const svg = d3Select.select(snpdistSVGRef.current);
-    if (dataColumnLevel === "intra-inter-group") {
-      console.log(prevSessionData);
-      recreateBar_intraInter(svg, prevSessionData);
-    } else {
-      recreateChart(svg, prevSessionData);
-    }
+    createChart(svg, prevSessionData);
   }
 
   return (
     <Row>
       <Col span={24}>
-        <div id="bar-chart-cont-is-empty" style={{ display: "block" }}>
+        <div id="snpdist-cont-is-empty" style={{ display: "block" }}>
           <Empty
             style={{ display: chartIsDisplayed ? "none" : "block" }}
             description={

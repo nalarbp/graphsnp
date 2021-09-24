@@ -15,33 +15,6 @@ const MetadataBox = (props) => {
     columns: null,
     cells: null,
   });
-  // //DATA FOR TABLE: INITIATION
-  // let selectedNodeList =
-  //   props.selectedNode && props.selectedNode.length > 0
-  //     ? props.selectedNode.map((n) => props.metadata.get(n))
-  //     : [];
-  // let columns = [];
-  // let dataSource = [];
-  // selectedNodeList.forEach((d) => {
-  //   let keyIndexFoUniq = 0;
-  //   for (const [k, v, i] of Object.entries(d)) {
-  //     console.log(i);
-  //     //column
-  //     columns.push({
-  //       title: k,
-  //       dataIndex: k,
-  //       key: k + keyIndexFoUniq.toString(),
-  //     });
-  //     //datasource
-  //     let dataInIndex = dataSource[keyIndexFoUniq]
-  //       ? _.cloneDeep(dataSource[keyIndexFoUniq])
-  //       : {};
-  //     dataInIndex["key"] = keyIndexFoUniq.toString();
-  //     dataInIndex[k] = v;
-  //     dataSource.push(dataInIndex);
-  //     keyIndexFoUniq = keyIndexFoUniq + 1;
-  //   }
-  // });
 
   //USEEFFECTS
   useEffect(() => {
@@ -107,7 +80,7 @@ const MetadataBox = (props) => {
           width: "100%",
         }}
       >
-        {props.metadata && (
+        {props.metadata && props.graphObject && (
           <Row>
             <Col span={24}>
               <Collapse bordered={false} expandIconPosition="left">

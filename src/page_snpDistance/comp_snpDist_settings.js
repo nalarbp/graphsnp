@@ -89,7 +89,8 @@ const SNPdistSettings = (props) => {
         Array.isArray(dataColumnLevels_arr) &&
         dataColumnLevels_arr.length > 0
       ) {
-        dataColumnLevels_arr.unshift("intra-inter-group");
+        dataColumnLevels_arr.unshift("INTER-Group");
+        dataColumnLevels_arr.unshift("INTRA-Group");
         return dataColumnLevels_arr;
       } else {
         return ["#na_exluded!"];
@@ -136,12 +137,12 @@ const SNPdistSettings = (props) => {
       </Row>
       <Row gutter={[8, 8]}>
         <Col span={24}>
-          <h5>Bar chart settings</h5>
+          <h5>Visualization settings</h5>
           <p>
-            Select isolates{" "}
+            Select samples{" "}
             <span>
               <Tooltip
-                title="Select group of isolates for bar chart visualization."
+                title="Select group of sample for bar chart visualization."
                 placement="rightTop"
               >
                 <QuestionCircleOutlined style={{ color: "red" }} />
@@ -154,7 +155,7 @@ const SNPdistSettings = (props) => {
             disabled={props.hammingMatrix ? false : true}
             onChange={dataToDisplayHandler}
           >
-            <Option value="all">All isolates</Option>
+            <Option value="all">All samples</Option>
             <Option
               disabled={props.metadata ? false : true}
               value="per-category"
@@ -172,7 +173,7 @@ const SNPdistSettings = (props) => {
                 Select metadata column{" "}
                 <span>
                   <Tooltip
-                    title="Column in metadata which group of isolates to be displayed"
+                    title="Column in metadata which group of sample to be displayed"
                     placement="rightTop"
                   >
                     <QuestionCircleOutlined style={{ color: "red" }} />
@@ -258,7 +259,7 @@ const SNPdistSettings = (props) => {
             onClick={drawChartHandler}
             type="primary"
           >
-            Create chart
+            Create Bar chart
           </Button>
         </Col>
 
