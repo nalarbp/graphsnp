@@ -29,6 +29,7 @@
     "graphlib-dot": "^0.6.4",
     "hamming": "0.0.2",
     "install": "^0.13.0",
+    "kruskal-mst": "^1.0.0",
     "lodash": "^4.17.20",
     "louvain": "^1.2.0",
     "moment": "^2.29.1",

@@ -129,7 +129,7 @@ const SNPdistSettings = (props) => {
             <Spin
               indicator={loadingIcon}
               style={{ color: "white" }}
-              tip="Processing..."
+              tip="Preparing Chart"
               size="large"
             />
           </Modal>

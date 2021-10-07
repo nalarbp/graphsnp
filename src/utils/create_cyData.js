@@ -2,31 +2,54 @@ export function createCytoscapeData(graphObject) {
   //create cytoscape data structure
   //let data = [{ data: { id: id, label: name } },
   //            { data: {source: s, target: t, weight: w} }  ]
+  let cytoscapeData = [];
   let creatorMethod = graphObject.creator;
   let nodes = graphObject.nodes;
   let edges = graphObject.edges;
 
-  let cytoscapeData = [];
-  //converting edges to cytoscape data
-  edges.forEach((el) => {
-    cytoscapeData.push({
-      data: {
-        source: el.source,
-        target: el.target,
-        weight: el.value,
-        dir: el.dir === "forward" ? "forward" : "none",
-      },
+  if (creatorMethod === "mscg") {
+    //converting edges to cytoscape data
+    edges.forEach((el) => {
+      cytoscapeData.push({
+        data: {
+          source: el.source,
+          target: el.target,
+          weight: el.value,
+          dir: el.dir === "forward" ? "forward" : "none",
+        },
+      });
     });
-  });
 
-  ///adding nodes data
-  nodes.forEach((d) => {
-    let node_data = creatorMethod === "nlv" ? d.data : [];
-    let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
-    cytoscapeData.push({
-      data: { id: d, nodeType: node_type, data: node_data },
+    ///adding nodes data
+    nodes.forEach((d) => {
+      let node_data = creatorMethod === "nlv" ? d.data : [];
+      let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
+      cytoscapeData.push({
+        data: { id: d, nodeType: node_type, data: node_data },
+      });
     });
-  });
+  } else {
+    //converting edges to cytoscape data
+    edges.forEach((el) => {
+      cytoscapeData.push({
+        data: {
+          source: el.source,
+          target: el.target,
+          weight: el.value,
+          dir: el.dir === "forward" ? "forward" : "none",
+        },
+      });
+    });
+
+    ///adding nodes data
+    nodes.forEach((d) => {
+      let node_data = creatorMethod === "nlv" ? d.data : [];
+      let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
+      cytoscapeData.push({
+        data: { id: d, nodeType: node_type, data: node_data },
+      });
+    });
+  }
 
   return cytoscapeData;
 }

@@ -38,10 +38,6 @@ const TableViewer = (props) => {
     }
   });
 
-  console.log("tableViwer");
-  console.log("selectedNode", props.selectedNode);
-  console.log("datasource", dataSource);
-
   return (
     <React.Fragment>
       {props.selectedNode && (

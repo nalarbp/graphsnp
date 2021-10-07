@@ -58,7 +58,7 @@ const NavigationMenu = (props) => {
             props.changeNavLocation(e.key);
           }}
         >
-          <NavLink to="/snpdistance">SNP-distances</NavLink>
+          <NavLink to="/snpdistance">Distances</NavLink>
         </Menu.Item>
 
         <Menu.Item

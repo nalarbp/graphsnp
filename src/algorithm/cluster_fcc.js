@@ -41,7 +41,6 @@ export function findConnectedComponents(graphObject) {
     }
   });
 
-  console.log(clusterResult);
   return { group: groups, members: clusterResult };
 }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Row, Col, Collapse, Table } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
+import { TableOutlined } from "@ant-design/icons";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import Moment from "moment";
@@ -83,7 +83,7 @@ const MetadataBox = (props) => {
         {props.metadata && props.graphObject && (
           <Row>
             <Col span={24}>
-              <Collapse bordered={false} expandIconPosition="left">
+              <Collapse accordion bordered={false} expandIconPosition="left">
                 <Panel
                   style={{
                     marginBottom: "0px",
@@ -92,10 +92,10 @@ const MetadataBox = (props) => {
                   }}
                   header={
                     <p style={{ marginBottom: "0px" }}>
-                      <InfoCircleOutlined /> Selected node metadata
+                      <TableOutlined /> Selected node metadata
                     </p>
                   }
-                  key="100"
+                  key="1"
                 >
                   {props.selectedNode &&
                     props.graphObject &&

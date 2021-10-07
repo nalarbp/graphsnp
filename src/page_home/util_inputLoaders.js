@@ -5,6 +5,7 @@ import { message } from "antd";
 import { extendMoment } from "moment-range";
 import * as util from "../utils/utils";
 import HammingMatrix from "../model/hammingMatrix_prop";
+import DistanceMatrix from "../model/distanceMatrix_prop.js";
 
 const _ = require("lodash");
 const moment = extendMoment(Moment);
@@ -96,6 +97,59 @@ export async function snpsLoader(
   } else {
     alert("Error: Check the SNP alignment input requirements");
     propsIsinputLoadingToStore(false);
+  }
+}
+
+//======================= DIST-MATRIX ========================
+export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
+  let data_promise_raw = await csv(fileURL).then(function (result) {
+    return result;
+  });
+  // let isMatrixValid = false;
+  // let firstRow = data_promise_raw[1];
+  // let colNames = [];
+  // console.log(firstRow);
+  // for (let key in firstRow) {
+  //   console.log(key);
+  // }
+  // //console.log(colNames);
+
+  // //check: first column must be ""
+  // if (Array.isArray(colNames) && colNames[0] === "") {
+  //   isMatrixValid = true;
+  //   colNames.shift();
+  // } else {
+  //   alert("Invalid input for distance matrix: First column name is not empty ");
+  //   setisLoading(false);
+  // }
+
+  if (data_promise_raw && Array.isArray(data_promise_raw)) {
+    let rowNames = data_promise_raw.map((d) => d[""]);
+    let colNames = Object.keys(data_promise_raw[0]).filter((e) =>
+      e !== "" ? true : false
+    );
+    console.log(rowNames, colNames);
+    let areNamesIdentical = true;
+    //   colNames.length === rowNames.length
+    //     ? colNames.every((val, idx) => val === rowNames[idx])
+    //     : false;
+
+    if (areNamesIdentical) {
+      setTimeout(() => {
+        const inputMatrix = new DistanceMatrix(data_promise_raw).createMatrix();
+
+        message.success("Pairwise distance matrix has been created", 1);
+        console.log(inputMatrix);
+        matrixToStore(inputMatrix);
+        setisLoading(false);
+      }, 100);
+    } else {
+      //isMatrixValid = false;
+      alert(
+        "Invalid input for distance matrix: column names and row names are in different order"
+      );
+      setisLoading(false);
+    }
   }
 }
 //========================== METADATA ============================

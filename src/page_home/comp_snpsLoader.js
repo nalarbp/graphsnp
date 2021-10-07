@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { sequenceToStore, isinputLoadingToStore } from "../action/inputActions";
 import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import { snpsLoader } from "./util_inputLoaders";
+import { snpsLoader, getMatrixInput } from "./util_inputLoaders";
 
 const { Dragger } = Upload;
 
@@ -20,39 +20,54 @@ const InputLoader = (props) => {
 
   const beforeUploadHandler = (file) => {
     if (file) {
-      let inputType = "seq";
+      let inputType = null;
 
       //check extension
-      //check content
+      let seqExtension = [".fa", ".fasta", ".fna", ".mfa"];
+      let fileExtension = file.name.match(/\.[0-9a-z]+$/i)[0];
+      if (seqExtension.indexOf(fileExtension) !== -1) {
+        inputType = "seq";
+      } else {
+        inputType = "mat";
+      }
 
-      switch (inputType) {
-        case "seq":
-          const reader = new FileReader();
-          reader.readAsText(file);
-          //console.log(reader.readAsText(file));
-          props.isinputLoadingToStore(true);
-          reader.onloadend = function (evt) {
-            console.log(evt);
-            const dataText = evt.target.result;
-            snpsLoader(
-              dataText,
-              props.sequenceToStore,
-              props.hmmMatrixToStore,
-              props.isinputLoadingToStore
-            );
-          };
-          break;
-
-        default:
-          message.error("Invalid input file", 0.5);
-          break;
+      //check format
+      if (inputType === "seq") {
+        let reader = new FileReader();
+        reader.readAsText(file);
+        //console.log(reader.readAsText(file));
+        props.isinputLoadingToStore(true);
+        reader.onloadend = function (evt) {
+          const dataText = evt.target.result;
+          console.log(dataText);
+          snpsLoader(
+            dataText,
+            props.sequenceToStore,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore
+          );
+        };
+      } else if (inputType === "mat") {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        props.isinputLoadingToStore(true);
+        reader.onloadend = function (evt) {
+          const dataUrl = evt.target.result;
+          getMatrixInput(
+            dataUrl,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore
+          );
+        };
+      } else {
+        message.error("Invalid input file", 0.5);
       }
     }
     return false; //to avoid upload action (we parse and load it to store instead)
   };
 
   const getIconStatus = function () {
-    if (props.sequence) {
+    if (props.sequence || props.hammMatrix) {
       return <CheckCircleFilled style={{ fontSize: "14pt" }} />;
     } else {
       return <StopOutlined />;
@@ -68,7 +83,7 @@ const InputLoader = (props) => {
     <React.Fragment>
       <div>
         <Dragger
-          accept={".fa, .fasta, .fna, .mfa"}
+          accept={".fa, .fasta, .fna, .mfa, .csv"}
           showUploadList={false}
           style={{
             backgroundColor: "transparent",
@@ -85,10 +100,11 @@ const InputLoader = (props) => {
               shape={"round"}
               size={"large"}
             >
-              {getIconStatus()} SNPs {"  "}
+              {getIconStatus()} SNPs alignment {"  "}
               <span style={{ marginLeft: "5px" }}>
                 <Tooltip
-                  title="Input or drag and drop non-ambiguous multi-fasta SNPs alignment file here"
+                  title="Input or drag and drop non-ambiguous multi-fasta SNPs alignment (.fa, .fna, 
+                    .mfa, .fsa) or a distance matrix (.csv) file here"
                   placement="rightTop"
                 >
                   <QuestionCircleOutlined
@@ -120,6 +136,7 @@ const InputLoader = (props) => {
 function mapStateToProps(state) {
   return {
     sequence: state.sequence,
+    hammMatrix: state.hammMatrix,
     patientMovement: state.patientMovement,
   };
 }

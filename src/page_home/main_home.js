@@ -64,7 +64,7 @@ const Home = (props) => {
             <Spin
               indicator={loadingIcon}
               style={{ color: "white" }}
-              tip="Processing..."
+              tip="Preparing Data"
               size="large"
             />
           </Modal>

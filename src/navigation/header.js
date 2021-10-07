@@ -9,10 +9,10 @@ const Header = (props) => {
   return (
     <React.Fragment>
       <Row id="main-header">
-        <Col id="header-navigation" xs={8} sm={18}>
+        <Col id="header-navigation" xs={18}>
           <NavigationMenu />
         </Col>
-        <Col id="header-logo" xs={16} sm={6}>
+        <Col id="header-logo" xs={6}>
           <img
             style={{ float: "right" }}
             src={logo}

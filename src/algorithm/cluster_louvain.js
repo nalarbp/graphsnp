@@ -45,6 +45,7 @@ export function findLouvain(graphObject) {
       });
     }
   });
+  console.log("Louvain", group, members);
 
   return { group: group, members: members };
 }

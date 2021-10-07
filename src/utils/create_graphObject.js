@@ -3,6 +3,7 @@ import { createCATHAI } from "../algorithm/construct_cathai";
 import { createCGE } from "../algorithm/construct_cge";
 import { createSMSO } from "../algorithm/construct_smso";
 import { createSeqTrack } from "../algorithm/construct_seqtrack";
+import { createMSCG } from "../algorithm/construct_mscg";
 
 /* Definition of graph object
 it always returns an object
@@ -37,6 +38,12 @@ export function createGraphObject(
       graphObject.creator = "cathai";
       graphObject.nodes = cathai_graph.nodes;
       graphObject.edges = cathai_graph.edges;
+      break;
+    case "mscg":
+      let mscg_graph = createMSCG(hammingMatrix, edgeCutoff);
+      graphObject.creator = "mscg";
+      graphObject.nodes = mscg_graph.nodes;
+      graphObject.edges = mscg_graph.edges;
       break;
     case "cge":
       let cge_graph = createCGE(hammingMatrix, categoricalMap, edgeCutoff);

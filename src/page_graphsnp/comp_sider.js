@@ -208,7 +208,7 @@ const SiderMenu = (props) => {
             <Spin
               indicator={loadingIcon}
               style={{ color: "white" }}
-              tip="Processing..."
+              tip="Preparing Graph"
               size="large"
             />
           </Modal>
@@ -229,17 +229,20 @@ const SiderMenu = (props) => {
             </span>
           </p>
           <Select
-            disabled={props.sequence ? false : true}
+            disabled={props.hammMatrix ? false : true}
             value={graph_typeOfAnalysis}
             style={{ width: "100%" }}
             onChange={changeTypeOfAnalysisHandler}
           >
-            <Option disabled={props.sequence ? false : true} value="clustering">
+            <Option
+              disabled={props.hammMatrix ? false : true}
+              value="clustering"
+            >
               {" "}
               Clustering{" "}
             </Option>
             <Option
-              disabled={props.sequence && props.metadata ? false : true}
+              disabled={props.hammMatrix && props.metadata ? false : true}
               value="transmission"
             >
               Transmission
@@ -262,12 +265,18 @@ const SiderMenu = (props) => {
               </span>
             </p>
             <Select
-              disabled={props.sequence && graph_typeOfAnalysis ? false : true}
+              disabled={props.hammMatrix && graph_typeOfAnalysis ? false : true}
               value={graph_method}
               style={{ width: "100%" }}
               onChange={changeMethodHandler}
             >
               <Option value="cathai">CATHAI</Option>
+              <Option
+                value="mscg"
+                disabled={graph_isUserFilterEdges ? false : true}
+              >
+                MSCG
+              </Option>
             </Select>
           </Col>
         )}
@@ -294,7 +303,7 @@ const SiderMenu = (props) => {
               onChange={changeMethodHandler}
             >
               <Option
-                disabled={props.sequence && props.metadata ? false : true}
+                disabled={props.hammMatrix && props.metadata ? false : true}
                 value="seqtrack"
               >
                 SeqTrack
@@ -316,7 +325,7 @@ const SiderMenu = (props) => {
             </span>
           </p>
           <Select
-            disabled={props.sequence ? false : true}
+            disabled={props.hammMatrix ? false : true}
             value={graph_layout}
             style={{ width: "100%" }}
             onChange={changeLayoutHandler}
@@ -353,7 +362,7 @@ const SiderMenu = (props) => {
             onChange={isUserFilterEdgesdHandler}
             checked={graph_isUserFilterEdges}
             disabled={
-              props.sequence && graph_typeOfAnalysis === "clustering"
+              props.hammMatrix && graph_typeOfAnalysis === "clustering"
                 ? false
                 : true
             }
@@ -387,7 +396,7 @@ const SiderMenu = (props) => {
             min={0}
             disabled={
               graph_isUserFilterEdges &&
-              props.sequence &&
+              props.hammMatrix &&
               graph_typeOfAnalysis === "clustering"
                 ? false
                 : true
@@ -442,7 +451,7 @@ const SiderMenu = (props) => {
 
         <Col span={24}>
           <Button
-            disabled={props.sequence ? false : true}
+            disabled={props.hammMatrix ? false : true}
             onClick={drawingHandler}
             type="primary"
           >
@@ -477,7 +486,6 @@ const SiderMenu = (props) => {
               onChange={changeClusterMethodHandler}
             >
               <Option value="Connected Components">Connected Components</Option>
-              <Option value="Louvain">Louvain</Option>
             </Select>
           </Col>
         )}
@@ -669,6 +677,7 @@ function mapStateToProps(state) {
     metadata: state.metadata,
     patientMovement: state.patientMovement,
     sequence: state.sequence,
+    hammMatrix: state.hammMatrix,
     graphSettings: state.graphSettings,
     graphObject: state.graphObject,
     graphClusters: state.graphClusters,
@@ -706,12 +715,12 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SiderMenu);
 
 /*
-<Option disabled={props.sequence && props.metadata ? false : true} value="hierSnpsMetaStayOverlap">
+<Option disabled={props.hammMatrix && props.metadata ? false : true} value="hierSnpsMetaStayOverlap">
                 SNPs and patient stay
               </Option>
 
                             <Option
-                disabled={props.sequence && props.metadata ? false : true}
+                disabled={props.hammMatrix && props.metadata ? false : true}
                 value="cge"
               >
                 CATHAI + metadata
