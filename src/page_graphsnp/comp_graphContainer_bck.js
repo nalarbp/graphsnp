@@ -12,7 +12,6 @@ import { Col, Empty, Button, message } from "antd";
 import { createGraphObject } from "../utils/create_graphObject";
 import { createCytoscapeData } from "../utils/create_cyData";
 import { createClusterCSVFile } from "../utils/create_exportFile";
-import { cricle_svgUrl } from "../img/circle.js";
 import { findClusters } from "../utils//find_clusters";
 import cytoscape from "cytoscape";
 import cy_svg from "cytoscape-svg";
@@ -39,13 +38,10 @@ import {
   changeIsUserRelayoutSetting,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
-import coseBilkent from "cytoscape-cose-bilkent";
 
 const _ = require("lodash");
 const fcose = require("cytoscape-fcose");
 const spread = require("cytoscape-spread");
-
-cytoscape.use(coseBilkent); // register extension
 cytoscape.use(fcose); // register extension
 cytoscape.use(spread); // register extension
 cytoscape.use(cy_svg); // register extension
@@ -58,8 +54,7 @@ const GraphContainer = (props) => {
   //Settings
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_method = props.graphSettings.method;
-  const graph_layout =
-    graph_method === "mscg" ? "cose-bilkent" : props.graphSettings.layout;
+  const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
   const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
   const graph_edgeFilterCutoff = graph_isUserFilterEdges
@@ -349,8 +344,23 @@ const GraphContainer = (props) => {
                     return node_size;
                   }
                 },
-                label: "data(id)",
-                "text-wrap": "none",
+                label: function (d) {
+                  let nodeData = d.data("data");
+                  if (nodeData && nodeData.size) {
+                    let textLabel = nodeData.contents.join("\n");
+                    return textLabel;
+                  } else {
+                    return d.data("id");
+                  }
+                },
+                "text-wrap": function (d) {
+                  let nodeData = d.data("data");
+                  if (nodeData && nodeData.size) {
+                    return "wrap";
+                  } else {
+                    return "none";
+                  }
+                },
                 "text-valign": function (d) {
                   let nodeData = d.data("data");
                   if (nodeData && nodeData.size) {
@@ -376,22 +386,6 @@ const GraphContainer = (props) => {
                     return "lightgray";
                   }
                 },
-              },
-            },
-            {
-              selector: ":parent",
-              style: {
-                "background-image": cricle_svgUrl,
-                "padding-top": "25px",
-                "background-position-x": "0",
-                "background-position-y": "0",
-                "background-width": "100%",
-                "background-height": "100%",
-                "background-fit": "contain",
-                "background-opacity": "0",
-                "border-width": "0",
-                "text-valign": "top",
-                "text-halign": "center",
               },
             },
             {
@@ -465,11 +459,9 @@ const GraphContainer = (props) => {
         //node event click listener
         cy.selectionType("single");
         cy.nodes().bind("tap", function (evt) {
-          let nodeData = evt.target.data("data");
-          let nodeId =
-            nodeData && nodeData.size
-              ? nodeData.contents
-              : [evt.target.data("id")];
+          let nodeId = evt.target.data("data").size
+            ? evt.target.data("data").contents
+            : [evt.target.data("id")];
           if (props.metadata) {
             props.changeSelectedNode(nodeId);
           }
@@ -583,13 +575,5 @@ function mapDispatchToProps(dispatch) {
 
 export default connect(mapStateToProps, mapDispatchToProps)(GraphContainer);
 /*
-label: function (d) {
-                  let nodeData = d.data("data");
-                  if (nodeData && nodeData.size) {
-                    let textLabel = nodeData.contents.join("\n");
-                    return textLabel;
-                  } else {
-                    return d.data("id");
-                  }
-                },
+
 */

@@ -13,6 +13,7 @@
     "antd": "^4.10.0",
     "bio-parsers": "^6.2.6",
     "cytoscape": "^3.17.1",
+    "cytoscape-cose-bilkent": "^4.1.0",
     "cytoscape-fcose": "^2.0.0",
     "cytoscape-spread": "^3.0.0",
     "cytoscape-svg": "^0.3.1",

@@ -58,8 +58,16 @@ export function createMSCG(rawMatrix, edgeCutoff) {
   if (fcc_clusters.group.length > 0) {
     for (let i = 0; i < fcc_clusters.group.length; i++) {
       let sourceClusterID = "Cluster " + (i + 1);
-      nodelist_MSCG.push(sourceClusterID);
+
       let sourceClusterMembers = fcc_clusters.group[i];
+      nodelist_MSCG.push({
+        id: sourceClusterID,
+        data: {
+          type: "compound",
+          size: sourceClusterMembers.length,
+          contents: sourceClusterMembers,
+        },
+      });
 
       //+get pairwise cluster to cluster
       for (let j = i + 1; j < fcc_clusters.group.length; j++) {
@@ -104,11 +112,18 @@ export function createMSCG(rawMatrix, edgeCutoff) {
     }
   }
 
-  //+create relationship between singletons
+  //+create relationship between singleton to singleton
   if (singletons.length > 0) {
     for (let l = 0; l < singletons.length; l++) {
       let sourceS = singletons[l].sample;
-      nodelist_MSCG.push(sourceS);
+      nodelist_MSCG.push({
+        id: sourceS,
+        data: {
+          type: "singleton",
+          size: null,
+          contents: null,
+        },
+      });
       for (let m = l + 1; m < singletons.length; m++) {
         let targetS = singletons[m].sample;
         if (sourceS !== targetS) {

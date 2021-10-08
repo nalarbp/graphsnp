@@ -7,46 +7,55 @@ export function createCytoscapeData(graphObject) {
   let nodes = graphObject.nodes;
   let edges = graphObject.edges;
 
+  //converting edges to cytoscape data
+  edges.forEach((el) => {
+    cytoscapeData.push({
+      data: {
+        source: el.source,
+        target: el.target,
+        weight: el.value,
+        dir: el.dir === "forward" ? "forward" : "none",
+      },
+    });
+  });
+  //if method is mscg
   if (creatorMethod === "mscg") {
-    //converting edges to cytoscape data
-    edges.forEach((el) => {
-      cytoscapeData.push({
-        data: {
-          source: el.source,
-          target: el.target,
-          weight: el.value,
-          dir: el.dir === "forward" ? "forward" : "none",
-        },
-      });
-    });
-
     ///adding nodes data
     nodes.forEach((d) => {
-      let node_data = creatorMethod === "nlv" ? d.data : [];
-      let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
-      cytoscapeData.push({
-        data: { id: d, nodeType: node_type, data: node_data },
-      });
+      let node_data = d.data;
+      //if compound
+      if (node_data && node_data.type === "compound") {
+        //add parent
+        cytoscapeData.push({
+          data: { id: d.id, data: node_data },
+        });
+        //add childrens
+        node_data.contents.forEach((s) => {
+          cytoscapeData.push({
+            data: {
+              id: s,
+              parent: d.id,
+              data: { type: "singleton", size: null, contents: null },
+            },
+          });
+        });
+      }
+      //else: singleton
+      else {
+        cytoscapeData.push({
+          data: { id: d.id, data: node_data },
+        });
+      }
     });
-  } else {
-    //converting edges to cytoscape data
-    edges.forEach((el) => {
-      cytoscapeData.push({
-        data: {
-          source: el.source,
-          target: el.target,
-          weight: el.value,
-          dir: el.dir === "forward" ? "forward" : "none",
-        },
-      });
-    });
-
+    console.log(cytoscapeData);
+  }
+  //for other methods
+  else {
     ///adding nodes data
     nodes.forEach((d) => {
-      let node_data = creatorMethod === "nlv" ? d.data : [];
-      let node_type = creatorMethod === "nlv" ? "compound" : "singleton";
+      let node_data = { type: "singleton", size: null, contents: null };
       cytoscapeData.push({
-        data: { id: d, nodeType: node_type, data: node_data },
+        data: { id: d, data: node_data },
       });
     });
   }
@@ -55,35 +64,21 @@ export function createCytoscapeData(graphObject) {
 }
 
 /*
-let cytoscapeData = [];
-  //extracting edges
-  let edgeList = [];
-  graphObject.mapData.forEach((val, key) => {
-    nodes.push(key);
-    val.forEach((c) => {
-      edgeList.push({ source: key, target: c.target, value: c.value });
+if (creatorMethod === "mscg") {
+    ///adding nodes data
+    nodes.forEach((d) => {
+      let node_data = d.data;
+      cytoscapeData.push({
+        data: { id: d.id, data: node_data },
+      });
     });
-  });
-  //Filtering duplicates edges
-  let tracker = new Map();
-  edgeList = edgeList.filter(function (g) {
-    let currentPair = g.source.concat("-", g.target);
-    let inversePair = g.target.concat("-", g.source);
-
-    let inverseEdge = edgeList.find(function (h) {
-      return h.source === g.target && h.target === g.source;
+  } else {
+    ///adding nodes data
+    nodes.forEach((d) => {
+      let node_data = { type: "singleton", size: null, contents: null };
+      cytoscapeData.push({
+        data: { id: d, data: node_data },
+      });
     });
-
-    if (inverseEdge) {
-      if (tracker.get(inversePair) || tracker.get(currentPair)) {
-        return false;
-      } else {
-        tracker.set(currentPair, true);
-        tracker.set(inversePair, true);
-        return true;
-      }
-    } else {
-      return true;
-    }
-  });
+  }
 */

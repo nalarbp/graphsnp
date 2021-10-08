@@ -80,9 +80,15 @@ const SiderMenu = (props) => {
 
   const changeMethodHandler = (val) => {
     props.changeMethodSetting(val);
+    if (val === "mscg") {
+      props.changeLayoutSetting("cose-bilkent");
+    }
   };
 
   const changeLayoutHandler = (val) => {
+    if (graph_method === "mscg") {
+      props.changeLayoutSetting("cose-bilkent");
+    }
     props.changeLayoutSetting(val);
   };
 
@@ -333,6 +339,7 @@ const SiderMenu = (props) => {
             <Option value="cose"> CoSE</Option>
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
+            <Option value="cose-bilkent">CoSE Bilkent (Compound)</Option>
           </Select>
         </Col>
         <Col span={8}>
@@ -494,7 +501,9 @@ const SiderMenu = (props) => {
           <Col span={24}>
             <Button
               type="primary"
-              disabled={props.graphObject ? false : true}
+              disabled={
+                props.graphObject && !graph_method === "mscg" ? false : true
+              }
               onClick={clusteringHandler}
             >
               Detect clusters
