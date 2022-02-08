@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import projectsReducer from "./projectsReducer";
 import sequenceReducer from "./sequenceReducer";
 import navSettingsReducer from "./navSettingsReducer";
 import graphSettingsReducer from "./graphSettingsReducer";
@@ -16,6 +17,7 @@ import selectedNodeReducer from "./selectedNodeReducer";
 import isShowingLoadingModalReducer from "./isShowingLoadingModalReducer";
 
 export const initialState = {
+  projectJSON: null,
   sequence: null,
   metadata: null,
   patientMovement: null,
@@ -25,7 +27,7 @@ export const initialState = {
   hammMatrix: null,
   graphObject: null,
   graphClusters: null,
-  selectedNode: null, //exception, reducers and action were on
+  selectedNode: [], //exception, reducers and action were on
   graphSettings: {
     typeOfAnalysis: "clustering", //clustering;transmission
     method: "cathai",
@@ -68,6 +70,7 @@ export const initialState = {
 };
 const rootReducer = combineReducers(
   {
+    projectJSON: projectsReducer,
     sequence: sequenceReducer,
     metadata: metadataReducer,
     selectDemoData: selectDemoDataReducer,

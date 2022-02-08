@@ -68,14 +68,12 @@ export function createColorLUT(raw_sampleJSON, colorIndex) {
 
     let colorMap = new Map();
     sampleJSON.forEach((d) => {
-      if (colorIndex === "sample_date") {
-        let momentDate = moment(d[colorIndex]);
-        let isoWeek = momentDate.isoWeek().toString();
-        let isoWeekYear = momentDate.isoWeekYear().toString();
-        let isoWeekAndYear = parseInt(isoWeekYear + isoWeek);
+      if (colorIndex === "collectionDay") {
+        let isoWeekAndYear = d[colorIndex];
         let resultColor = color(
           colorInterpolatorSeq(isoWeekAndYear)
         ).formatHex();
+
         colorMap.set(d.sample, resultColor); //return sample_id as key, and color in
       } else {
         colorMap.set(d.sample, colorInterpolatorOrd(d[colorIndex]));

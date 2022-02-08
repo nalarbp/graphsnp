@@ -8,6 +8,7 @@ import { bindActionCreators } from "redux";
 import {
   selectDemoDataToStore,
   sequenceToStore,
+  projectJSONToStore,
   metadataToStore,
   patientMovementToStore,
   isinputLoadingToStore,
@@ -15,8 +16,11 @@ import {
 import { colorLUTtoStore } from "../action/colorActions";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
 import {
+  loadProjectJSON,
   snpsLoader,
   getMetadataInput,
+  getMatrixInput,
+  loadSNPsequence,
   getPatientMovementInput,
 } from "./util_inputLoaders";
 
@@ -24,42 +28,33 @@ const { Option } = Select;
 
 //LOADER FUNCTION: ASSUME ALL DEMO FILE IS PASS ACTUAL INPUT LOADER
 
-//===============
-
 const SelectDemoData = (props) => {
-  //general variable
+  let project_options = [];
+
+  //RETRIEVE PROJECTS.JSON
+  if (props.projectJSON === null) {
+    loadProjectJSON(constant.PROJECTS_JSON_URL, props.projectJSONToStore);
+  }
+
+  //List projects and create as options
+  if (props.projectJSON) {
+    props.projectJSON.forEach((v, k) => {
+      project_options.push(
+        <Option key={k} value={k}>
+          {v.name}
+        </Option>
+      );
+    });
+  }
+
   const selectedDemoData = props.selectDemoData;
 
   //functions
-  async function loadSNPsequence(
-    fileURL,
-    propsSequenceToStore,
-    propsHmmMatrixToStore,
-    propsIsinputLoadingToStore,
-    snpsLoader
-  ) {
-    let response = await fetch(fileURL);
-
-    propsIsinputLoadingToStore(true);
-    let dataInBlob = await response.blob();
-    const reader = new FileReader();
-    reader.readAsText(dataInBlob);
-    reader.onloadend = function (evt) {
-      const dataText = evt.target.result;
-      snpsLoader(
-        dataText,
-        propsSequenceToStore,
-        propsHmmMatrixToStore,
-        propsIsinputLoadingToStore
-      );
-    };
-  }
 
   //handlers
   const selectDemoDataHandler = (val) => {
     // case for each demo data
-    if (val) {
-      let fileURL = constant.DEMO[val];
+    if (props.projectJSON && val) {
       //clean all states
       props.sequenceToStore(null);
       props.hmmMatrixToStore(null);
@@ -69,21 +64,12 @@ const SelectDemoData = (props) => {
       props.patientMovementToStore(null);
 
       //load a new one
-      //snps
-      if (fileURL.snps) {
-        loadSNPsequence(
-          fileURL.snps,
-          props.sequenceToStore,
-          props.hmmMatrixToStore,
-          props.isinputLoadingToStore,
-          snpsLoader
-        );
-      }
+      let projectData = props.projectJSON.get(val);
 
       //meta
-      if (fileURL.metadata) {
+      if (projectData.metadata) {
         getMetadataInput(
-          fileURL.metadata,
+          projectData.metadata,
           props.metadataToStore,
           props.colorLUTtoStore,
           props.categoricalMapToStore,
@@ -91,14 +77,37 @@ const SelectDemoData = (props) => {
         );
       }
 
-      //stay timeline
-      if (fileURL.stayTimeline) {
-        getPatientMovementInput(
-          fileURL.stayTimeline,
-          props.patientMovementToStore,
-          props.isinputLoadingToStore
-        );
+      //if snps alignment
+      if (projectData.matrixOrAlignment === "alignment") {
+        if (projectData.snpDistance) {
+          loadSNPsequence(
+            //need to do this because different parsing with drag and drop one
+            projectData.snpDistance,
+            props.sequenceToStore,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore,
+            snpsLoader
+          );
+        }
+      } else if (projectData.matrixOrAlignment === "matrix") {
+        if (projectData.snpDistance) {
+          getMatrixInput(
+            projectData.snpDistance,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore
+          );
+        }
       }
+
+      //stay timeline
+      // if (fileURL.stayTimeline) {
+      //   getPatientMovementInput(
+      //     fileURL.stayTimeline,
+      //     props.patientMovementToStore,
+      //     props.isinputLoadingToStore
+      //   );
+      // }
+
       props.selectDemoDataToStore(val);
     } else {
       props.selectDemoDataToStore(null);
@@ -109,13 +118,8 @@ const SelectDemoData = (props) => {
     <React.Fragment>
       <Col xs={24}>
         <Select value={selectedDemoData} onChange={selectDemoDataHandler}>
-          <Option value={null}>Select demo data</Option>
-          <Option value="demo2">
-            ESBL K. michiganensis outbreak (Chapman et al., 2020)
-          </Option>
-          <Option value="demo1">
-            VRE ST78 outbreak (Permana et al., 2021)
-          </Option>
+          <Option value={null}>Preloaded dataset</Option>
+          {project_options}
         </Select>
       </Col>
     </React.Fragment>
@@ -124,12 +128,14 @@ const SelectDemoData = (props) => {
 
 function mapStateToProps(state) {
   return {
+    projectJSON: state.projectJSON,
     selectDemoData: state.selectDemoData,
   };
 }
 function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
+      projectJSONToStore,
       selectDemoDataToStore,
       sequenceToStore,
       metadataToStore,

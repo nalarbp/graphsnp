@@ -1,4 +1,4 @@
-sample_id,sample_date,patient_id,sex,age,peak.fever,outcome,notes
+sample_id,CollectionDay,patient_id,sex,age,peak.fever,outcome,notes
 1,2013-02-18,1,m,30,37.5,mild,
 2,2013-02-20,2,f,40,38.5,mild,
 3,2013-02-21,3,f,32,38,mild,

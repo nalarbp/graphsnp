@@ -1,0 +1,26 @@
+{
+  "projects": [
+    {
+      "id": "1",
+      "name": "VRE ST78 outbreak (Permana et al., 2022)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/1/st78_snps_input.fa",
+      "metadata": "./data/demoFile/1/st78_metadata_input.csv"
+    },
+    {
+      "id": "2",
+      "name": "ESBL K. michiganensis outbreak (Chapman et al., 2020)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/2/esbl_KM_snps_input.fa",
+      "metadata": "./data/demoFile/1/st78_metadata_input.csv"
+    },
+    {
+      "id": "3",
+      "name": "cgMLST ST78 PAH and global",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/st78_cgMLST/gp_cgMLST_dist_clean_135_globalContext_st78.csv",
+      "metadata": "./data/demoFile/st78_cgMLST/gp_metadata_135.csv"
+    }
+  ],
+  "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"
+}

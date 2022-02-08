@@ -3,7 +3,6 @@ import { Upload, Button, message, Tooltip } from "antd";
 import {
   StopOutlined,
   CheckCircleFilled,
-  DeleteFilled,
   DeleteOutlined,
   QuestionCircleOutlined,
 } from "@ant-design/icons";
@@ -23,7 +22,15 @@ const InputLoader = (props) => {
       let inputType = null;
 
       //check extension
-      let seqExtension = [".fa", ".fasta", ".fna", ".mfa"];
+      let seqExtension = [
+        ".fa",
+        ".fasta",
+        ".fna",
+        ".mfa",
+        ".aln",
+        ".faa",
+        ".txt",
+      ];
       let fileExtension = file.name.match(/\.[0-9a-z]+$/i)[0];
       if (seqExtension.indexOf(fileExtension) !== -1) {
         inputType = "seq";
@@ -39,7 +46,7 @@ const InputLoader = (props) => {
         props.isinputLoadingToStore(true);
         reader.onloadend = function (evt) {
           const dataText = evt.target.result;
-          console.log(dataText);
+          //console.log(dataText);
           snpsLoader(
             dataText,
             props.sequenceToStore,
@@ -117,7 +124,7 @@ const InputLoader = (props) => {
         </Dragger>
         <div className="remove-button-container">
           <Button
-            disabled={props.sequence ? false : true}
+            disabled={props.hammMatrix ? false : true}
             title={"Remove loaded SNPs alignment"}
             type={"ghost"}
             className="input-loader-remove-button "

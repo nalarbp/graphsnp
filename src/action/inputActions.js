@@ -1,5 +1,12 @@
 import * as constant from "../utils/constants";
 
+export function projectJSONToStore(val) {
+  return {
+    type: constant.PROJECTS_JSON,
+    payload: val,
+  };
+}
+
 export function sequenceToStore(val) {
   return {
     type: constant.SEQ_DATA,

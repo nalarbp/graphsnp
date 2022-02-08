@@ -17,11 +17,32 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import { connect } from "react-redux";
+import * as constant from "../utils/constants";
 import { bindActionCreators } from "redux";
 import {
   createClusterCSVFile,
   createDOTGraph,
 } from "../utils/create_exportFile";
+import {
+  selectDemoDataToStore,
+  sequenceToStore,
+  projectJSONToStore,
+  metadataToStore,
+  patientMovementToStore,
+  isinputLoadingToStore,
+} from "../action/inputActions";
+import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import { colorLUTtoStore } from "../action/colorActions";
+import { categoricalMapToStore } from "../action/categoricalMapActions";
+import {
+  loadProjectJSON,
+  snpsLoader,
+  getMetadataInput,
+  getMatrixInput,
+  loadSNPsequence,
+  getPatientMovementInput,
+} from "../page_home/util_inputLoaders";
+
 import {
   changeMethodSetting,
   changeLayoutSetting,
@@ -40,6 +61,7 @@ import {
   changeTypeOfAnalysisSetting,
   changeIsUserFilterEdgesSetting,
   changeIsUserRelayoutSetting,
+  changeSelectedNode,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
@@ -67,6 +89,31 @@ const SiderMenu = (props) => {
   const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
+  const selectedDemoData = props.selectDemoData;
+  let graph_nodeID_options = [];
+  let project_options = [];
+
+  //get nodeIDs from hamming matrix
+  if (props.hammMatrix) {
+    props.hammMatrix.forEach((v, k) => {
+      graph_nodeID_options.push(<Option key={k}>{k}</Option>);
+    });
+  }
+
+  //get preloaded project dataset for options
+  //List projects and create as options
+  if (props.projectJSON === null) {
+    loadProjectJSON(constant.PROJECTS_JSON_URL, props.projectJSONToStore);
+  }
+  if (props.projectJSON) {
+    props.projectJSON.forEach((v, k) => {
+      project_options.push(
+        <Option key={k} value={k}>
+          {v.name}
+        </Option>
+      );
+    });
+  }
 
   //HANDLERS
   const changeTypeOfAnalysisHandler = (val) => {
@@ -79,10 +126,12 @@ const SiderMenu = (props) => {
   };
 
   const changeMethodHandler = (val) => {
-    props.changeMethodSetting(val);
     if (val === "mscg") {
       props.changeLayoutSetting("cose-bilkent");
+    } else {
+      props.changeLayoutSetting("cose");
     }
+    props.changeMethodSetting(val);
   };
 
   const changeLayoutHandler = (val) => {
@@ -169,10 +218,18 @@ const SiderMenu = (props) => {
     props.changeTransIcludeLocLevel(val);
   };
 
+  const selectNodeIDsHandler = (val) => {
+    props.changeSelectedNode(val);
+  };
+
   const exportingHandler = () => {
     switch (graph_exportFormat) {
       case "clusterID":
-        createClusterCSVFile(props.graphClusters.members);
+        if (props.graphClusters) {
+          createClusterCSVFile(props.graphClusters.members);
+        } else {
+          alert("No file: Need to initiate detect cluster first ");
+        }
         break;
       case "svg":
         props.changeIsUserDownloadingSetting(true);
@@ -183,6 +240,59 @@ const SiderMenu = (props) => {
 
       default:
         break;
+    }
+  };
+
+  const selectDemoDataHandler = (val) => {
+    // case for each demo data
+    if (props.projectJSON && val) {
+      //clean all states
+      props.sequenceToStore(null);
+      props.hmmMatrixToStore(null);
+      props.metadataToStore(null);
+      props.colorLUTtoStore(null);
+      props.categoricalMapToStore(null);
+      props.patientMovementToStore(null);
+
+      //load a new one
+      let projectData = props.projectJSON.get(val);
+
+      //meta
+      if (projectData.metadata) {
+        getMetadataInput(
+          projectData.metadata,
+          props.metadataToStore,
+          props.colorLUTtoStore,
+          props.categoricalMapToStore,
+          props.isinputLoadingToStore
+        );
+      }
+
+      //if snps alignment
+      if (projectData.matrixOrAlignment === "alignment") {
+        if (projectData.snpDistance) {
+          loadSNPsequence(
+            //need to do this because different parsing with drag and drop one
+            projectData.snpDistance,
+            props.sequenceToStore,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore,
+            snpsLoader
+          );
+        }
+      } else if (projectData.matrixOrAlignment === "matrix") {
+        if (projectData.snpDistance) {
+          getMatrixInput(
+            projectData.snpDistance,
+            props.hmmMatrixToStore,
+            props.isinputLoadingToStore
+          );
+        }
+      }
+
+      props.selectDemoDataToStore(val);
+    } else {
+      props.selectDemoDataToStore(null);
     }
   };
 
@@ -221,6 +331,18 @@ const SiderMenu = (props) => {
         </Col>
       </Row>
       <Row gutter={[8, 8]}>
+        <Col span={24}>
+          <h5>Preloaded dataset</h5>
+          <Select
+            value={selectedDemoData}
+            style={{ width: "100%", textOverflow: "ellipsis" }}
+            onChange={selectDemoDataHandler}
+          >
+            <Option value={null}>Select projects</Option>
+            {project_options}
+          </Select>
+        </Col>
+
         <Col span={24}>
           <h5>Graph settings</h5>
           <p>
@@ -340,6 +462,7 @@ const SiderMenu = (props) => {
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
             <Option value="cose-bilkent">CoSE Bilkent (Compound)</Option>
+            <Option value="dagre">Dagre</Option>
           </Select>
         </Col>
         <Col span={8}>
@@ -501,9 +624,7 @@ const SiderMenu = (props) => {
           <Col span={24}>
             <Button
               type="primary"
-              disabled={
-                props.graphObject && !graph_method === "mscg" ? false : true
-              }
+              disabled={props.graphObject ? false : true}
               onClick={clusteringHandler}
             >
               Detect clusters
@@ -512,9 +633,32 @@ const SiderMenu = (props) => {
         )}
 
         <Divider style={{ margin: "10px 0px 0px 0px" }} />
-
         <Col span={24}>
           <h5>Visualization settings</h5>
+          <p>
+            Select node(s){" "}
+            <span>
+              <Tooltip
+                title="Select one or more node IDs to highlight the node(s) on the graph"
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Select
+            mode="multiple"
+            allowClear
+            style={{ width: "100%" }}
+            placeholder="Select ID(s)"
+            onChange={selectNodeIDsHandler}
+            value={props.selectedNode}
+          >
+            {graph_nodeID_options}
+          </Select>
+        </Col>
+
+        <Col span={24}>
           <Checkbox
             style={{ fontSize: "10px" }}
             onChange={isEdgeScaledHandler}
@@ -692,6 +836,9 @@ function mapStateToProps(state) {
     graphClusters: state.graphClusters,
     colorLUT: state.colorLUT,
     isShowingLoadingModal: state.isShowingLoadingModal,
+    selectedNode: state.selectedNode,
+    selectDemoData: state.selectDemoData,
+    projectJSON: state.projectJSON,
   };
 }
 
@@ -716,6 +863,16 @@ function mapDispatchToProps(dispatch) {
       changeIsUserFilterEdgesSetting,
       changeIsUserRelayoutSetting,
       isShowingLoadingModalToStore,
+      changeSelectedNode,
+      projectJSONToStore,
+      selectDemoDataToStore,
+      sequenceToStore,
+      metadataToStore,
+      patientMovementToStore,
+      isinputLoadingToStore,
+      hmmMatrixToStore,
+      colorLUTtoStore,
+      categoricalMapToStore,
     },
     dispatch
   );

@@ -102,54 +102,52 @@ export async function snpsLoader(
 
 //======================= DIST-MATRIX ========================
 export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
-  let data_promise_raw = await csv(fileURL).then(function (result) {
+  let data_promise_super_raw = await csv(fileURL).then(function (result) {
     return result;
   });
-  // let isMatrixValid = false;
-  // let firstRow = data_promise_raw[1];
-  // let colNames = [];
-  // console.log(firstRow);
-  // for (let key in firstRow) {
-  //   console.log(key);
-  // }
-  // //console.log(colNames);
 
-  // //check: first column must be ""
-  // if (Array.isArray(colNames) && colNames[0] === "") {
-  //   isMatrixValid = true;
-  //   colNames.shift();
-  // } else {
-  //   alert("Invalid input for distance matrix: First column name is not empty ");
-  //   setisLoading(false);
-  // }
+  const headers = data_promise_super_raw.columns;
 
-  if (data_promise_raw && Array.isArray(data_promise_raw)) {
-    let rowNames = data_promise_raw.map((d) => d[""]);
-    let colNames = Object.keys(data_promise_raw[0]).filter((e) =>
-      e !== "" ? true : false
-    );
-    console.log(rowNames, colNames);
-    let areNamesIdentical = true;
-    //   colNames.length === rowNames.length
-    //     ? colNames.every((val, idx) => val === rowNames[idx])
-    //     : false;
+  if (headers[0] === "") {
+    let rowNames = [""];
+    let data_promise_raw = [];
 
-    if (areNamesIdentical) {
+    data_promise_super_raw.forEach((d) => {
+      let newD = {};
+      headers.forEach((h) => {
+        let valInt = h === "" ? String(d[h]) : parseFloat(d[h]);
+        let keyString = String(h);
+        newD[keyString] = valInt;
+      });
+      data_promise_raw.push(newD);
+      rowNames.push(d[""]);
+    });
+
+    //check colNames (header) and rowNames should be identical
+
+    let areColRowNamesIdentical =
+      headers.length === rowNames.length
+        ? headers.every((val, idx) => val === rowNames[idx])
+        : false;
+
+    if (areColRowNamesIdentical) {
       setTimeout(() => {
-        const inputMatrix = new DistanceMatrix(data_promise_raw).createMatrix();
-
+        const inputMatrix = new DistanceMatrix(
+          data_promise_raw,
+          headers
+        ).createMatrix();
         message.success("Pairwise distance matrix has been created", 1);
-        console.log(inputMatrix);
+
         matrixToStore(inputMatrix);
         setisLoading(false);
       }, 100);
     } else {
-      //isMatrixValid = false;
-      alert(
-        "Invalid input for distance matrix: column names and row names are in different order"
-      );
+      alert("Invalid CSV matrix: not symetrical");
       setisLoading(false);
     }
+  } else {
+    alert("First column in CSV matrix must be empty string");
+    setisLoading(false);
   }
 }
 //========================== METADATA ============================
@@ -163,7 +161,7 @@ export async function getMetadataInput(
   let data_promise_raw = await csv(fileURL).then(function (result) {
     return result;
   });
-  const validHeaders = ["sample_id", "sample_date"];
+  const validHeaders = ["sample_id"];
   const inputHeaders = Object.keys(data_promise_raw[0]);
   let header_is_valid = true;
   validHeaders.forEach((item) => {
@@ -173,12 +171,11 @@ export async function getMetadataInput(
   });
 
   if (!header_is_valid) {
-    alert("Invalid headers: One or more required headers was not found");
+    alert("Error: Metadata requires sample_id column");
     setisLoading(false);
     return;
   }
   //header transformation
-
   //
 
   // no duplicate in isolate name
@@ -190,10 +187,7 @@ export async function getMetadataInput(
     .filter((d) => d.count > 1);
 
   if (duplicatedRecords.length > 0) {
-    alert(
-      "Invalid data: duplicate record in column sample id" +
-        `${JSON.stringify(duplicatedRecords)}`
-    );
+    alert("Error: Duplicated id(s)" + `${JSON.stringify(duplicatedRecords)}`);
     setisLoading(false);
     return;
   }
@@ -202,28 +196,31 @@ export async function getMetadataInput(
   const sample_id_empty = sample_id[""] ? true : false;
 
   if (sample_id_empty) {
-    alert("Invalid data: column sample_id contain empty record");
+    alert("Error: Empty id(s)");
     setisLoading(false);
     return;
   }
 
-  // no empty record or invalid format in collection date
-  let isolate_start_datevalid = false;
-  data_promise_raw.forEach(function (d) {
-    d.sample_id = d.sample_id.replace(/\s*$/, "");
-    d.sample_date = d.sample_date.replace(/\s*$/, "");
-    if (isoDateParser(d.sample_date)) {
-      d["uid"] = d.sample_id;
-      d.sample_date = isoDateParser(d.sample_date);
-    } else {
-      isolate_start_datevalid = true;
-    }
-  });
+  // check if its contain dates (collection day)
+  if (Object.keys(data_promise_raw[0]).indexOf("CollectionDay") !== -1) {
+    // no empty record or invalid format in collection date
+    let isolate_start_datevalid = false;
+    data_promise_raw.forEach(function (d) {
+      d.sample_id = d.sample_id.replace(/\s*$/, "");
+      d.collectionDay =
+        d.CollectionDay && parseInt(d.CollectionDay.replace(/\s*$/, ""))
+          ? parseInt(d.CollectionDay.replace(/\s*$/, ""))
+          : null;
+      if (!d.collectionDay) {
+        isolate_start_datevalid = true;
+      }
+    });
 
-  if (isolate_start_datevalid) {
-    alert("Invalid data: wrong date format in column sample date");
-    setisLoading(false);
-    return;
+    if (isolate_start_datevalid) {
+      alert("Invalid CollectionDay ");
+      setisLoading(false);
+      return;
+    }
   }
 
   //Get other available metadata for color
@@ -250,7 +247,17 @@ export async function getMetadataInput(
 
   let colorLUTstore = {};
   let categorical_Map = new Map();
-  let excludedCategory = ["0", 0, "null", "na", "#N/A", "NA", "", "excluded"];
+  let excludedCategory = [
+    "0",
+    0,
+    "null",
+    "na",
+    "#N/A",
+    "NA",
+    "",
+    "excluded",
+    "nil",
+  ];
   headers_for_categoricalMap.forEach((d) => {
     const columnHeader = d;
     let row_group = [];
@@ -429,4 +436,46 @@ export async function getPatientMovementInput(
   //When all pass validation test, send to store
   patientMovementToStore(patientStaysMap);
   setisLoading(false);
+}
+
+//========================= PROJECT JSON ============================
+export async function loadProjectJSON(project_json_url, projectJSONToStore) {
+  let response = await fetch(project_json_url);
+  let dataInBlob = await response.blob();
+  const reader = new FileReader();
+  reader.readAsText(dataInBlob);
+  reader.onloadend = function (evt) {
+    const dataJSON = JSON.parse(evt.target.result);
+    const projects = new Map();
+    dataJSON.projects.forEach((p) => {
+      projects.set(p.id, p);
+    });
+
+    projectJSONToStore(projects);
+  };
+}
+
+//====================== SNPS read from disk ==========
+export async function loadSNPsequence(
+  fileURL,
+  propsSequenceToStore,
+  propsHmmMatrixToStore,
+  propsIsinputLoadingToStore,
+  snpsLoader
+) {
+  let response = await fetch(fileURL);
+
+  propsIsinputLoadingToStore(true);
+  let dataInBlob = await response.blob();
+  const reader = new FileReader();
+  reader.readAsText(dataInBlob);
+  reader.onloadend = function (evt) {
+    const dataText = evt.target.result;
+    snpsLoader(
+      dataText,
+      propsSequenceToStore,
+      propsHmmMatrixToStore,
+      propsIsinputLoadingToStore
+    );
+  };
 }

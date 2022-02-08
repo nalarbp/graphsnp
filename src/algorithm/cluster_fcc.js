@@ -17,6 +17,7 @@ export function findConnectedComponents(graphObject) {
   }
 
   let clusterResult = [];
+  //bigger group has first id
   groups = groups.sort((a, b) => b.length - a.length);
   let taxas = [];
   groups.forEach((g, i) => {

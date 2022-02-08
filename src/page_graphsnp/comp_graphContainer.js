@@ -44,11 +44,13 @@ import coseBilkent from "cytoscape-cose-bilkent";
 const _ = require("lodash");
 const fcose = require("cytoscape-fcose");
 const spread = require("cytoscape-spread");
+const dagre = require("cytoscape-dagre");
 
 cytoscape.use(coseBilkent); // register extension
 cytoscape.use(fcose); // register extension
 cytoscape.use(spread); // register extension
 cytoscape.use(cy_svg); // register extension
+cytoscape.use(dagre); // register extension
 
 const GraphContainer = (props) => {
   //state
@@ -58,8 +60,7 @@ const GraphContainer = (props) => {
   //Settings
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_method = props.graphSettings.method;
-  const graph_layout =
-    graph_method === "mscg" ? "cose-bilkent" : props.graphSettings.layout;
+  const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
   const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
   const graph_edgeFilterCutoff = graph_isUserFilterEdges
@@ -138,6 +139,7 @@ const GraphContainer = (props) => {
       setTimeout(function () {
         //call clustering
         let clusters = findClusters(props.graphObject, graph_clusterMethod);
+        console.log(props.graphObject);
         setProcessingGraph(false);
         message.success(
           `Found ${clusters.group.length} clusters in the graph`,
@@ -278,6 +280,21 @@ const GraphContainer = (props) => {
     }
   }, [graph_colorNodeBy, props.colorLUT]);
 
+  useEffect(() => {
+    if (props.selectedNode && cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      if (props.selectedNode.length >= 1) {
+        props.selectedNode.forEach((n) => {
+          cy.filter(`node[id = "${n}"]`).select();
+        });
+      } else {
+        cy.filter("node").unselect();
+      }
+
+      cytoscapeRef.current = cy;
+    }
+  }, [props.selectedNode]);
+
   const reloadChartHandler = (val) => {
     if (!isUserReloadSession) {
       props.isShowingLoadingModalToStore(true);
@@ -287,6 +304,7 @@ const GraphContainer = (props) => {
 
   //DRAW
   function draw() {
+    //console.log("drawww", props.selectedNode);
     //console.log("3. Start drawing, creating hammingMatrix ##", +new Date());
     //check hamming distance ? if not create one, send to store at the end.
     const hammingMatrix = !props.hammMatrix
@@ -323,6 +341,7 @@ const GraphContainer = (props) => {
           let cy = prevSessionData;
           cy.unmount();
         }
+
         const cy = cytoscape({
           elements: cytoscapeData,
           container: document.getElementById("graph-cont-cytoscape-canvas"),
@@ -333,6 +352,7 @@ const GraphContainer = (props) => {
             {
               selector: "node",
               style: {
+                shape: graph_method === "mscg" ? "round-rectangle" : "circle",
                 width: function (d) {
                   let nodeData = d.data("data");
                   if (nodeData && nodeData.size) {
@@ -380,16 +400,17 @@ const GraphContainer = (props) => {
             },
             {
               selector: ":parent",
+              shape: "round-rectangle",
               style: {
-                "background-image": cricle_svgUrl,
-                "padding-top": "25px",
+                "background-image": "none",
+                "padding-top": "5px",
                 "background-position-x": "0",
                 "background-position-y": "0",
                 "background-width": "100%",
                 "background-height": "100%",
                 "background-fit": "contain",
                 "background-opacity": "0",
-                "border-width": "0",
+                "border-width": "1",
                 "text-valign": "top",
                 "text-halign": "center",
               },
@@ -469,10 +490,12 @@ const GraphContainer = (props) => {
           let nodeId =
             nodeData && nodeData.size
               ? nodeData.contents
-              : [evt.target.data("id")];
-          if (props.metadata) {
-            props.changeSelectedNode(nodeId);
-          }
+              : [evt.target.data("id")]; //always return arr
+          let prev_selected_nodes = cy
+            .elements("node:selected")
+            .map((d) => (d ? d.id() : null)); // always return empty arr or with id(s)
+          let current_selected_nodes = prev_selected_nodes.concat(nodeId);
+          props.changeSelectedNode(nodeId);
         });
         //click on background listener
         cy.on("tap", function (evt) {
@@ -558,6 +581,7 @@ function mapStateToProps(state) {
     colorLUT: state.colorLUT,
     graphClusters: state.graphClusters,
     categoricalMap: state.categoricalMap,
+    selectedNode: state.selectedNode,
   };
 }
 

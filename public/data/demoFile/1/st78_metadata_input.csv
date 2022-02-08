@@ -1,4 +1,4 @@
-sample_id,sample_date,ward_id,ward_id:color,clade_group,cluster_group,cluster_group:color
+sample_id,CollectionDay,ward_id,ward_id:color,clade_group,cluster_group,cluster_group:color
 M01236,2020-01-16,4B,#5ee2a7,1,NA,#ffffff
 M810885,2018-11-28,5D,#9e0142,1,NA,#ffffff
 M93370,2019-03-12,4A,#9af7cc,1,1D,#fc56aa

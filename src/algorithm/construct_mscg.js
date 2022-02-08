@@ -115,6 +115,7 @@ export function createMSCG(rawMatrix, edgeCutoff) {
   //+create relationship between singleton to singleton
   if (singletons.length > 0) {
     for (let l = 0; l < singletons.length; l++) {
+      //add singleton as node
       let sourceS = singletons[l].sample;
       nodelist_MSCG.push({
         id: sourceS,
@@ -124,18 +125,19 @@ export function createMSCG(rawMatrix, edgeCutoff) {
           contents: null,
         },
       });
+
       for (let m = l + 1; m < singletons.length; m++) {
         let targetS = singletons[m].sample;
         if (sourceS !== targetS) {
           //create edgelist between singletons
-          let sourceS_LUT = mat.get(sourceS);
-          sourceS_LUT.filter((s) => {
+          let sourceS_LUT = mat.get(sourceS).filter((s) => {
             if (s.target === targetS) {
               return true;
             } else {
               return false;
             }
           });
+
           edgelist_MSCG.push({
             source: sourceS,
             target: targetS,
@@ -158,5 +160,9 @@ export function createMSCG(rawMatrix, edgeCutoff) {
     return { source: d.from, target: d.to, value: d.weight };
   });
 
-  return { nodes: nodelist_MSCG, edges: finalEdges };
+  return {
+    nodes: nodelist_MSCG,
+    edges: finalEdges,
+    clusterGroup: fcc_clusters,
+  };
 }

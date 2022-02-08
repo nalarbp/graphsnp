@@ -47,7 +47,6 @@ export function createCytoscapeData(graphObject) {
         });
       }
     });
-    console.log(cytoscapeData);
   }
   //for other methods
   else {

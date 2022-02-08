@@ -1,3 +1,5 @@
+//Projects json
+export const PROJECTS_JSON = "PROJECTS_JSON";
 //Is input loading
 export const INPUT_LOADING = "INPUT_LOADING";
 //Is loading modal being displayed
@@ -81,3 +83,6 @@ export const TEMPLATE = {
   metadata: "./data/templateFile/metadata_input.csv",
   stayTimeline: "./data/templateFile/patientStayTimeline_input.csv",
 };
+
+//Project JSON link
+export const PROJECTS_JSON_URL = "./data/project.json";

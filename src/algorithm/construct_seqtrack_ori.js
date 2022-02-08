@@ -17,28 +17,29 @@ export function createSeqTrack(
   mut_rate = null
 ) {
   let hammingDistMat = _.cloneDeep(rawMatrix);
-  //make list of case id and metadata based on SNP alignment
+  //list of case
+  let cases = []; //list of case object [ {id: caseID, date: caseDate}, ...  ]
+  metadataMap.forEach((val, key) => {
+    cases.push({ id: key, date: val.sample_date });
+  });
+  // console.log("cases:", cases);
+
   //error check
   let paramsError = false;
-  let cases = []; //list of case object [ {id: caseID, date: caseDate}, ...  ]
-  let missingMeta = [];
-
-  hammingDistMat.forEach((val, key) => {
-    let caseID = key;
-    let meta = metadataMap.get(key);
-    let colDay = meta && meta.collectionDay ? meta.collectionDay : null;
-    if (meta && colDay) {
-      cases.push({ id: caseID, day: colDay });
-    } else {
+  //check for consistency of id between sequence and metadata
+  for (let i = 0; i < cases.length; i++) {
+    let aCase = cases[i];
+    let caseInAlignment = hammingDistMat.has(aCase.id);
+    if (!caseInAlignment) {
       paramsError = true;
-      missingMeta.push(caseID);
+      alert(
+        "Case id in metadata is not consistent with taxa id in alignment:" +
+          aCase.id
+      );
+      break;
     }
-  });
-
-  //check that all id in alignment have metadata (we only collectionDay)
-  if (paramsError) {
-    alert("No collection day data for id(s): ", missingMeta.join(", "));
   }
+  //other check
 
   //Fun 4: Running selAmongAncestors
   function selAmongAncestors(
@@ -52,24 +53,24 @@ export function createSeqTrack(
     //but not now, because we dont have one in graphsnp
 
     if (ancesWithLowestSNPdist.length > 1) {
-      let ancesWithLowestSNPdist_wDay = ancesWithLowestSNPdist
+      let ancesWithLowestSNPdist_wDate = ancesWithLowestSNPdist
         .map((d) => {
-          d["day"] = metadata.get(d.id).collectionDay;
+          d["date"] = moment(metadata.get(d.id).sample_date);
           return d;
         })
-        .sort((a, b) => a.day > b.day);
+        .sort((a, b) => a.date > b.date);
 
       // if mutation rate not available, choose the oldest one
 
       if (!mut_rate || !snpLen) {
-        let oldestAnces = ancesWithLowestSNPdist_wDay[0];
+        let oldestAnces = ancesWithLowestSNPdist_wDate[0];
         return { ances: oldestAnces.id, snpDist: oldestAnces.snpDist };
       } else {
         console.log("with mutation");
-        let case_day = aCase.day;
-        let ancesWithLowestSNPdist_wDayDiff = ancesWithLowestSNPdist_wDay.map(
+        let case_date = moment(aCase.date);
+        let ancesWithLowestSNPdist_wDayDiff = ancesWithLowestSNPdist_wDate.map(
           (a) => {
-            let timeDiff = Math.abs(case_day - a.day);
+            let timeDiff = case_date.diff(a.date, "days");
             let prob = dbinom(a.snpDist, timeDiff * snpLen, mu);
             a["dayDiff"] = timeDiff;
             a["probability"] = prob;
@@ -124,12 +125,12 @@ export function createSeqTrack(
   //Fun 2: Running and calling selAmongAncestors
   function findAncestor(aCase, cases, hammingDistMat) {
     //Search and return 1 best ancestor for a caseID, from the list of available cases
-    //+based on case's collection day, and (if available) mutation rate and haplo length
+    //+based on case's collection date, and (if available) mutation rate and haplo length
     //+(length of snp sites)
     let bestAncestor = { ances: null, snpDist: null };
     //1. Find ancestor candidates: other case(s) which collected before this caseId
     let candid = cases.filter((c) => {
-      if (c.day < aCase.day) {
+      if (c.date < aCase.date) {
         return true;
       } else {
         return false;
@@ -158,7 +159,7 @@ export function createSeqTrack(
       return bestAncestor; // fun stop here
     }
 
-    // for any other cases (multiple candidates were found)
+    // any other cases (multiple candidates were found)
     else {
       //filter candidates based on their snp distance, get candidate(s) with the least snpDist
       let ancesWithLowestSNPdist = compareAncesSNPdist(
@@ -188,7 +189,6 @@ export function createSeqTrack(
     let res = new Map();
     for (let index = 0; index < cases.length; index++) {
       const thisCase = cases[index];
-      // thisCase = aCase = {id: xxx, day: yyy}
       //Fun 1: calling findAncestor function
       let ancestor = findAncestor(thisCase, cases, hammingDistMat); //must return one best ancestor object for this caseId {ances: sample_id, snpDist= null}
       //set the ancestor of this case to the result map

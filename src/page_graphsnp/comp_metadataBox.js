@@ -18,49 +18,52 @@ const MetadataBox = (props) => {
 
   //USEEFFECTS
   useEffect(() => {
-    if (props.metadata && props.selectedNode) {
-      if (props.selectedNode.length > 0) {
-        let selectedNodeList = props.selectedNode.map((n) =>
-          props.metadata.get(n)
-        );
-        let columns = [];
-        let dataSource = [];
-        selectedNodeList.forEach((d) => {
-          let keyIndexFoUniq = 0;
-          for (const [k, v] of Object.entries(d)) {
-            //column
-            columns.push({
-              title: k,
-              dataIndex: k,
-              key: k + keyIndexFoUniq.toString(),
-            });
-            //datasource in index i
-            let dataSourceInIndex = dataSource[0];
-            let dataInIndex = {};
-            if (dataSourceInIndex) {
-              // if exist, copy it
-              dataInIndex = Object.assign({}, dataSourceInIndex);
-            }
-            //console.log("before", dataInIndex);
-            if (!dataInIndex.key) {
-              dataInIndex["key"] = keyIndexFoUniq.toString();
-            }
-            if (k === "sample_date") {
-              dataInIndex[k] = moment(v).format("YYYY-MM-DD");
-            } else {
-              dataInIndex[k] = v;
-            }
-
-            dataSource = [dataInIndex];
-            //keyIndexFoUniq = keyIndexFoUniq + 1;
-            //console.log("after", dataInIndex);
+    if (props.metadata) {
+      //console.log(props.selectedNode);
+      if (props.selectedNode.length >= 1) {
+        //console.log(props.selectedNode);
+        let selectedNodeList = [];
+        props.selectedNode.forEach((n) => {
+          if (props.metadata.get(n)) {
+            selectedNodeList.push(props.metadata.get(n));
           }
         });
 
-        setdataTable({
-          columns: columns,
-          cells: dataSource,
-        });
+        if (selectedNodeList.length >= 1) {
+          let columns = [];
+          Object.keys(selectedNodeList[0]).forEach((d, idx) => {
+            columns.push({
+              title: d,
+              dataIndex: d,
+              key: d + idx.toString(),
+            });
+          });
+
+          selectedNodeList.forEach((d, idx) => {
+            d["key"] = idx;
+          });
+          //console.log(columns, dataSource);
+
+          //clear up columns
+          let columns_filtered = columns.filter((c) => {
+            console.log(c.dataIndex);
+            if (c.dataIndex.includes(":color") || c.dataIndex.includes("key")) {
+              return false;
+            } else {
+              return true;
+            }
+          });
+
+          setdataTable({
+            columns: columns_filtered,
+            cells: selectedNodeList,
+          });
+        } else {
+          setdataTable({
+            columns: null,
+            cells: null,
+          });
+        }
       } else {
         setdataTable({
           columns: null,

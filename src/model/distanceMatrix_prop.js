@@ -1,5 +1,6 @@
-function DistanceMatrix(distMatCSV) {
+function DistanceMatrix(distMatCSV, headers) {
   this.distMatCSV = distMatCSV;
+  this.headers = headers;
 }
 
 DistanceMatrix.prototype.createMatrix = function () {
@@ -7,22 +8,19 @@ DistanceMatrix.prototype.createMatrix = function () {
   //re-structure graph object in: adjacency list (Map) e.g {taxaU: [{target: taxaV, value: UV_value}], taxaV: [{target: taxaU, value: VU_value}]}
   let matrixMap = new Map();
   //for each row
-  for (let i = 0; i < this.distMatCSV.length; i++) {
-    let row = this.distMatCSV[i];
-    let colTaxas = Object.keys(row);
-    let sourceTaxa = null;
+  this.distMatCSV.forEach((row) => {
     let diagStat = "newRowStart";
     // in this row, for each column do:
-    colTaxas.forEach((t, idx) => {
-      if (t === "") {
-        sourceTaxa = row[t];
-      } else {
+    this.headers.forEach((t) => {
+      //if headers == "" mean its the first column, ignore
+      if (t !== "") {
         // idx = 1++
+        let sourceTaxa = row[""];
         let targetTaxa = t;
-        let snpDist = parseFloat(row[t]);
+        let snpDist = row[t];
         //console.log("++", diagStat, targetTaxa);
 
-        //find diagonal
+        //is it diagonal? if true mark it then skip, we dont need diagonal value
         if (
           sourceTaxa === targetTaxa &&
           (diagStat === "newRowStart" || diagStat === "lower")
@@ -95,7 +93,8 @@ DistanceMatrix.prototype.createMatrix = function () {
         }
       }
     });
-  }
+  });
+
   return matrixMap; //an adjacency Map
 };
 
