@@ -139,3 +139,17 @@ export function changeIsUserRelayoutSetting(val) {
     payload: val,
   };
 }
+
+export function changeNodeIsLabelShown(val) {
+  return {
+    type: constant.SETTING_NODE_IS_LABEL_SHOWN,
+    payload: val,
+  };
+}
+
+export function changeEdgeLabelSizeSetting(val) {
+  return {
+    type: constant.SETTING_EDGE_LABEL_SIZE,
+    payload: val,
+  };
+}

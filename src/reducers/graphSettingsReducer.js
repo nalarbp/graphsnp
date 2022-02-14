@@ -136,6 +136,20 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_iurl;
 
+    case constant.SETTING_NODE_IS_LABEL_SHOWN:
+      let newState_nils = Object.assign({}, prevState);
+      if (action.payload !== prevState.node_isLabelShown) {
+        newState_nils.node_isLabelShown = action.payload;
+      }
+      return newState_nils;
+
+    case constant.SETTING_EDGE_LABEL_SIZE:
+      let newState_els = Object.assign({}, prevState);
+      if (action.payload !== prevState.edge_labelSize) {
+        newState_els.edge_labelSize = action.payload;
+      }
+      return newState_els;
+
     default:
       if (prevState) {
         return prevState;

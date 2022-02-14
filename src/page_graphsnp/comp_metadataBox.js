@@ -75,16 +75,9 @@ const MetadataBox = (props) => {
 
   return (
     <React.Fragment>
-      <div
-        style={{
-          position: "absolute",
-          zIndex: "10",
-          top: "inherit",
-          width: "100%",
-        }}
-      >
+      <div id="metadata-box">
         {props.metadata && props.graphObject && (
-          <Row>
+          <Row style={{ paddingBottom: "0px" }}>
             <Col span={24}>
               <Collapse accordion bordered={false} expandIconPosition="left">
                 <Panel

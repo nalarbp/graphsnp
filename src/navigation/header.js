@@ -17,7 +17,7 @@ const Header = (props) => {
             style={{ float: "right" }}
             src={logo}
             alt="GraphSNP"
-            height="75px"
+            height="70px"
           ></img>
         </Col>
       </Row>

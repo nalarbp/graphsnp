@@ -77,4 +77,7 @@ x Add filter edges algorithm
         - change value to base = 0 
         - look up edge cutoff, if below, add value with 1
         - look up (iterate) all available hash map key, if edge in the list (indexOf), add value with 1
-        
+## STATE RESET 
+- export a list of object containing all state and respective action 
+- loop through all states, and set it all to the initial state
+- we need to make a separate elements/module for reloading dataset       

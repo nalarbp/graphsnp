@@ -10,6 +10,7 @@ import {
   Tooltip,
   Modal,
   Spin,
+  Slider,
 } from "antd";
 import {
   QuestionCircleOutlined,
@@ -62,6 +63,8 @@ import {
   changeIsUserFilterEdgesSetting,
   changeIsUserRelayoutSetting,
   changeSelectedNode,
+  changeNodeIsLabelShown,
+  changeEdgeLabelSizeSetting,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
@@ -89,6 +92,8 @@ const SiderMenu = (props) => {
   const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
+  const graph_node_isLabelShown = props.graphSettings.node_isLabelShown;
+  const graph_edge_labelSize = props.graphSettings.edge_labelSize;
   const selectedDemoData = props.selectDemoData;
   let graph_nodeID_options = [];
   let project_options = [];
@@ -221,6 +226,14 @@ const SiderMenu = (props) => {
   const selectNodeIDsHandler = (val) => {
     props.changeSelectedNode(val);
   };
+  const edge_labelSizeHandler = (val) => {
+    props.changeEdgeLabelSizeSetting(val);
+  };
+
+  const isNodeLabelShownHandler = (e) => {
+    let isChecked = e.target.checked;
+    props.changeNodeIsLabelShown(isChecked);
+  };
 
   const exportingHandler = () => {
     switch (graph_exportFormat) {
@@ -308,8 +321,8 @@ const SiderMenu = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
-        <Col xs={24} id="header-content">
+      <Row gutter={[8, 8]}>
+        <Col xs={24} id="modal-content">
           <Modal
             visible={props.isShowingLoadingModal}
             closable={false}
@@ -329,8 +342,6 @@ const SiderMenu = (props) => {
             />
           </Modal>
         </Col>
-      </Row>
-      <Row gutter={[8, 8]}>
         <Col span={24}>
           <h5>Preloaded dataset</h5>
           <Select
@@ -338,7 +349,7 @@ const SiderMenu = (props) => {
             style={{ width: "100%", textOverflow: "ellipsis" }}
             onChange={selectDemoDataHandler}
           >
-            <Option value={null}>Select projects</Option>
+            <Option value={null}>Select dataset</Option>
             {project_options}
           </Select>
         </Col>
@@ -403,7 +414,7 @@ const SiderMenu = (props) => {
                 value="mscg"
                 disabled={graph_isUserFilterEdges ? false : true}
               >
-                MSCG
+                MST Single-linkage Cluster
               </Option>
             </Select>
           </Col>
@@ -633,8 +644,39 @@ const SiderMenu = (props) => {
         )}
 
         <Divider style={{ margin: "10px 0px 0px 0px" }} />
+
+        <h5>Node settings</h5>
         <Col span={24}>
-          <h5>Visualization settings</h5>
+          <p>
+            Node color{" "}
+            <span>
+              <Tooltip
+                title="Color nodes by the selected column in metadata or by the clustering result.
+                User can also specify the color manually
+                (e.g. To specify color on column 'patient_group', add new column named 'patient_group:color' in metadata)."
+                placement="rightTop"
+              >
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Select
+            disabled={props.graphObject ? false : true}
+            value={graph_colorNodeBy}
+            style={{ width: "100%" }}
+            onChange={changeColorNodeHandler}
+          >
+            {" "}
+            {props.colorLUT && Object.keys(props.colorLUT)
+              ? Object.keys(props.colorLUT).map((k, i) => {
+                  return getColorOption(k, i);
+                })
+              : ["na"].map((l, j) => {
+                  return getColorOption(l, j);
+                })}
+          </Select>
+        </Col>
+        <Col span={24}>
           <p>
             Select node(s){" "}
             <span>
@@ -661,11 +703,46 @@ const SiderMenu = (props) => {
         <Col span={24}>
           <Checkbox
             style={{ fontSize: "10px" }}
+            onChange={isNodeLabelShownHandler}
+            checked={graph_node_isLabelShown}
+            disabled={props.graphObject ? false : true}
+          >
+            Show node label{" "}
+            <span>
+              <Tooltip title="Show or hide node's label." placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </Checkbox>
+        </Col>
+
+        <h5>Edge settings</h5>
+        <Col span={24}>
+          <p>
+            Edge label size{" "}
+            <span>
+              <Tooltip title="Change edge label size" placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Slider
+            value={props.graphSettings.edge_labelSize}
+            min={0}
+            max={100}
+            onChange={edge_labelSizeHandler}
+            disabled={props.graphObject ? false : true}
+          />
+        </Col>
+
+        <Col span={24}>
+          <Checkbox
+            style={{ fontSize: "10px" }}
             onChange={isEdgeScaledHandler}
             checked={graph_isEdgeScaled}
             disabled={props.graphObject ? false : true}
           >
-            Scale edge to its weight{" "}
+            Scale edge to weight{" "}
             <span>
               <Tooltip
                 title="Change the thickness of the edge accordin to its weight.
@@ -718,7 +795,7 @@ const SiderMenu = (props) => {
           </Checkbox>
         </Col>
 
-        <Col span={12}>
+        <Col span={11}>
           <p>Minimum</p>
           <InputNumber
             min={0}
@@ -731,7 +808,7 @@ const SiderMenu = (props) => {
           />
         </Col>
 
-        <Col span={12}>
+        <Col span={11}>
           <p>Maximum</p>
           <InputNumber
             min={0}
@@ -742,37 +819,6 @@ const SiderMenu = (props) => {
             value={graph_edgesHideCutoff.max}
             onChange={edgesHideCutoffMaxHandler}
           />
-        </Col>
-
-        <Col span={24}>
-          <p>
-            Node color{" "}
-            <span>
-              <Tooltip
-                title="Color nodes by the selected column in metadata or by the clustering result.
-                User can also specify the color manually
-                (e.g. To specify color on column 'patient_group', add new column named 'patient_group:color' in metadata)."
-                placement="rightTop"
-              >
-                <QuestionCircleOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </span>
-          </p>
-          <Select
-            disabled={props.graphObject ? false : true}
-            value={graph_colorNodeBy}
-            style={{ width: "100%" }}
-            onChange={changeColorNodeHandler}
-          >
-            {" "}
-            {props.colorLUT && Object.keys(props.colorLUT)
-              ? Object.keys(props.colorLUT).map((k, i) => {
-                  return getColorOption(k, i);
-                })
-              : ["na"].map((l, j) => {
-                  return getColorOption(l, j);
-                })}
-          </Select>
         </Col>
 
         <Col span={24}>
@@ -862,6 +908,8 @@ function mapDispatchToProps(dispatch) {
       changeTypeOfAnalysisSetting,
       changeIsUserFilterEdgesSetting,
       changeIsUserRelayoutSetting,
+      changeEdgeLabelSizeSetting,
+      changeNodeIsLabelShown,
       isShowingLoadingModalToStore,
       changeSelectedNode,
       projectJSONToStore,

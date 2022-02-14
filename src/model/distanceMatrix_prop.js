@@ -7,15 +7,17 @@ DistanceMatrix.prototype.createMatrix = function () {
   //written in list of edge object [{source:A, target:B, value:Num}]
   //re-structure graph object in: adjacency list (Map) e.g {taxaU: [{target: taxaV, value: UV_value}], taxaV: [{target: taxaU, value: VU_value}]}
   let matrixMap = new Map();
+  //get diag_name
+  let diag_name = this.headers[0];
   //for each row
   this.distMatCSV.forEach((row) => {
     let diagStat = "newRowStart";
     // in this row, for each column do:
     this.headers.forEach((t) => {
       //if headers == "" mean its the first column, ignore
-      if (t !== "") {
+      if (t !== diag_name) {
         // idx = 1++
-        let sourceTaxa = row[""];
+        let sourceTaxa = row[diag_name];
         let targetTaxa = t;
         let snpDist = row[t];
         //console.log("++", diagStat, targetTaxa);

@@ -30,8 +30,8 @@ export const initialState = {
   selectedNode: [], //exception, reducers and action were on
   graphSettings: {
     typeOfAnalysis: "clustering", //clustering;transmission
-    method: "cathai",
-    layout: "cose",
+    method: "mscg",
+    layout: "cose-bilkent",
     isUserReDraw: false,
     isUserFilteringEdge: true,
     edgeFilterCutoff: 25,
@@ -48,6 +48,8 @@ export const initialState = {
     chartSession: null,
     isUserReloadSession: false,
     isUserRelayout: false,
+    node_isLabelShown: true, //mean show it
+    edge_labelSize: 3,
   },
   snpDistSettings: {
     dataToDisplay: "all",

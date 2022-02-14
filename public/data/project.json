@@ -16,10 +16,24 @@
     },
     {
       "id": "3",
-      "name": "cgMLST ST78 PAH and global",
+      "name": "cgMLST ST78 PAH",
       "matrixOrAlignment": "matrix",
-      "snpDistance": "./data/demoFile/st78_cgMLST/gp_cgMLST_dist_clean_135_globalContext_st78.csv",
-      "metadata": "./data/demoFile/st78_cgMLST/gp_metadata_135.csv"
+      "snpDistance": "./data/demoFile/st78_cgMLST/gp_st78_cgMLST_pDists.csv",
+      "metadata": "./data/demoFile/st78_cgMLST/gp_metadata_st78.csv"
+    },
+    {
+      "id": "4",
+      "name": "SKA-based pDist on ST78 PAH",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/st78_SKA_dists/gp_SKA_pSNPdist_df.csv",
+      "metadata": "./data/demoFile/st78_SKA_dists/gp-metadata_simple.csv"
+    },
+    {
+      "id": "5",
+      "name": "Snippy-based pSNPDist on ST78 PAH",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/st78_snippy_dists/core_SNP_snippy.fasta",
+      "metadata": "./data/demoFile/st78_snippy_dists/gp_metadata_st78.csv"
     }
   ],
   "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"

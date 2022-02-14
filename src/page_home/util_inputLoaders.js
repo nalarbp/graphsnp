@@ -107,20 +107,21 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
   });
 
   const headers = data_promise_super_raw.columns;
+  const diag_name = headers[0];
 
-  if (headers[0] === "") {
-    let rowNames = [""];
+  if (diag_name) {
+    let rowNames = [diag_name];
     let data_promise_raw = [];
 
     data_promise_super_raw.forEach((d) => {
       let newD = {};
       headers.forEach((h) => {
-        let valInt = h === "" ? String(d[h]) : parseFloat(d[h]);
+        let valInt = h === diag_name ? String(d[h]) : parseFloat(d[h]);
         let keyString = String(h);
         newD[keyString] = valInt;
       });
       data_promise_raw.push(newD);
-      rowNames.push(d[""]);
+      rowNames.push(d[diag_name]);
     });
 
     //check colNames (header) and rowNames should be identical

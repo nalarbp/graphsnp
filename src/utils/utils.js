@@ -101,7 +101,7 @@ export function colorLUTFromUser(headerWithColor, data_promise_raw) {
 
 export function getColorByColorIndex(query, colIndex, colLUT) {
   let col = "lightgray";
-  if (colIndex !== "na") {
+  if (colLUT[colIndex] && colIndex !== "na") {
     let lut = colLUT[colIndex];
     col = lut.get(query) ? lut.get(query) : "lightgray";
   }

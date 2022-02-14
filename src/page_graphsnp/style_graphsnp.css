@@ -1,14 +1,16 @@
 #graphsnp-container {
   background-color: rgb(243, 243, 243);
   padding: 0px;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 80px);
   width: 100%;
 }
 
 #graphsnp-sider {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   padding: 0px 15px;
   overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 80px);
 }
 
 #graphsnp-sider h5 {
@@ -49,4 +51,22 @@
   position: absolute;
   width: 100%;
   z-index: 100;
+}
+
+#modal-content {
+  padding: 0px;
+  margin: 0px;
+  width: 100%;
+  height: 0;
+}
+
+#metadata-box {
+  background-color: rgb(252, 48, 48);
+  position: absolute;
+  z-index: 10;
+  top: inherit;
+  width: calc(100vw - 210px);
+  max-height: 25vh;
+  overflow-y: scroll;
+  overflow-x: scroll;
 }

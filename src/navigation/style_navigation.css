@@ -1,25 +1,25 @@
 #main-header {
   background-color: white;
   height: auto;
-  margin-bottom: 20px;
 }
 
 #header-logo {
   background-color: rgb(255, 255, 255);
-  padding: 25px 20px 0px 20px;
+  padding: 10px 10px 0px 0px;
   float: right;
   width: auto;
 }
 
 #header-navigation {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
+  height: 75px;
 }
 
 #header-menu {
   background-color: white;
   float: left;
   width: auto;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 50px;
   padding: 0;
 }

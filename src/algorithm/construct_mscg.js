@@ -57,7 +57,7 @@ export function createMSCG(rawMatrix, edgeCutoff) {
   //+create relationship between identified clusters and other singleton
   if (fcc_clusters.group.length > 0) {
     for (let i = 0; i < fcc_clusters.group.length; i++) {
-      let sourceClusterID = "Cluster " + (i + 1);
+      let sourceClusterID = "Group " + (i + 1);
 
       let sourceClusterMembers = fcc_clusters.group[i];
       nodelist_MSCG.push({
@@ -71,7 +71,7 @@ export function createMSCG(rawMatrix, edgeCutoff) {
 
       //+get pairwise cluster to cluster
       for (let j = i + 1; j < fcc_clusters.group.length; j++) {
-        let targetClusterID = "Cluster " + (j + 1);
+        let targetClusterID = "Group " + (j + 1);
         if (sourceClusterID !== targetClusterID) {
           let targetClusterMembers = fcc_clusters.group[j];
           let minDist = [];

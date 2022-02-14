@@ -76,6 +76,8 @@ const GraphContainer = (props) => {
   const graph_isUserDownloading = props.graphSettings.isUserDownloading;
   const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
+  const graph_node_isLabelShown = props.graphSettings.node_isLabelShown;
+  const graph_edge_labelSize = props.graphSettings.edge_labelSize;
 
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };
@@ -88,8 +90,6 @@ const GraphContainer = (props) => {
   const node_size_margin = 1;
   const node_size_sel = 8;
   const node_label_size = "6px";
-
-  const edge_label_size = "3px";
 
   //Automatic reloading if previous graph session data is a available
 
@@ -139,7 +139,7 @@ const GraphContainer = (props) => {
       setTimeout(function () {
         //call clustering
         let clusters = findClusters(props.graphObject, graph_clusterMethod);
-        console.log(props.graphObject);
+        //console.log(props.graphObject);
         setProcessingGraph(false);
         message.success(
           `Found ${clusters.group.length} clusters in the graph`,
@@ -281,6 +281,32 @@ const GraphContainer = (props) => {
   }, [graph_colorNodeBy, props.colorLUT]);
 
   useEffect(() => {
+    if (cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      if (graph_node_isLabelShown) {
+        cy.style()
+          .selector("node")
+          .style({ "font-size": node_label_size })
+          .update();
+      } else {
+        cy.style().selector("node").style({ "font-size": "0px" }).update();
+      }
+      cytoscapeRef.current = cy;
+    }
+  }, [graph_node_isLabelShown]);
+
+  useEffect(() => {
+    if (cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      cy.style()
+        .selector("edge")
+        .style({ "font-size": String(graph_edge_labelSize) + "px" })
+        .update();
+      cytoscapeRef.current = cy;
+    }
+  }, [graph_edge_labelSize]);
+
+  useEffect(() => {
     if (props.selectedNode && cytoscapeRef.current) {
       let cy = cytoscapeRef.current;
       if (props.selectedNode.length >= 1) {
@@ -376,7 +402,7 @@ const GraphContainer = (props) => {
                   if (nodeData && nodeData.size) {
                     return "center";
                   } else {
-                    return "'top'";
+                    return "top";
                   }
                 },
                 "font-size": node_label_size,
@@ -433,7 +459,7 @@ const GraphContainer = (props) => {
                   }
                 },
                 label: "data(weight)",
-                "font-size": edge_label_size,
+                "font-size": String(graph_edge_labelSize) + "px",
                 "text-background-color": "#F5E372",
                 color: "red",
                 width: function (e) {
@@ -494,7 +520,7 @@ const GraphContainer = (props) => {
           let prev_selected_nodes = cy
             .elements("node:selected")
             .map((d) => (d ? d.id() : null)); // always return empty arr or with id(s)
-          let current_selected_nodes = prev_selected_nodes.concat(nodeId);
+          //let current_selected_nodes = prev_selected_nodes.concat(nodeId);
           props.changeSelectedNode(nodeId);
         });
         //click on background listener
