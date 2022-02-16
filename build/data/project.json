@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "id": "2",
+      "name": "QLD + NCBI clusters + RefSeq",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_cgMLST_pDist.csv",
+      "metadata": "./data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    },
+    {
+      "id": "3",
+      "name": "ST78 in Hospital (cgMLST)",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/st78_cgMLST/gp_st78_cgMLST_pDists.csv",
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    },
+    {
+      "id": "4",
+      "name": "ST78 in Hospital (SKA pSNPDist)",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/st78_SKA_dists/gp_SKA_pSNPdist_df.csv",
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    },
+    {
+      "id": "5",
+      "name": "ST78 in Hospital (Snippy pSNPDist)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/st78_snippy_dists/core_SNP_snippy.fasta",
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    },
+    {
+      "id": "6",
+      "name": "QLD E.faecium A1 (PickleSNP pSNPDist)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/VREfm_QLD_snp_dists/woA_snpSites_masked_pg_pickleSNP_A1_(BEFORE).fa",
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    }
+  ],
+  "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"
+}

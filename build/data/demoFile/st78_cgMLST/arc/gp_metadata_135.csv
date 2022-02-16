@@ -1,0 +1,136 @@
+sample_id,location,vanGene,ST,year,subtype,subtype:color
+GCF_000172915.1,Netherlands,NA,78,2005,#N/A,#000000
+GCF_000322345.1,Italy,NA,78,1999,#N/A,#000000
+GCF_000322365.1,Germany,NA,78,2002,#N/A,#000000
+GCF_000322385.1,Hungary,VanA,78,2005,#N/A,#000000
+GCF_000322405.1,Netherlands,NA,78,2006,#N/A,#000000
+GCF_000322425.1,Denmark,NA,78,unknown,#N/A,#000000
+GCF_000322445.1,Latvia,NA,78,2010,#N/A,#000000
+GCF_000322465.1,Portugal,NA,78,2010,#N/A,#000000
+GCF_000328425.1,China,NA,78,2006,#N/A,#000000
+GCF_001481405.1,Unknown,VanA,78,2015,#N/A,#000000
+GCF_001545685.1,Sweden,VanB,78,2014,#N/A,#000000
+GCF_002009635.1,Russia,NA,78,2011,#N/A,#000000
+GCF_002562805.1,Russia,VanB,78,2012,#N/A,#000000
+GCF_002630975.1,Russia,NA,78,2012,#N/A,#000000
+GCF_002630985.1,Russia,NA,78,2012,#N/A,#000000
+GCF_002848385.1,China,VanA,78,2016,#N/A,#000000
+GCF_003020705.1,Australia (Victoria),VanA,78,2015,#N/A,#000000
+GCF_003020725.1,Australia (Victoria),VanB,796,2015,#N/A,#000000
+GCF_003020745.1,Australia (Victoria),VanA,203,2015,#N/A,#000000
+GCF_003240455.1,Russia,VanA,78,2012,#N/A,#000000
+GCF_003284815.1,Russia,VanA,78,2015,#N/A,#000000
+GCF_003284825.1,Russia,VanA,78,2015,#N/A,#000000
+GCF_003332845.1,Brazil,VanA,78,2005,#N/A,#000000
+GCF_003719365.1,China,VanA,78,2015,#N/A,#000000
+GCF_003957785.1,Australia (Brisbane),VanB,203,2016,#N/A,#000000
+GCF_004152185.1,USA,NA,78,2018,#N/A,#000000
+GCF_004152205.1,USA,VanA,78,2018,#N/A,#000000
+GCF_004152505.1,USA,VanA,78,2018,#N/A,#000000
+GCF_005234875.1,New Zealand,VanA,78,2009,#N/A,#000000
+GCF_006007925.1,China,VanA,78,2018,#N/A,#000000
+GCF_006375635.1,Germany,VanA,78,2011,#N/A,#000000
+GCF_008974665.2,Japan,VanA,78,unknown,#N/A,#000000
+GCF_009733985.1,China,VanM,78,2017,#N/A,#000000
+GCF_009733995.1,China,NA,78,2018,#N/A,#000000
+GCF_009734005.1,China,VanM,78,2017,#N/A,#000000
+GCF_009769955.1,Australia (Tasmania),VanB,796,2016,#N/A,#000000
+GCF_009791335.1,Portugal,VanA,78,2012,#N/A,#000000
+GCF_009938075.1,China,VanM,78,2017,#N/A,#000000
+GCF_010120755.1,China,VanM,78,2017,#N/A,#000000
+GCF_012062555.1,China,VanM,78,2016,#N/A,#000000
+GCF_012070665.1,China,VanM,78,2018,#N/A,#000000
+GCF_012070685.1,China,VanM,78,2018,#N/A,#000000
+GCF_013179755.1,China,VanM,78,2018,#N/A,#000000
+GCF_900092475.1,Australia (Victoria),VanB,796,2011,#N/A,#000000
+GCF_900178555.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178595.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178625.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178715.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178725.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178745.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178755.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178765.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178785.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178815.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178835.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178845.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178855.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178875.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178905.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178915.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178925.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178935.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178975.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900178985.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900179055.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900179085.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900179295.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900179785.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900179915.1,United Kingdom,NA,78,2015,#N/A,#000000
+GCF_900180175.1,United Kingdom,VanA,78,2015,#N/A,#000000
+GCF_900638805.1,Unknown,NA,78,unknown,#N/A,#000000
+GCF_900639425.1,Unknown,VanA,78,unknown,#N/A,#000000
+M00065,Australia (Brisbane),VanB,78,2019,Singleton,#ffffff
+M00066,Australia (Brisbane),VanB,78,2019,2C,#4da8ea
+M00362,Australia (Brisbane),VanB,78,2020,2B,#e39517
+M00363,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M00680,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M00943,Australia (Brisbane),VanB,78,2020,2B,#e39517
+M00945,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M01234,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M01235,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M01236,Australia (Brisbane),VanB,78,2020,Singleton,#ffffff
+M01603,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M05847,Australia (Brisbane),VanB,78,2020,Singleton,#ffffff
+M06114_3,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M07824,Australia (Brisbane),VanB,78,2020,2A,#7ad151
+M810154,Australia (Brisbane),VanB,78,2018,2B,#e39517
+M810885,Australia (Brisbane),VanB,78,2018,Singleton,#ffffff
+M86159,Australia (Brisbane),VanB,78,2018,2B,#e39517
+M910050,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910478,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910479,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910480_2,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910665_1,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910881,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M910882,Australia (Brisbane),VanB,78,2019,2C,#4da8ea
+M910888,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911140,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911142,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911144,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911146,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911362,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911364,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911373,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911374,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911375,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911619,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911620,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M911842,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M912102,Australia (Brisbane),VanB,78,2019,2B,#e39517
+M912103,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M912106,Australia (Brisbane),VanB,78,2019,2B,#e39517
+M91414,Australia (Brisbane),VanB,78,2019,2C,#4da8ea
+M93370,Australia (Brisbane),VanB,78,2019,1D,#fc56aa
+M93924,Australia (Brisbane),VanB,78,2019,1D,#fc56aa
+M94211,Australia (Brisbane),VanB,78,2019,2B,#e39517
+M94926,Australia (Brisbane),VanB,78,2019,2B,#e39517
+M94927,Australia (Brisbane),VanB,78,2019,Singleton,#ffffff
+M95768,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M96011,Australia (Brisbane),VanB,78,2019,Singleton,#ffffff
+M96902,Australia (Brisbane),VanB,78,2019,2B,#e39517
+M97750,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M97944,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M97945,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98146,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98147,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98516,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98703,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98884,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M98889,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M99250,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M99402,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M99624,Australia (Brisbane),VanB,78,2019,Singleton,#ffffff
+M99825,Australia (Brisbane),VanB,78,2019,2A,#7ad151
+M99826,Australia (Brisbane),VanB,78,2019,2C,#4da8ea

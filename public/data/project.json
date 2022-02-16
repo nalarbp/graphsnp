@@ -1,39 +1,39 @@
 {
   "projects": [
     {
-      "id": "1",
-      "name": "VRE ST78 outbreak (Permana et al., 2022)",
-      "matrixOrAlignment": "alignment",
-      "snpDistance": "./data/demoFile/1/st78_snps_input.fa",
-      "metadata": "./data/demoFile/1/st78_metadata_input.csv"
-    },
-    {
       "id": "2",
-      "name": "ESBL K. michiganensis outbreak (Chapman et al., 2020)",
-      "matrixOrAlignment": "alignment",
-      "snpDistance": "./data/demoFile/2/esbl_KM_snps_input.fa",
-      "metadata": "./data/demoFile/1/st78_metadata_input.csv"
+      "name": "QLD + NCBI clusters + RefSeq",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_cgMLST_pDist.csv",
+      "metadata": "./data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
     },
     {
       "id": "3",
-      "name": "cgMLST ST78 PAH",
+      "name": "ST78 in Hospital (cgMLST)",
       "matrixOrAlignment": "matrix",
       "snpDistance": "./data/demoFile/st78_cgMLST/gp_st78_cgMLST_pDists.csv",
-      "metadata": "./data/demoFile/st78_cgMLST/gp_metadata_st78.csv"
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
     },
     {
       "id": "4",
-      "name": "SKA-based pDist on ST78 PAH",
+      "name": "ST78 in Hospital (SKA pSNPDist)",
       "matrixOrAlignment": "matrix",
       "snpDistance": "./data/demoFile/st78_SKA_dists/gp_SKA_pSNPdist_df.csv",
-      "metadata": "./data/demoFile/st78_SKA_dists/gp-metadata_simple.csv"
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
     },
     {
       "id": "5",
-      "name": "Snippy-based pSNPDist on ST78 PAH",
+      "name": "ST78 in Hospital (Snippy pSNPDist)",
       "matrixOrAlignment": "alignment",
       "snpDistance": "./data/demoFile/st78_snippy_dists/core_SNP_snippy.fasta",
-      "metadata": "./data/demoFile/st78_snippy_dists/gp_metadata_st78.csv"
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
+    },
+    {
+      "id": "6",
+      "name": "QLD E.faecium A1 (PickleSNP pSNPDist)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/VREfm_QLD_snp_dists/woA_snpSites_masked_pg_pickleSNP_A1_(BEFORE).fa",
+      "metadata": "/data/demoFile/QLD_ncbiCluster_refseqCompleteGenomes_dist/all_samples_metadata.csv"
     }
   ],
   "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"
