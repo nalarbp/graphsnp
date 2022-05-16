@@ -81,9 +81,14 @@ export const DEMO = {
 
 //Input files template
 export const TEMPLATE = {
-  snps: "./data/templateFile/snps_input.fa",
-  metadata: "./data/templateFile/metadata_input.csv",
-  stayTimeline: "./data/templateFile/patientStayTimeline_input.csv",
+  snps: "./data/templateFile/snps_alignment_input_example.fasta",
+  metadata: "./data/templateFile/metadata_input_example.csv",
+  distanceMatrix: "./data/templateFile/distanceMatrix_input_example.csv",
+};
+
+//User manual
+export const USER_MANUAL = {
+  latest: "./data/userManual/GraphSNP_userManual_v2022Apr01.pdf",
 };
 
 //Project JSON link

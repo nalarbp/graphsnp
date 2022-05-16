@@ -15,11 +15,11 @@ const Extra = (props) => {
         works on majority of modern browsers. Except Internet Explorer (IE),
         GraphSNP was tested and compatible on the following desktop browsers:
         <ul>
-          <li> Microsoft Edge (v.xx) </li>
-          <li> Safari (v.xx)</li>
-          <li> Chrome (v.xx) </li>
-          <li> Firefox (v.90.0)</li>
-          <li> Opera (v.xx) </li>
+          <li> Microsoft Edge </li>
+          <li> Safari</li>
+          <li> Chrome</li>
+          <li> Firefox</li>
+          <li> Opera</li>
         </ul>
         <Title level={3}>Core libraries</Title>
         <Text>
@@ -81,8 +81,9 @@ const Extra = (props) => {
           Cite us{" "}
         </Title>
         <Text>
-          If you use GraphSNP in your publication, please cite our papers
-          [available soon] and [CATHAI paper]
+          If you use GraphSNP in your publication, please cite our web
+          application: GraphSNP:https://graphsnp.beatsonlab.com and CATHAI:
+          https://cathai.fordelab.com/cathai/
         </Text>
         <Divider />
       </div>

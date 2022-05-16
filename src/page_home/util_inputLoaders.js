@@ -108,6 +108,7 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
 
   const headers = data_promise_super_raw.columns;
   const diag_name = headers[0];
+  console.log(diag_name);
 
   if (diag_name) {
     let rowNames = [diag_name];
@@ -147,7 +148,7 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
       setisLoading(false);
     }
   } else {
-    alert("First column in CSV matrix must be empty string");
+    alert("First column in CSV matrix cannot an empty string");
     setisLoading(false);
   }
 }
@@ -203,22 +204,22 @@ export async function getMetadataInput(
   }
 
   // check if its contain dates (collection day)
-  if (Object.keys(data_promise_raw[0]).indexOf("CollectionDay") !== -1) {
+  if (Object.keys(data_promise_raw[0]).indexOf("collection_day") !== -1) {
     // no empty record or invalid format in collection date
     let isolate_start_datevalid = false;
     data_promise_raw.forEach(function (d) {
       d.sample_id = d.sample_id.replace(/\s*$/, "");
-      d.collectionDay =
-        d.CollectionDay && parseInt(d.CollectionDay.replace(/\s*$/, ""))
-          ? parseInt(d.CollectionDay.replace(/\s*$/, ""))
+      d.collection_day =
+        d.collection_day && parseInt(d.collection_day.replace(/\s*$/, ""))
+          ? parseInt(d.collection_day.replace(/\s*$/, ""))
           : null;
-      if (!d.collectionDay) {
+      if (!d.collection_day) {
         isolate_start_datevalid = true;
       }
     });
 
     if (isolate_start_datevalid) {
-      alert("Invalid CollectionDay ");
+      alert("Invalid collection_day ");
       setisLoading(false);
       return;
     }

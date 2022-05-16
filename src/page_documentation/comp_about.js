@@ -1,6 +1,7 @@
 import React from "react";
-import { Typography, Divider } from "antd";
+import { Typography, Divider, Button } from "antd";
 import { Link } from "react-router-dom";
+import * as constant from "../utils/constants";
 import "./style_documentation.css";
 
 const { Title, Text } = Typography;
@@ -17,8 +18,8 @@ const About = (props) => {
           GraphSNP is a web-based application to create and visualise network of
           pairwise SNP distances for outbreak cluster and transmission analysis.
           It is a client-side and standalone version of integrated cluster
-          analysis platform CATHAI: Cluster Analysis for Healthcare Associated
-          Infection (REF:Forde et al., 2021)
+          analysis platform CATHAI: Cluster Analysis for Healthcare-Associated
+          Infections (https://cathai.fordelab.com/)
         </Text>
         <Title level={3}>When to use </Title>
         <Text>You can use GraphSNP for:</Text>
@@ -46,14 +47,13 @@ const About = (props) => {
           </li>
           <li>
             {" "}
-            <b>Create transmission tree </b> based on SNPs, sampling dates, and
-            patient stay timeline (for nosocomial outbreak){" "}
+            <b>Create transmission tree </b> based on SNPs and collection day{" "}
           </li>
         </ul>
         <Title level={3}>How to use </Title>
         <Text>
-          Simple, have at least a multi-fasta SNPs alignment file as the input
-          file then drag and drop it to
+          Load at least a multi-fasta SNPs alignment file as the input file then
+          drag and drop it to
           <Link
             to="/graphsnp"
             onClick={() => {
@@ -63,9 +63,19 @@ const About = (props) => {
             {" "}
             GraphSNP page.
           </Link>{" "}
-          You can also add other information like metadata and patient stay
-          timeline to the analysis.
+          You can also add other information on a metadata input file.
         </Text>
+
+        <Title level={3}>User Manual </Title>
+        <Text>
+          For more detailed information about GrapSNP, please download GraphSNP
+          user manual below.
+          <br />
+          <br />
+        </Text>
+        <Button type={"danger"} href={constant.USER_MANUAL.latest}>
+          Download GraphSNP User Manual
+        </Button>
 
         <Divider />
       </div>

@@ -26,7 +26,7 @@ export function createSeqTrack(
   hammingDistMat.forEach((val, key) => {
     let caseID = key;
     let meta = metadataMap.get(key);
-    let colDay = meta && meta.collectionDay ? meta.collectionDay : null;
+    let colDay = meta && meta.collection_day ? meta.collection_day : null;
     if (meta && colDay) {
       cases.push({ id: caseID, day: colDay });
     } else {
@@ -35,7 +35,7 @@ export function createSeqTrack(
     }
   });
 
-  //check that all id in alignment have metadata (we only collectionDay)
+  //check that all id in alignment have metadata (we only collection_day)
   if (paramsError) {
     alert("No collection day data for id(s): ", missingMeta.join(", "));
   }
@@ -54,7 +54,7 @@ export function createSeqTrack(
     if (ancesWithLowestSNPdist.length > 1) {
       let ancesWithLowestSNPdist_wDay = ancesWithLowestSNPdist
         .map((d) => {
-          d["day"] = metadata.get(d.id).collectionDay;
+          d["day"] = metadata.get(d.id).collection_day;
           return d;
         })
         .sort((a, b) => a.day > b.day);
