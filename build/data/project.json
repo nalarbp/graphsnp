@@ -1,0 +1,33 @@
+{
+  "projects": [
+    {
+      "id": "e0",
+      "name": "Graphical example",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/e0/sample.fasta",
+      "metadata": "./data/demoFile/e0/metadata.csv"
+    },
+    {
+      "id": "e1",
+      "name": "Klebsiella michiganensis outbreak in a neonatal unit (Chapman et al., 2020)",
+      "matrixOrAlignment": "alignment",
+      "snpDistance": "./data/demoFile/e1/esbl_KM_snps_input.fasta",
+      "metadata": "./data/demoFile/e1/esbl_KM_metadata_input.csv"
+    },
+    {
+      "id": "e2",
+      "name": "Enterococcus faecium subtype 47A (Gouliouris et al., 2021)",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/e2/Gouliouris_et_al_SNPdistMat_47A.csv",
+      "metadata": "./data/demoFile/e2/Gouliouris_et_al_47A_metadata.csv"
+    },
+    {
+      "id": "e3",
+      "name": "Interfacility transmission of carbapenem-resistant Klebsiella pneumoniae (Spenser et al., 2019)",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/e3/Spencer_et_al_SNPdistMat.csv",
+      "metadata": "/data/demoFile/e3/Spencer_et_al_metadata.csv"
+    }
+  ],
+  "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"
+}

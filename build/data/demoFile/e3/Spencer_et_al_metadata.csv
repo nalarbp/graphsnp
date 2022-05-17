@@ -1,0 +1,72 @@
+sample_id,collection_day,Isolate Strain,Specimen Type,Specimen Collection Location,Specimen Collection Location:color
+2,1863,ST-1199,Urine,Rehab,#D02015
+3,1782,ST-258,Urine,Hospital 2,#4484FB
+5,1868,ST-258,Rectal swab,Hospital 2,#4484FB
+6,1885,ST-258,Groin wound,Hospital 2,#4484FB
+7,1868,ST-258,Urine,Rehab,#D02015
+8a,1865,ST-258,Urine,Hospital 2,#4484FB
+9,1781,ST-258,Urine,Hospital 2,#4484FB
+11,1884,ST-258,Urine,Hospital 2,#4484FB
+12,1777,ST-258,Trachea,Hospital 2,#4484FB
+13,1774,ST-258,Urine,Rehab,#D02015
+14,1723,ST-258,Urine,Hospital 2,#4484FB
+16,1827,ST-258,Blood,Hospital 2,#4484FB
+17,1593,ST-258,Blood,Hospital 2,#4484FB
+18,1762,ST-258,Blood,Hospital 5,#1EBBBC
+19,948,ST-258,Blood,Hospital 1,#50B44D
+20,1920,ST-258,Urine,Hospital 2,#4484FB
+21,1806,ST-45,Rectal swab,Hospital 2,#4484FB
+22,1917,ST-258,Urine,Hospital 2,#4484FB
+23,1704,ST-258,Blood,Hospital 3,#FC5AD3
+24,1626,ST-11,Blood,Hospital 1,#50B44D
+25,2081,ST-258,Blood,Hospital 2,#4484FB
+26a,2047,ST-258,Urine,Hospital 2,#4484FB
+27,2073,ST-258,Abcess,Hospital 2,#4484FB
+28,2082,ST-258,Urine,Hospital 2,#4484FB
+29,2019,ST-258,Urine,Hospital 2,#4484FB
+30,2062,ST-258,Urine,Hospital 2,#4484FB
+31,2060,ST-258,Urine,Hospital 2,#4484FB
+32,2067,ST-258,Urine,Hospital 2,#4484FB
+33,2046,ST-258,Blood,Hospital 2,#4484FB
+34,2078,ST-258,Urine,Hospital 2,#4484FB
+35,2077,ST-258,Trachea,Hospital 2,#4484FB
+36,2064,ST-258,Urine,Hospital 2,#4484FB
+26b,2064,ST-258,Blood,Hospital 2,#4484FB
+38a,2052,ST-258,Urine,Hospital 2,#4484FB
+39,2029,ST-258,ASIDIC,Hospital 2,#4484FB
+40,2118,ST-258,Urine,Hospital 1,#50B44D
+41,2067,ST-258,Urine,Hospital 2,#4484FB
+42,2079,ST-258,Urine,Outpatient,#8F8F8F
+8b,2039,ST-25,Urine,Outpatient,#8F8F8F
+44,2038,ST-258,Urine,Outpatient,#8F8F8F
+45,2033,ST-258,Urine,Outpatient,#8F8F8F
+46,2111,ST-258,Urine,Hospital 7,#FC7622
+47a,2050,ST-258,Urine,Outpatient,#8F8F8F
+48,2038,ST-25,Abcess,Outpatient,#8F8F8F
+49,2044,ST-258,Urine,Outpatient,#8F8F8F
+50,2080,ST-258,Wound,Rehab,#D02015
+47b,2082,ST-258,Urine,Outpatient,#8F8F8F
+52,2045,ST-258,Urine,Hospital 6,#89549E
+53,2075,ST-258,Trach,Hospital 3,#FC5AD3
+54,2033,ST-258,Blood,Hospital 3,#FC5AD3
+55,2033,ST-258,Blood,Hospital 3,#FC5AD3
+56,2080,ST-258,Urine,Hospital 4,#F9EE35
+57,2034,ST-258,Urine,Hospital 4,#F9EE35
+58,2069,ST-258,Urine,Hospital 4,#F9EE35
+59,2024,ST-258,Urine,Hospital 4,#F9EE35
+60,2073,ST-258,Urine,Hospital 5,#1EBBBC
+61,2071,ST-258,Urine,Rehab,#D02015
+62,2072,ST-258,Urine,Rehab,#D02015
+63,2066,ST-258,Urine,Rehab,#D02015
+38b,2068,ST-258,Urine,Rehab,#D02015
+65,2044,ST-258,Urine,Rehab,#D02015
+66,2024,ST-14,Urine,Rehab,#D02015
+67,2043,ST-258,Blood/urine,Hospital 7,#FC7622
+70,1835,ST-258,Urine,Hospital 2,#4484FB
+71,2110,ST-258,Urine,Outpatient,#8F8F8F
+72,2110,ST-258,Urine,Hospital 2,#4484FB
+73,2104,ST-258,Urine,Hospital 2,#4484FB
+74,2103,ST-258,Urine,Hospital 4,#F9EE35
+75,2104,ST-258,Urine,Hospital 2,#4484FB
+76,2103,ST-258,Urine,Hospital 5,#1EBBBC
+80,2100,ST-258,Urine,Hospital 2,#4484FB
