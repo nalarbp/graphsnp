@@ -140,7 +140,7 @@ const InputPlaceholder = (props) => {
               </Col>
             </Row>
             <Row id={"home-input-dragger-buttons"} align={"center"}>
-              <Col xs={24} sm={8} md={6} xl={5} xxl={3}>
+              <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
                 <Button
                   id="home-input-button-snps"
                   shape={"round"}
@@ -174,7 +174,7 @@ const InputPlaceholder = (props) => {
                 </Button>
               </Col>
 
-              <Col xs={24} sm={8} md={6} xl={5} xxl={3}>
+              <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
                 <Button
                   id="home-input-button-metadata"
                   shape={"round"}

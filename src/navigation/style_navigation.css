@@ -1,22 +1,24 @@
-#main-header {
-  background-color: white;
+.main-header {
+  background-color: rgb(255, 255, 255);
+  width: 100vw;
   height: auto;
+  border-bottom: 1px solid rgb(205, 205, 205, 0);
 }
 
 #header-logo {
-  background-color: rgb(255, 255, 255);
+  background-color: transparent;
   padding: 10px 10px 0px 0px;
   float: right;
   width: auto;
 }
 
 #header-navigation {
-  background-color: rgb(255, 255, 255);
+  background-color: transparent;
   height: 75px;
 }
 
 #header-menu {
-  background-color: white;
+  background-color: transparent;
   float: left;
   width: auto;
   margin-top: 10px;

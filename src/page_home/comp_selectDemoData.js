@@ -103,8 +103,7 @@ const SelectDemoData = (props) => {
         <Select
           value={selectedDemoData}
           onChange={selectDemoDataHandler}
-          style={{ width: "100%" }}
-        >
+          className={"gp-select"}>
           <Option value={null}>Preloaded dataset</Option>
           {project_options}
         </Select>

@@ -9,6 +9,27 @@
   pointer-events: none;
 }
 
+.gp-collapsible-container {
+  position:absolute;
+  z-index: 10;
+  width: 100vw;
+  background-color: rgba(254, 254, 254, 0.95);
+  padding: 0px;
+  margin: 0px;
+  border: none;
+}
+
+.gp-settings-box {
+  background-color: rgba(238, 238, 238, 0.1);
+  margin: 10px;
+}
+
+.gp-select{
+  max-width: 250px;
+  min-width: 100px;
+  margin-bottom: 10px;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
@@ -38,3 +59,4 @@
     transform: rotate(360deg);
   }
 }
+

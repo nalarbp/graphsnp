@@ -14,7 +14,7 @@ const GraphSNP = (props) => {
   return (
     <React.Fragment>
       <Layout>
-        <Sider id="graphsnp-sider">
+        <Sider id="graphsnp-sider" collapsible={true} collapsedWidth={10} breakpoint={'xs'}>
           <SiderMenu />
         </Sider>
         <Layout id="graphsnp-container">

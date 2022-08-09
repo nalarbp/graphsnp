@@ -70,7 +70,7 @@
   border: 1px solid rgb(255, 105, 50);
   margin: 3px auto;
   text-align: center;
-  padding: 0 2em;
+  padding: 0 15px;
 }
 
 #home-input-button-metadata {
@@ -79,7 +79,7 @@
   border: 1px solid rgb(255, 203, 73, 0);
   margin: 3px auto;
   text-align: center;
-  padding: 0 2em;
+  padding: 0 15px;
 }
 
 #home-input-status {

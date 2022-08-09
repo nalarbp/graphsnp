@@ -5,10 +5,9 @@ import logo from "../img/logo.png";
 import "./style_navigation.css";
 
 const Header = (props) => {
-  //console.log("Header");
   return (
     <React.Fragment>
-      <Row id="main-header">
+      <Row className="main-header">
         <Col id="header-navigation" xs={18}>
           <NavigationMenu />
         </Col>

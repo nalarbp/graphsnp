@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Row, Col, Empty, Button } from "antd";
-import "./snpdist_style.css";
+import "./style_snpdist.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
