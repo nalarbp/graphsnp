@@ -41,8 +41,7 @@ import {
   getMetadataInput,
   getMatrixInput,
   loadSNPsequence,
-  getPatientMovementInput,
-} from "../page_home/util_inputLoaders";
+} from "../page_home/util_home";
 
 import {
   changeMethodSetting,

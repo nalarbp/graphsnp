@@ -11,7 +11,7 @@ import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
 import { metadataToStore, isinputLoadingToStore } from "../action/inputActions";
-import { getMetadataInput } from "./util_inputLoaders";
+import { getMetadataInput } from "./util_home";
 const { Dragger } = Upload;
 
 const MetadataInputLoader = (props) => {

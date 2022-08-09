@@ -1,6 +1,5 @@
-#header-content {
+#home-loading-info {
   width: 100%;
-  font-family: "Nunito", sans-serif;
   margin: auto;
   padding: 10px;
   text-align: center;
@@ -9,45 +8,92 @@
   background-color: white;
 }
 
-#input-loader-snps {
-  height: calc(100vh - 420px);
+#home-input-placeholder {
+  background: linear-gradient(
+    90deg,
+    rgb(238, 173, 76) 10%,
+    rgb(226, 88, 69) 100%
+  );
+  min-height: calc(100vh - 350px);
+  /*url("../img/bg_content_header.png") no-repeat fixed center,*/
 }
-/*
-background-color: rgba(255, 164, 164, 0.3);
-*/
 
-#input-loader-metadata {
-  height: calc(100vh - 420px);
+#home-input-area {
+  margin: auto;
 }
-/*
-background-color: rgba(255, 194, 115, 0.3);
-*/
 
-#input-loader-patientMovement {
-  height: calc(100vh - 420px);
+#home-input-dragger {
+  margin: auto;
+  background-color: rgb(255, 255, 255, 0);
+  height: calc(100vh - 450px);
+  width: calc(100vw - 50px);
 }
-/*
-background-color: rgba(104, 220, 255, 0.3);
-*/
 
-/*
-  background: url("../img/bg_content_header.png") no-repeat fixed center,
-    rgb(240, 71, 66) 5%;
-background: url("../img/bg_content_header.png") no-repeat fixed center,
-    linear-gradient(90deg, rgb(238, 173, 76) 100%, rgb(238, 173, 76) 100%);
-    background: url("../img/bg_content_header.png") no-repeat fixed center,
-    rgb(60, 207, 226) 10%;
+#home-input-dragger-text-title {
+  font-family: "Nunito", sans-serif;
+  max-width: 300px;
+  text-align: center;
+  margin-top: -10px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 900;
+  font-size: 30pt;
+  color: rgb(255, 215, 166);
+  border: 2px rgb(255, 183, 1);
+}
 
-  background: url("../img/bg_content_header.png") no-repeat fixed center,
-    linear-gradient(90deg, rgb(238, 173, 76) 10%, rgb(226, 88, 69) 100%);
-*/
-.remove-button-container {
-  width: 100%;
+#home-input-dragger-text-subtitle {
+  font-family: "Nunito", sans-serif;
+  max-width: 600px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bold;
+  margin-bottom: 5px;
+  font-size: 16px;
+  color: rgb(255, 215, 166);
+  border: 2px rgb(255, 183, 1);
+}
+
+#home-input-dragger-text {
+  max-width: 300px;
+  text-align: center;
+  margin: auto;
+  font-weight: 900;
+  color: white;
+  margin-bottom: 10px;
+}
+
+#home-input-button-snps {
+  color: white;
+  background-color: rgb(255, 94, 88);
+  border: 1px solid rgb(255, 105, 50);
+  margin: 3px auto;
+  text-align: center;
+  padding: 0 2em;
+}
+
+#home-input-button-metadata {
+  color: white;
+  background-color: rgb(255, 160, 16);
+  border: 1px solid rgb(255, 203, 73, 0);
+  margin: 3px auto;
+  text-align: center;
+  padding: 0 2em;
+}
+
+#home-input-status {
+  background-color: transparent;
+  color: rgb(0, 0, 0);
+  font-weight: light;
+  font-size: 12px;
+  padding-top: 10px;
+  height: 40px;
   margin: auto;
   text-align: center;
 }
 
-.input-loader-remove-button {
+.home-input-remove-button {
   color: white;
   border: 0px solid white;
   border-color: none;
@@ -56,90 +102,27 @@ background: url("../img/bg_content_header.png") no-repeat fixed center,
   text-align: center;
 }
 
-#input-loader-button-snps {
-  color: white;
-  background-color: rgb(255, 94, 88);
-  border: 1px solid white;
-  margin-top: calc((100vh - 420px) / 2);
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  padding: 0 2em;
-}
-
-#input-loader-button-metadata {
-  color: white;
-  background-color: rgb(255, 160, 16);
-  border: 1px solid white;
-  margin-top: calc((100vh - 420px) / 2);
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  padding: 0 2em;
-}
-
-#input-loader-button-patientMovement {
-  color: white;
-  background-color: rgb(4, 205, 219);
-  border: 1px solid white;
-  margin-top: calc((100vh - 420px) / 2);
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  padding: 0 2em;
-}
-
-#input-status {
-  width: 100%;
-  background-color: white;
-  padding-top: 5px;
-  margin: 0px;
-}
-
-#demo-selection {
-  width: 100vw;
+#home-preloaded-data {
+  max-width: 350px;
+  left: 0;
   height: auto;
   text-align: left;
   padding-left: 40px;
-  margin: auto;
   padding-top: 15px;
   background-color: rgb(255, 255, 255);
 }
 
-#footer-component {
-  width: 100vw;
+#home-footer {
+  max-width: 400px;
   height: auto;
   text-align: left;
-  padding-left: 50px;
   margin: auto;
-  padding-top: 15px;
+  padding: 15px 5px 5px 40px;
   background-color: rgb(255, 255, 255);
-}
-
-#title-header-component {
-  color: white;
-  font-size: 24px;
-  margin: auto;
-
-  width: 100%;
-  font-family: "Nunito", sans-serif;
-  padding: 20px 20px 0px 20px;
-  text-align: center;
-  height: auto;
-}
-
-#input-wrapper {
-  background: linear-gradient(
-    90deg,
-    rgb(238, 173, 76) 10%,
-    rgb(226, 88, 69) 100%
-  );
 }
 
 /*
-background: url("../img/bg_content_header.png") no-repeat fixed center,
+  background-image: linear-gradient(90deg, #ffb790, #ffef91, #ffb03a);
+  background-clip: text;
+  color: transparent;
 */
-
-.particles-bg {
-  height: calc(100vh - 420px);
-}

@@ -1,14 +1,18 @@
-#snpdist-container {
-  background-color: rgb(243, 243, 243);
-  padding: 0px 15px;
-  height: calc(100vh - 130px);
-  width: 100%;
-}
-
 #snpdist-sider {
   background-color: white;
-  padding: 0px 15px;
+  min-height: calc(100vh - 320px);
+}
+
+#snpdist-sider-content {
+  margin: 15px;
   overflow-y: auto;
+}
+
+#snpdist-container {
+  background-color: rgb(243, 243, 243);
+  padding: 15px;
+  height: calc(100vh - 130px);
+  width: 100%;
 }
 
 #snpdist-sider h5 {

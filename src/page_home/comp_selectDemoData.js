@@ -21,12 +21,9 @@ import {
   getMetadataInput,
   getMatrixInput,
   loadSNPsequence,
-  getPatientMovementInput,
-} from "./util_inputLoaders";
+} from "./util_home";
 
 const { Option } = Select;
-
-//LOADER FUNCTION: ASSUME ALL DEMO FILE IS PASS ACTUAL INPUT LOADER
 
 const SelectDemoData = (props) => {
   let project_options = [];
@@ -49,13 +46,8 @@ const SelectDemoData = (props) => {
 
   const selectedDemoData = props.selectDemoData;
 
-  //functions
-
-  //handlers
   const selectDemoDataHandler = (val) => {
-    // case for each demo data
     if (props.projectJSON && val) {
-      //clean all states
       props.sequenceToStore(null);
       props.hmmMatrixToStore(null);
       props.metadataToStore(null);
@@ -99,15 +91,6 @@ const SelectDemoData = (props) => {
         }
       }
 
-      //stay timeline
-      // if (fileURL.stayTimeline) {
-      //   getPatientMovementInput(
-      //     fileURL.stayTimeline,
-      //     props.patientMovementToStore,
-      //     props.isinputLoadingToStore
-      //   );
-      // }
-
       props.selectDemoDataToStore(val);
     } else {
       props.selectDemoDataToStore(null);
@@ -116,8 +99,12 @@ const SelectDemoData = (props) => {
 
   return (
     <React.Fragment>
-      <Col xs={24}>
-        <Select value={selectedDemoData} onChange={selectDemoDataHandler}>
+      <Col>
+        <Select
+          value={selectedDemoData}
+          onChange={selectDemoDataHandler}
+          style={{ width: "100%" }}
+        >
           <Option value={null}>Preloaded dataset</Option>
           {project_options}
         </Select>
@@ -152,7 +139,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SelectDemoData);
 
 /*
-
-        */
-
-// Changing component state will trigger Component-Init and Component-Render
+ */

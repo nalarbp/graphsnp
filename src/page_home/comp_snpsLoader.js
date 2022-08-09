@@ -10,7 +10,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { sequenceToStore, isinputLoadingToStore } from "../action/inputActions";
 import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import { snpsLoader, getMatrixInput } from "./util_inputLoaders";
+import { snpsLoader, getMatrixInput } from "./util_home";
 
 const { Dragger } = Upload;
 
@@ -144,7 +144,6 @@ function mapStateToProps(state) {
   return {
     sequence: state.sequence,
     hammMatrix: state.hammMatrix,
-    patientMovement: state.patientMovement,
   };
 }
 function mapDispatchToProps(dispatch) {

@@ -1,63 +1,61 @@
 import { csv } from "d3-fetch";
 import { utcParse } from "d3-time-format";
-import Moment from "moment";
 import { message } from "antd";
-import { extendMoment } from "moment-range";
 import * as util from "../utils/utils";
 import HammingMatrix from "../model/hammingMatrix_prop";
 import DistanceMatrix from "../model/distanceMatrix_prop.js";
 
 const _ = require("lodash");
-const moment = extendMoment(Moment);
 const fastaToJson = require("bio-parsers").fastaToJson;
 
+export const graphSNP_desc =
+  "Graph-based and interactive SNP distance visualisation tool for cluster and transmission analysis.";
+
 export const isoDateParser = utcParse("%Y-%m-%d");
-//========================== SNPS ============================
+//SNPS
 export async function snpsLoader(
   fastaString,
   propsSequenceToStore,
   propsHmmMatrixToStore,
   propsIsinputLoadingToStore
 ) {
-  //console.log("async");
   const sequenceJSON = await fastaToJson(fastaString);
   const snpsSequence = [];
   if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
-    //console.log(sequenceJSON);
-    //check all error message, alert, and no seq to store
     let isolateName = {};
     let seqLen = [];
     let noErr = true;
+
     for (let index = 0; index < sequenceJSON.length; index++) {
       let messages = sequenceJSON[index].messages;
       let parsedSequence = sequenceJSON[index].parsedSequence;
       let success = sequenceJSON[index].success;
-      //tracking size
+
       if (seqLen.indexOf(parsedSequence.size) === -1) {
         seqLen.push(parsedSequence.size);
       }
-      //check success parsing
+
       if (!success) {
         noErr = false;
         alert("Parsing error:", parsedSequence.name);
         propsIsinputLoadingToStore(false);
         break;
       }
-      //check err messages
+
       if (messages.length > 0) {
         noErr = false;
         alert(messages[0]);
         propsIsinputLoadingToStore(false);
         break;
       }
-      //check sequence length
+
       if (seqLen.length > 1) {
         noErr = false;
         alert("Size error: Alignment required sequences with same length");
         propsIsinputLoadingToStore(false);
         break;
       }
-      //check duplicated isolate
+
       if (!isolateName[parsedSequence.name]) {
         isolateName[parsedSequence.name] = true;
       } else {
@@ -66,7 +64,7 @@ export async function snpsLoader(
         propsIsinputLoadingToStore(false);
         break;
       }
-      //making snpsSequence
+
       if (noErr) {
         snpsSequence.push({
           id: parsedSequence.name,
@@ -77,7 +75,6 @@ export async function snpsLoader(
     }
 
     if (noErr) {
-      //display success message
       message.success(
         "The sequences have been loaded, now building distance matrix ..",
         1
@@ -91,8 +88,6 @@ export async function snpsLoader(
         propsHmmMatrixToStore(hammingMatrix);
         propsIsinputLoadingToStore(false);
       }, 100);
-
-      //load to store
     }
   } else {
     alert("Error: Check the SNP alignment input requirements");
@@ -100,12 +95,11 @@ export async function snpsLoader(
   }
 }
 
-//======================= DIST-MATRIX ========================
+//DIST-MATRIX
 export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
   let data_promise_super_raw = await csv(fileURL).then(function (result) {
     return result;
   });
-
   const headers = data_promise_super_raw.columns;
   const diag_name = headers[0];
   console.log(diag_name);
@@ -124,8 +118,6 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
       data_promise_raw.push(newD);
       rowNames.push(d[diag_name]);
     });
-
-    //check colNames (header) and rowNames should be identical
 
     let areColRowNamesIdentical =
       headers.length === rowNames.length
@@ -152,7 +144,7 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
     setisLoading(false);
   }
 }
-//========================== METADATA ============================
+//METADATA
 export async function getMetadataInput(
   fileURL,
   metadataToStore,
@@ -166,6 +158,7 @@ export async function getMetadataInput(
   const validHeaders = ["sample_id"];
   const inputHeaders = Object.keys(data_promise_raw[0]);
   let header_is_valid = true;
+
   validHeaders.forEach((item) => {
     if (inputHeaders.indexOf(item) === -1) {
       header_is_valid = false;
@@ -177,10 +170,8 @@ export async function getMetadataInput(
     setisLoading(false);
     return;
   }
-  //header transformation
-  //
+  //add header transformation here
 
-  // no duplicate in isolate name
   const sample_id = _.countBy(data_promise_raw, "sample_id");
   const duplicatedRecords = Object.keys(sample_id)
     .map((key) => {
@@ -194,18 +185,14 @@ export async function getMetadataInput(
     return;
   }
 
-  // no empty record in sample_id
   const sample_id_empty = sample_id[""] ? true : false;
-
   if (sample_id_empty) {
     alert("Error: Empty id(s)");
     setisLoading(false);
     return;
   }
 
-  // check if its contain dates (collection day)
   if (Object.keys(data_promise_raw[0]).indexOf("collection_day") !== -1) {
-    // no empty record or invalid format in collection date
     let isolate_start_datevalid = false;
     data_promise_raw.forEach(function (d) {
       d.sample_id = d.sample_id.replace(/\s*$/, "");
@@ -225,10 +212,8 @@ export async function getMetadataInput(
     }
   }
 
-  //Get other available metadata for color
   let headers_for_categoricalMap = [];
   let headers_userColorLUT = [];
-
   inputHeaders.forEach((h) => {
     let splittedHeader = h.split(":");
     let isHeaderForColor =
@@ -241,11 +226,6 @@ export async function getMetadataInput(
       }
     }
   });
-
-  // let headers_for_categoricalMap = inputHeaders.filter((d) => {
-  //   //filter out headers that have
-  //   return d !== "sample_id";
-  // });
 
   let colorLUTstore = {};
   let categorical_Map = new Map();
@@ -260,6 +240,7 @@ export async function getMetadataInput(
     "excluded",
     "nil",
   ];
+
   headers_for_categoricalMap.forEach((d) => {
     const columnHeader = d;
     let row_group = [];
@@ -274,10 +255,7 @@ export async function getMetadataInput(
 
     row_group.filter(util.filterUnique); //categorical: e.g vanA, vanB
 
-    //create categorical map
-    //extract category on a row
     row_group.forEach((g) => {
-      //{vanA: [taxaA, taxaB]}
       let gList = cells
         .filter((c) => {
           return c[columnHeader] === g;
@@ -289,158 +267,31 @@ export async function getMetadataInput(
         categorical_Map.set(categoricalID, gList);
       }
     });
-    //create color LUT
-    //check is there any header:color or not, if exist use this to create colorLUT, otherwise create new one
+
     let colorLUT = null;
     let isHeaderHasColor = headers_userColorLUT.indexOf(d) > -1 ? true : false;
+
     if (isHeaderHasColor) {
-      //get column header:color
       let headerWithColor = d.concat(":color");
       colorLUT = util.colorLUTFromUser(headerWithColor, data_promise_raw);
     } else {
       colorLUT = util.createColorLUT(cells, columnHeader);
     }
-
     colorLUTstore[columnHeader] = colorLUT;
   });
 
-  //Convert metadata into Map
   let metadata_Map = new Map();
   data_promise_raw.forEach((d) => {
     metadata_Map.set(d.sample_id, d);
   });
 
-  //Create categorical Map object from metadata
-  //{groupLocA: [taxa1, taxa2, ...], groupLocB: [taxa4, taxa6]}
-  //for each column, get the categorical
-
-  //console.log(colorLUTstore);
-
-  //When all pass validation test, send to store
   metadataToStore(metadata_Map);
   colorLUTtoStore(colorLUTstore);
   categoricalMapToStore(categorical_Map);
   setisLoading(false);
 }
 
-//========================== Patient Movement ============================
-export async function getPatientMovementInput(
-  fileURL,
-  patientMovementToStore,
-  setisLoading
-) {
-  let data_promise_raw = await csv(fileURL).then(function (result) {
-    return result;
-  });
-  const validHeaders = [
-    "patient_id",
-    "start_date",
-    "end_date",
-    "hospital_id",
-    "ward_id",
-    "bay_id",
-    "bed_id",
-  ];
-
-  const nullRecords = [
-    "null",
-    "",
-    " ",
-    "na",
-    "NA",
-    "N/A",
-    "#N/A",
-    "NULL",
-    "Null",
-  ];
-  const inputHeaders = Object.keys(data_promise_raw[0]);
-  let header_is_valid = true;
-  validHeaders.forEach((item) => {
-    if (inputHeaders.indexOf(item) === -1) {
-      header_is_valid = false;
-    }
-  });
-
-  if (!header_is_valid) {
-    alert("Invalid headers: One or more required headers was not found");
-    setisLoading(false);
-    return;
-  }
-
-  // no empty record or invalid format in date in and out
-  let date_invalid = false;
-  data_promise_raw.forEach(function (d) {
-    d.patient_id = d.patient_id.replace(/\s*$/, "");
-    d.start_date = d.start_date.replace(/\s*$/, "");
-    d.end_date = d.end_date.replace(/\s*$/, "");
-    d.hospital_id =
-      nullRecords.indexOf(d.hospital_id) !== -1 //when id = NA and in consist of nullRecords null, tidak -1 artinya ada di null
-        ? null
-        : d.hospital_id.replace(/\s*$/, "");
-    d.ward_id =
-      nullRecords.indexOf(d.ward_id) !== -1
-        ? null
-        : d.ward_id.replace(/\s*$/, "");
-    d.bay_id =
-      nullRecords.indexOf(d.bay_id) !== -1
-        ? null
-        : d.bay_id.replace(/\s*$/, "");
-    d.bed_id =
-      nullRecords.indexOf(d.bed_id) !== -1
-        ? null
-        : d.bed_id.replace(/\s*$/, "");
-
-    if (moment(d.start_date) && moment(d.end_date)) {
-      d.start_date = moment(d.start_date);
-      d.end_date = moment(d.end_date);
-    } else {
-      date_invalid = true;
-    }
-  });
-
-  if (date_invalid) {
-    alert(
-      "Invalid data: wrong date format in column start_date and or end_date"
-    );
-    setisLoading(false);
-    return;
-  }
-
-  //Start creating Patient stays Map:
-  //key is pid, value is pid and StayList instance pid => pid: pat_id, stays: stayList
-
-  let patientStaysMap = new Map();
-
-  const patList = data_promise_raw
-    .map((d) => d.patient_id)
-    .filter(util.filterUnique);
-
-  patList.forEach((p) => {
-    let stays = [];
-    let patStays = data_promise_raw.filter((d) => {
-      return d.patient_id === p;
-    });
-    patStays.forEach((s) => {
-      let stay = {
-        pid: p,
-        start_date: s.start_date,
-        end_date: s.end_date,
-        hospital_id: s.hospital_id,
-        ward_id: s.ward_id,
-        bay_id: s.bay_id,
-        bed_id: s.bed_id,
-      };
-      stays.push(stay);
-    });
-    patientStaysMap.set(p, stays);
-  });
-
-  //When all pass validation test, send to store
-  patientMovementToStore(patientStaysMap);
-  setisLoading(false);
-}
-
-//========================= PROJECT JSON ============================
+//PROJECT JSON
 export async function loadProjectJSON(project_json_url, projectJSONToStore) {
   let response = await fetch(project_json_url);
   let dataInBlob = await response.blob();
@@ -457,7 +308,7 @@ export async function loadProjectJSON(project_json_url, projectJSONToStore) {
   };
 }
 
-//====================== SNPS read from disk ==========
+//SNPS read from preloaded dataset
 export async function loadSNPsequence(
   fileURL,
   propsSequenceToStore,
@@ -481,3 +332,71 @@ export async function loadSNPsequence(
     );
   };
 }
+
+//Utils
+export function extensionCheck(fileExtension) {
+  let seqExtension = [".fa", ".fasta", ".fna", ".aln", ".msa"];
+  let metaExtension = [".csv"];
+  if (seqExtension.indexOf(fileExtension) !== -1) {
+    return "SNP";
+  }
+  if (metaExtension.indexOf(fileExtension) !== -1) {
+    return "MetaOrMatrix";
+  }
+}
+
+export async function loadMetaOrMatrix(
+  fileURL,
+  metadataToStore,
+  colorLUTtoStore,
+  categoricalMapToStore,
+  hmmMatrixToStore,
+  isinputLoadingToStore
+) {
+  let data_promise_raw = await csv(fileURL).then(function (result) {
+    return result;
+  });
+  let metaIdHeader = "sample_id";
+  let inputHeaders = Object.keys(data_promise_raw[0]);
+
+  if (inputHeaders.indexOf(metaIdHeader) !== -1) {
+    getMetadataInput(
+      fileURL,
+      metadataToStore,
+      colorLUTtoStore,
+      categoricalMapToStore,
+      isinputLoadingToStore
+    );
+  } else {
+    getMatrixInput(fileURL, hmmMatrixToStore, isinputLoadingToStore);
+  }
+}
+
+export const getParticleHeight = String(util.vh(100) - 400) + "px";
+export const getParticleWidth = String(util.vw(100) - 50) + "px";
+export const particleParams = {
+  fpsLimit: 24,
+  particles: {
+    number: { value: 25 },
+    size: { value: 4 },
+    links: {
+      enable: true,
+      distance: 75,
+    },
+    move: {
+      enable: true,
+      speed: 2,
+      outModes: {
+        default: "bounce",
+      },
+    },
+  },
+  interactivity: {
+    events: {
+      onhover: {
+        enable: false,
+        mode: "repulse",
+      },
+    },
+  },
+};

@@ -16,6 +16,8 @@ const MetadataBox = (props) => {
     cells: null,
   });
 
+  const lala = "ll,egka";
+
   //USEEFFECTS
   useEffect(() => {
     if (props.metadata) {

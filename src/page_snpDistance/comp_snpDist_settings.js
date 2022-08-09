@@ -14,6 +14,7 @@ import {
 } from "../action/snpdistSettingsActions";
 
 import { filterUnique } from "../utils/utils";
+import SelectDemoData from "../page_home/comp_selectDemoData";
 
 const { Option } = Select;
 const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
@@ -113,197 +114,203 @@ const SNPdistSettings = (props) => {
 
   return (
     <React.Fragment>
-      <Row>
-        <Col xs={24} id="header-content">
-          <Modal
-            visible={props.isShowingLoadingModal}
-            closable={false}
-            centered={true}
-            width={0}
-            footer={null}
-            bodyStyle={{
-              textAlign: "center",
-              padding: "0px",
-            }}
-          >
-            <Spin
-              indicator={loadingIcon}
-              style={{ color: "white" }}
-              tip="Preparing Chart"
-              size="large"
-            />
-          </Modal>
-        </Col>
-      </Row>
-      <Row gutter={[8, 8]}>
-        <Col span={24}>
-          <h5>Visualization settings</h5>
-          <p>
-            Select samples{" "}
-            <span>
-              <Tooltip
-                title="Select group of sample for bar chart visualization."
-                placement="rightTop"
-              >
-                <QuestionCircleOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </span>
-          </p>
-          <Select
-            value={dataToDisplay}
-            style={{ width: "100%" }}
-            disabled={props.hammingMatrix ? false : true}
-            onChange={dataToDisplayHandler}
-          >
-            <Option value="all">All samples</Option>
-            <Option
-              disabled={props.metadata ? false : true}
-              value="per-category"
+      <div id="snpdist-sider-content">
+        <Row>
+          <Col xs={24} id="header-content">
+            <Modal
+              visible={props.isShowingLoadingModal}
+              closable={false}
+              centered={true}
+              width={0}
+              footer={null}
+              bodyStyle={{
+                textAlign: "center",
+                padding: "0px",
+              }}
             >
-              Specific group (metadata)
-            </Option>
-          </Select>
-        </Col>
+              <Spin
+                indicator={loadingIcon}
+                style={{ color: "white" }}
+                tip="Preparing Chart"
+                size="large"
+              />
+            </Modal>
+          </Col>
+        </Row>
 
-        {dataToDisplay === "per-category" &&
-          props.hammingMatrix &&
-          props.metadata && (
-            <Col span={24}>
-              <p>
-                Select metadata column{" "}
-                <span>
-                  <Tooltip
-                    title="Column in metadata which group of sample to be displayed"
-                    placement="rightTop"
-                  >
-                    <QuestionCircleOutlined style={{ color: "red" }} />
-                  </Tooltip>
-                </span>
-              </p>
-              <Select
-                value={dataColumn}
-                style={{ width: "100%" }}
-                disabled={
-                  dataToDisplay === "per-category" &&
-                  props.hammingMatrix &&
-                  props.metadata
-                    ? false
-                    : true
-                }
-                onChange={dataColumnHandler}
-              >
-                {props.colorLUT && Object.keys(props.colorLUT)
-                  ? Object.keys(props.colorLUT).map((k, i) => {
-                      return getMetadataColumn(k, i);
-                    })
-                  : ["na"].map((l, j) => {
-                      return (
-                        <Option key={j} disabled={false} value={l}>
-                          {l}
-                        </Option>
-                      );
-                    })}
-              </Select>
-            </Col>
-          )}
-
-        {dataToDisplay === "per-category" &&
-          dataColumn &&
-          props.metadata &&
-          metadata_arr && (
-            <Col span={24}>
-              <p>
-                Select group{" "}
-                <span>
-                  <Tooltip
-                    title="Categorical group from the selected metadata column"
-                    placement="rightTop"
-                  >
-                    <QuestionCircleOutlined style={{ color: "red" }} />
-                  </Tooltip>
-                </span>
-              </p>
-              <Select
-                value={dataColumnLevel}
-                style={{ width: "100%" }}
-                disabled={
-                  dataToDisplay !== "all" &&
-                  dataColumn &&
-                  props.metadata &&
-                  metadata_arr
-                    ? false
-                    : true
-                }
-                onChange={dataColumnLevelHandler}
-              >
-                {dataColumn && metadata_arr
-                  ? getMetadataColumnLevels_arr(metadata_arr, dataColumn).map(
-                      (e, x) => {
-                        return getMetadataColumnLevel(e, x);
-                      }
-                    )
-                  : ["na"].map((l, j) => {
-                      return (
-                        <Option key={j} disabled={false} value={l}>
-                          {l}
-                        </Option>
-                      );
-                    })}
-              </Select>
-            </Col>
-          )}
-
-        <Col span={24}>
-          <Button
-            disabled={props.hammingMatrix ? false : true}
-            onClick={drawChartHandler}
-            type="primary"
-          >
-            Create Bar chart
-          </Button>
-        </Col>
-
-        <Divider style={{ margin: "10px 0px 0px 0px" }} />
-
-        <Col span={24}>
-          <h5>Download settings</h5>
-          <p>
-            Type{" "}
-            <span>
-              <Tooltip
-                title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
-                placement="rightTop"
-              >
-                <QuestionCircleOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </span>
-          </p>
-          <Select
-            disabled={props.hammingMatrix ? false : true}
-            value={snpDistExportFormat}
-            onChange={exportFormatHandler}
-            style={{ width: "100%" }}
-          >
-            <Option
+        <Row gutter={[8, 8]}>
+          <Col xs={24}>
+            <SelectDemoData />
+          </Col>
+          <Col span={24}>
+            <h5>Visualization settings</h5>
+            <p>
+              Select samples{" "}
+              <span>
+                <Tooltip
+                  title="Select group of sample for bar chart visualization."
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <Select
+              value={dataToDisplay}
+              style={{ width: "100%" }}
               disabled={props.hammingMatrix ? false : true}
-              value="symSnpDist"
+              onChange={dataToDisplayHandler}
             >
-              Table of pairwise SNP distances (CSV)
-            </Option>
-            <Option value="barChartSvg">Bar chart (SVG)</Option>
-          </Select>
-        </Col>
+              <Option value="all">All samples</Option>
+              <Option
+                disabled={props.metadata ? false : true}
+                value="per-category"
+              >
+                Specific group (metadata)
+              </Option>
+            </Select>
+          </Col>
 
-        <Col span={24}>
-          <Button
-            disabled={props.hammingMatrix ? false : true}
-            onClick={exportChartHandler}
-            type="primary"
-          >
-            Download
-          </Button>
-        </Col>
-      </Row>
+          {dataToDisplay === "per-category" &&
+            props.hammingMatrix &&
+            props.metadata && (
+              <Col span={24}>
+                <p>
+                  Select metadata column{" "}
+                  <span>
+                    <Tooltip
+                      title="Column in metadata which group of sample to be displayed"
+                      placement="rightTop"
+                    >
+                      <QuestionCircleOutlined style={{ color: "red" }} />
+                    </Tooltip>
+                  </span>
+                </p>
+                <Select
+                  value={dataColumn}
+                  style={{ width: "100%" }}
+                  disabled={
+                    dataToDisplay === "per-category" &&
+                    props.hammingMatrix &&
+                    props.metadata
+                      ? false
+                      : true
+                  }
+                  onChange={dataColumnHandler}
+                >
+                  {props.colorLUT && Object.keys(props.colorLUT)
+                    ? Object.keys(props.colorLUT).map((k, i) => {
+                        return getMetadataColumn(k, i);
+                      })
+                    : ["na"].map((l, j) => {
+                        return (
+                          <Option key={j} disabled={false} value={l}>
+                            {l}
+                          </Option>
+                        );
+                      })}
+                </Select>
+              </Col>
+            )}
+
+          {dataToDisplay === "per-category" &&
+            dataColumn &&
+            props.metadata &&
+            metadata_arr && (
+              <Col span={24}>
+                <p>
+                  Select group{" "}
+                  <span>
+                    <Tooltip
+                      title="Categorical group from the selected metadata column"
+                      placement="rightTop"
+                    >
+                      <QuestionCircleOutlined style={{ color: "red" }} />
+                    </Tooltip>
+                  </span>
+                </p>
+                <Select
+                  value={dataColumnLevel}
+                  style={{ width: "100%" }}
+                  disabled={
+                    dataToDisplay !== "all" &&
+                    dataColumn &&
+                    props.metadata &&
+                    metadata_arr
+                      ? false
+                      : true
+                  }
+                  onChange={dataColumnLevelHandler}
+                >
+                  {dataColumn && metadata_arr
+                    ? getMetadataColumnLevels_arr(metadata_arr, dataColumn).map(
+                        (e, x) => {
+                          return getMetadataColumnLevel(e, x);
+                        }
+                      )
+                    : ["na"].map((l, j) => {
+                        return (
+                          <Option key={j} disabled={false} value={l}>
+                            {l}
+                          </Option>
+                        );
+                      })}
+                </Select>
+              </Col>
+            )}
+
+          <Col span={24}>
+            <Button
+              disabled={props.hammingMatrix ? false : true}
+              onClick={drawChartHandler}
+              type="primary"
+            >
+              Create Bar chart
+            </Button>
+          </Col>
+
+          <Divider style={{ margin: "10px 0px 0px 0px" }} />
+
+          <Col span={24}>
+            <h5>Download settings</h5>
+            <p>
+              Type{" "}
+              <span>
+                <Tooltip
+                  title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
+                  placement="rightTop"
+                >
+                  <QuestionCircleOutlined style={{ color: "red" }} />
+                </Tooltip>
+              </span>
+            </p>
+            <Select
+              disabled={props.hammingMatrix ? false : true}
+              value={snpDistExportFormat}
+              onChange={exportFormatHandler}
+              style={{ width: "100%" }}
+            >
+              <Option
+                disabled={props.hammingMatrix ? false : true}
+                value="symSnpDist"
+              >
+                Table of pairwise SNP distances (CSV)
+              </Option>
+              <Option value="barChartSvg">Bar chart (SVG)</Option>
+            </Select>
+          </Col>
+
+          <Col span={24}>
+            <Button
+              disabled={props.hammingMatrix ? false : true}
+              onClick={exportChartHandler}
+              type="primary"
+            >
+              Download
+            </Button>
+          </Col>
+        </Row>
+      </div>
     </React.Fragment>
   );
 };

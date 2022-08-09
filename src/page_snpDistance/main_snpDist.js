@@ -1,6 +1,6 @@
+import "./snpdist_style.css";
 import React from "react";
 import { Layout, Col, Empty } from "antd";
-import "./style_snpDist.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 
@@ -13,7 +13,13 @@ const SNPdistance = (props) => {
   return (
     <React.Fragment>
       <Layout>
-        <Sider id="snpdist-sider">
+        <Sider
+          id="snpdist-sider"
+          collapsible={true}
+          defaultCollapsed={true}
+          collapsedWidth={0}
+          breakpoint={"xs"}
+        >
           <SNPdistSettings />
         </Sider>
         <Layout id="snpdist-container">

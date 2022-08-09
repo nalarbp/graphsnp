@@ -1,41 +1,39 @@
 import { Row, Col } from "antd";
-import "./style_home.css";
-const FooterComponent = (props) => {
+import { graphSNP_desc } from "./util_home";
+
+const TextLink = (props) => {
+  return (
+    <a href={props.link} target="_blank" rel="noopener noreferrer">
+      {props.text}
+    </a>
+  );
+};
+
+const FooterComponent = () => {
   return (
     <Row>
-      <Col sm={24} id="footer-component">
+      <Col id="home-footer">
         <p>
-          <a
-            href="https://graphsnp.beatsonlab.com"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <b>GraphSNP v1.0</b>
-          </a>
-          <br />
           <b>
-            {" "}
-            Graph-based, drag and drop web visualization tool for <br />
-            cluster and transmission analysis using pairwise SNP-distance.
+            <TextLink
+              text={"GraphSNP v1.0"}
+              link={"https://github.com/nalarbp/graphsnp"}
+            />
           </b>
-          <br /> Developed by Budi Permana at{" "}
-          <a
-            href="https://beatsonlab.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {" "}
-            Beatson Lab
-          </a>
-          <br />{" "}
-          <a
-            href="https://www.uq.edu.au/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            The University of Queensland
-          </a>{" "}
-          | Australia
+          <br />
+          <b>{graphSNP_desc}</b>
+          <br /> Developed by
+          <TextLink
+            text={" Budi Permana "}
+            link={"https://nalarbp.github.io"}
+          />
+          at
+          <TextLink text={" Beatson Lab "} link={"https://beatsonlab.com/"} />
+          <br />
+          <TextLink
+            text={"The University of Queensland"}
+            link={"https://www.uq.edu.au/"}
+          />
         </p>
       </Col>
     </Row>
@@ -43,4 +41,3 @@ const FooterComponent = (props) => {
 };
 
 export default FooterComponent;
-// <br /> {new Date().getFullYear()}

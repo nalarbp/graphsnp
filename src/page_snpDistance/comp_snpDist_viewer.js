@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Row, Col, Empty, Button } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
-import "./style_snpDist.css";
+import "./snpdist_style.css";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
