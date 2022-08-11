@@ -99,15 +99,13 @@ const SelectDemoData = (props) => {
 
   return (
     <React.Fragment>
-      <Col>
-        <Select
-          value={selectedDemoData}
-          onChange={selectDemoDataHandler}
-          className={"gp-select"}>
-          <Option value={null}>Preloaded dataset</Option>
-          {project_options}
-        </Select>
-      </Col>
+      <Select
+        value={selectedDemoData}
+        onChange={selectDemoDataHandler}
+        className={"gp-select"}>
+        <Option value={null}>Preloaded dataset</Option>
+        {project_options}
+      </Select>
     </React.Fragment>
   );
 };

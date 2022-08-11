@@ -1,5 +1,5 @@
 import React from "react";
-import { Col, Select, Tooltip } from "antd";
+import { Select, Tooltip } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { QuestionCircleOutlined } from "@ant-design/icons";

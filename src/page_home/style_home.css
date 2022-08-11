@@ -38,7 +38,7 @@
   margin-right: auto;
   font-weight: 900;
   font-size: 30pt;
-  color: rgb(255, 215, 166);
+  color: rgb(255, 255, 255);
   border: 2px rgb(255, 183, 1);
 }
 
@@ -51,7 +51,7 @@
   font-weight: bold;
   margin-bottom: 5px;
   font-size: 16px;
-  color: rgb(255, 215, 166);
+  color: rgb(255, 255, 255);
   border: 2px rgb(255, 183, 1);
 }
 
@@ -60,7 +60,7 @@
   text-align: center;
   margin: auto;
   font-weight: 900;
-  color: white;
+  color: rgb(255, 205, 169);
   margin-bottom: 10px;
 }
 

@@ -10,7 +10,7 @@ import {
 } from "../action/inputActions";
 import { hmmMatrixToStore } from "../action/graphMatrixActions";
 import { extensionCheck, snpsLoader, loadMetaOrMatrix } from "./util_home";
-import { Upload, Button, Divider, Row, Col, Tooltip } from "antd";
+import { Upload, Button, Row, Col, Tooltip } from "antd";
 import {
   getParticleHeight,
   getParticleWidth,
@@ -127,8 +127,7 @@ const InputPlaceholder = (props) => {
             minHeight: "calc(100vh - 400px)",
             minWidth: "calc(100vw - 50px)",
           }}
-          beforeUpload={beforeUploadHandler}
-        >
+          beforeUpload={beforeUploadHandler}>
           <div id="home-input-dragger">
             <Row align={"center"}>
               <Col xs={24} md={16} xl={12} xxl={8}>
@@ -145,15 +144,13 @@ const InputPlaceholder = (props) => {
                   id="home-input-button-snps"
                   shape={"round"}
                   size={"large"}
-                  type={"ghost"}
-                >
+                  type={"ghost"}>
                   {getIconStatus("SNP")}Alignment/matrix{"  "}
                   <span style={{ marginLeft: "5px" }}>
                     <Tooltip
                       title="A non-ambiguous multi-fasta SNPs alignment (.fa, .fna, 
                     .mfa, .fsa) or a distance matrix (.csv) file here"
-                      placement="rightTop"
-                    >
+                      placement="rightTop">
                       <QuestionCircleOutlined
                         style={{ fontSize: "14px", color: "white" }}
                       />
@@ -168,8 +165,7 @@ const InputPlaceholder = (props) => {
                   className="home-input-remove-button "
                   shape={"circle"}
                   size={"small"}
-                  onClick={removeSNPHandler}
-                >
+                  onClick={removeSNPHandler}>
                   <DeleteOutlined />
                 </Button>
               </Col>
@@ -179,14 +175,12 @@ const InputPlaceholder = (props) => {
                   id="home-input-button-metadata"
                   shape={"round"}
                   size={"large"}
-                  type={"ghost"}
-                >
+                  type={"ghost"}>
                   {getIconStatus("Metadata")} Metadata{" "}
                   <span style={{ marginLeft: "5px" }}>
                     <Tooltip
                       title="A table file (.csv) with column sample_id"
-                      placement="rightTop"
-                    >
+                      placement="rightTop">
                       <QuestionCircleOutlined
                         style={{ fontSize: "14px", color: "white" }}
                       />
@@ -201,8 +195,7 @@ const InputPlaceholder = (props) => {
                   className="home-input-remove-button "
                   shape={"circle"}
                   size={"small"}
-                  onClick={removeMetadataHandler}
-                >
+                  onClick={removeMetadataHandler}>
                   <DeleteOutlined />
                 </Button>
               </Col>
@@ -239,9 +232,6 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(InputPlaceholder);
 
 /*
-
-
-                           <p id="home-input-dragger-text-title">GraphSNP</p>
-              <Divider style={{ opacity: 0 }} />
-
-              */
+<p id="home-input-dragger-text-title">GraphSNP</p>
+<Divider style={{ opacity: 0 }} />
+*/

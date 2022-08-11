@@ -1,23 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Row, Col, Empty, Button } from "antd";
-import "./style_snpdist.css";
+import { Col, Empty, Row } from "antd";
+import * as d3Select from "d3-selection";
+import { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions.js";
 import {
+  dist_changeChartSession,
   dist_changeIsUserDraw,
   dist_changeIsUserExport,
   dist_changeIsUserLoadSession,
-  dist_changeChartSession,
 } from "../action/snpdistSettingsActions";
-import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions.js";
-import * as d3Select from "d3-selection";
-//import useResizeObserver from "../hooks/hook_resizeObserver"; //Broken
 import GraphEdgeList from "../model/graphEdgeList_prop";
-import { vh, vw, downloadSVG, filterUnique } from "../utils/utils";
-import { createBarPlot_all, createChart } from "./chart_barplot_all";
 import { createSNPdistCSVFile } from "../utils/create_exportFile";
-
-const _ = require("lodash");
+import { downloadSVG, vh, vw } from "../utils/utils";
+import { createBarPlot_all, createChart } from "./chart_barplot_all";
+import "./style_snpdist.css";
 
 const SNPdistViewer = (props) => {
   //Ref
@@ -277,15 +274,13 @@ const SNPdistViewer = (props) => {
                 ? "Reload previous chart"
                 : "No chart, create one "
             }
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          ></Empty>
+            image={Empty.PRESENTED_IMAGE_SIMPLE}></Empty>
         </div>
       </Col>
       <Col ref={chartContainerRef} sm={24}>
         <div
           id="snpdist-chart-container"
-          style={{ height: "100%", width: "100%" }}
-        >
+          style={{ height: "100%", width: "100%" }}>
           <svg id="snpdist-chart-svg" ref={snpdistSVGRef}></svg>
         </div>
       </Col>

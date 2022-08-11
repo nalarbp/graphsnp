@@ -1,20 +1,20 @@
 import { combineReducers } from "redux";
-import projectsReducer from "./projectsReducer";
-import sequenceReducer from "./sequenceReducer";
-import navSettingsReducer from "./navSettingsReducer";
-import graphSettingsReducer from "./graphSettingsReducer";
-import metadataReducer from "./metadataReducer";
-import patientMovementReducer from "./patientMovementReducer";
-import isInputLoadingReducer from "./isInputLoadingReducer";
-import graphObjectReducer from "./graphObjectReducer";
-import graphClustersReducer from "./graphClustersReducer";
-import hammMatrixReducer from "./hammMatrixReducer";
 import categoricalMapReducer from "./categoricalMapReducer";
 import colorLUTReducer from "./colorLUTReducer";
-import snpDistSettingsReducer from "./snpDistSettingsReducer";
+import graphClustersReducer from "./graphClustersReducer";
+import graphObjectReducer from "./graphObjectReducer";
+import graphSettingsReducer from "./graphSettingsReducer";
+import hammMatrixReducer from "./hammMatrixReducer";
+import isInputLoadingReducer from "./isInputLoadingReducer";
+import isShowingLoadingModalReducer from "./isShowingLoadingModalReducer";
+import metadataReducer from "./metadataReducer";
+import navSettingsReducer from "./navSettingsReducer";
+import patientMovementReducer from "./patientMovementReducer";
+import projectsReducer from "./projectsReducer";
 import selectDemoDataReducer from "./selectDemoDataReducer";
 import selectedNodeReducer from "./selectedNodeReducer";
-import isShowingLoadingModalReducer from "./isShowingLoadingModalReducer";
+import sequenceReducer from "./sequenceReducer";
+import snpDistSettingsReducer from "./snpDistSettingsReducer";
 
 export const initialState = {
   projectJSON: null,
@@ -63,6 +63,7 @@ export const initialState = {
     isUserExportSnpDist: false,
     chartSession: null,
     isUserReloadSession: false,
+    chartsData: null,
   },
   navSettings: {
     navLocation: null,

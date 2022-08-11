@@ -64,6 +64,7 @@ export const DIST_IS_USER_DRAW = "DIST_IS_USER_DRAW";
 export const DIST_IS_USER_EXPORT = "DIST_IS_USER_EXPORT";
 export const DIST_CHART_SESSION = "DIST_CHART_SESSION";
 export const DIST_IS_USER_LOAD_SESSION = "DIST_IS_USER_LOAD_SESSION";
+export const DIST_CHARTS_DATA = "DIST_CHARTS_DATA";
 
 //Demonstration dataset
 export const DEMO = {

@@ -1,11 +1,11 @@
+import { Col, Empty, Layout } from "antd";
 import React from "react";
-import { Layout, Col, Empty } from "antd";
-import "./style_graphsnp.css";
-import MetadataBox from "./comp_metadataBox";
-import SiderMenu from "./comp_sider";
-import GraphContainer from "./comp_graphContainer";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import GraphContainer from "./comp_graphContainer";
+import MetadataBox from "./comp_metadataBox";
+import SiderMenu from "./comp_sider";
+import "./style_graphsnp.css";
 
 const { Sider, Content } = Layout;
 
@@ -14,7 +14,7 @@ const GraphSNP = (props) => {
   return (
     <React.Fragment>
       <Layout>
-        <Sider id="graphsnp-sider" collapsible={true} collapsedWidth={10} breakpoint={'xs'}>
+        <Sider id="graphsnp-sider" collapsible={false}>
           <SiderMenu />
         </Sider>
         <Layout id="graphsnp-container">

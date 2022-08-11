@@ -1,8 +1,8 @@
+import { LoadingOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Col, Modal, Row, Spin, Tooltip } from "antd";
 import React from "react";
-import { Button, Row, Col, Select, Divider, Tooltip, Modal, Spin } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { QuestionCircleOutlined, LoadingOutlined } from "@ant-design/icons";
 import {
   dist_changeExportFormat,
   dist_changeIsUserDraw,
@@ -10,130 +10,57 @@ import {
 } from "../action/snpdistSettingsActions";
 
 import SelectDemoData from "../page_home/comp_selectDemoData";
-import SelectSamples from "./comp_select_samples";
+import SelectCharts from "./comp_select_charts";
+import DrawSNPdistCharts from "./comp_snpDist_drawCharts";
 
-const { Option } = Select;
 const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const SNPdistSettings = (props) => {
-  const snpDistExportFormat = props.snpDistSettings.snpDistExportFormat;
-  const isUserDrawChart = props.snpDistSettings.isUserDrawChart;
-  const isUserExportSnpDist = props.snpDistSettings.isUserExportSnpDist;
-
-  const drawChartHandler = () => {
-    if (!isUserDrawChart) {
-      props.dist_changeIsUserDraw(true);
-    }
-  };
-
-  const exportFormatHandler = (val) => {
-    props.dist_changeExportFormat(val);
-  };
-
-  const exportChartHandler = () => {
-    console.log("downlaod handlers");
-    if (!isUserExportSnpDist) {
-      props.dist_changeIsUserExport(true);
-    }
-  };
-
   return (
     <React.Fragment>
-      <div id="snpdist-sider-content">
-        <Row>
-          <Col xs={24} id="header-content">
-            <Modal
-              visible={props.isShowingLoadingModal}
-              closable={false}
-              centered={true}
-              width={0}
-              footer={null}
-              bodyStyle={{
-                textAlign: "center",
-                padding: "0px",
-              }}>
-              <Spin
-                indicator={loadingIcon}
-                style={{ color: "white" }}
-                tip="Preparing Chart"
-                size="large"
-              />
-            </Modal>
-          </Col>
-        </Row>
+      <Row>
+        <Modal
+          visible={props.isShowingLoadingModal}
+          closable={false}
+          centered={true}
+          width={0}
+          footer={null}
+          bodyStyle={{
+            textAlign: "center",
+            padding: "0px",
+          }}>
+          <Spin
+            indicator={loadingIcon}
+            style={{ color: "white" }}
+            tip="Preparing Chart"
+            size="large"
+          />
+        </Modal>
+      </Row>
 
-        <Row gutter={[16, 16]}>
-          <Col className="gp-settings-box" xs={24} sm={10} lg={5}>
-            <h5>
-              Select preloaded dataset{" "}
-              <span>
-                <Tooltip
-                  title="Select preloaded dataset for the visualisation."
-                  placement="rightTop">
-                  <QuestionCircleOutlined style={{ color: "red" }} />
-                </Tooltip>
-              </span>
-            </h5>
-            <SelectDemoData />
-          </Col>
+      <Row gutter={[16, 16]}>
+        <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
+          <h5>
+            Select preloaded dataset{" "}
+            <span>
+              <Tooltip
+                title="Select preloaded dataset for the visualisation."
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </h5>
+          <SelectDemoData />
+        </Col>
 
-          <Col className="gp-settings-box" xs={24} sm={10} lg={5}>
-            <SelectSamples />
-          </Col>
+        <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
+          <SelectCharts />
+        </Col>
 
-          <Col className="gp-settings-box" xs={24} sm={10} lg={5}>
-            <h5>
-              Generate chart(s){" "}
-              <span>
-                <Tooltip
-                  title="Click to generate the chart(s)"
-                  placement="rightTop">
-                  <QuestionCircleOutlined style={{ color: "red" }} />
-                </Tooltip>
-              </span>
-            </h5>
-            <Button
-              disabled={props.hammingMatrix ? false : true}
-              onClick={drawChartHandler}
-              type="primary">
-              Create Bar chart
-            </Button>
-          </Col>
-
-          <Col className="gp-settings-box" xs={24} sm={10} lg={5}>
-            <h5>
-              Select download type{" "}
-              <span>
-                <Tooltip
-                  title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
-                  placement="rightTop">
-                  <QuestionCircleOutlined style={{ color: "red" }} />
-                </Tooltip>
-              </span>
-            </h5>
-            <Select
-              className={"gp-select"}
-              disabled={props.hammingMatrix ? false : true}
-              value={snpDistExportFormat}
-              onChange={exportFormatHandler}
-              style={{ width: "100%" }}>
-              <Option
-                disabled={props.hammingMatrix ? false : true}
-                value="symSnpDist">
-                Table of pairwise SNP distances (CSV)
-              </Option>
-              <Option value="barChartSvg">Bar chart (SVG)</Option>
-            </Select>
-            <Divider style={{ margin: "5px 0px", opacity: 0 }} />
-            <Button
-              disabled={props.hammingMatrix ? false : true}
-              onClick={exportChartHandler}
-              type="primary">
-              Download
-            </Button>
-          </Col>
-        </Row>
-      </div>
+        <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
+          <DrawSNPdistCharts />
+        </Col>
+      </Row>
     </React.Fragment>
   );
 };
@@ -162,6 +89,59 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistSettings);
 
 /*
+<Col className="gp-settings-box" xs={22} sm={10} lg={5}>
+          <h5>
+            Generate chart(s){" "}
+            <span>
+              <Tooltip
+                title="Click to generate the chart(s)"
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </h5>
+          <Button
+            disabled={props.hammingMatrix ? false : true}
+            onClick={drawChartHandler}
+            type="primary">
+            Create Bar chart
+          </Button>
+        </Col>
+
+        <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
+          <h5>
+            Select download type{" "}
+            <span>
+              <Tooltip
+                title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </h5>
+          <Select
+            className={"gp-select"}
+            disabled={props.hammingMatrix ? false : true}
+            value={snpDistExportFormat}
+            onChange={exportFormatHandler}
+            style={{ width: "100%" }}>
+            <Option
+              disabled={props.hammingMatrix ? false : true}
+              value="symSnpDist">
+              Table of pairwise SNP distances (CSV)
+            </Option>
+            <Option value="barChartSvg">Bar chart (SVG)</Option>
+          </Select>
+          <Divider style={{ margin: "5px 0px", opacity: 0 }} />
+          <Button
+            disabled={props.hammingMatrix ? false : true}
+            onClick={exportChartHandler}
+            type="primary">
+            Download
+          </Button>
+        </Col>
+
+
 <Col span={24}>
           <p>Chart(s) orientation</p>
           <Select

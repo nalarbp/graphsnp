@@ -1,15 +1,15 @@
+import { message } from "antd";
 import { csv } from "d3-fetch";
 import { utcParse } from "d3-time-format";
-import { message } from "antd";
-import * as util from "../utils/utils";
-import HammingMatrix from "../model/hammingMatrix_prop";
 import DistanceMatrix from "../model/distanceMatrix_prop.js";
+import HammingMatrix from "../model/hammingMatrix_prop";
+import * as util from "../utils/utils";
 
 const _ = require("lodash");
 const fastaToJson = require("bio-parsers").fastaToJson;
 
 export const graphSNP_desc =
-  "Graph-based and interactive SNP distance visualisation tool for cluster and transmission analysis.";
+  "An interactive SNP distance visualisation tool for cluster and transmission analysis using graph approach.";
 
 export const isoDateParser = utcParse("%Y-%m-%d");
 //SNPS
@@ -102,7 +102,6 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
   });
   const headers = data_promise_super_raw.columns;
   const diag_name = headers[0];
-  console.log(diag_name);
 
   if (diag_name) {
     let rowNames = [diag_name];
@@ -398,5 +397,8 @@ export const particleParams = {
         mode: "repulse",
       },
     },
+  },
+  opacity: {
+    value: 0.5,
   },
 };

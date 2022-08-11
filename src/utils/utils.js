@@ -1,7 +1,7 @@
-import { scaleOrdinal, scaleSequential } from "d3-scale";
-import * as d3Chroma from "d3-scale-chromatic";
 import * as d3Array from "d3-array";
 import { color } from "d3-color";
+import { scaleOrdinal, scaleSequential } from "d3-scale";
+import * as d3Chroma from "d3-scale-chromatic";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 
@@ -279,5 +279,20 @@ export function getBarChartTickValues(domain_arr) {
       return !(i % 100);
     });
     return res;
+  }
+}
+
+export function getStats(arr) {
+  if (Array.isArray(arr)) {
+    return {
+      min: parseFloat(d3Array.min(arr)).toFixed(0),
+      q1: parseFloat(d3Array.quantile(arr, 0.25)).toFixed(1),
+      mean: parseFloat(d3Array.mean(arr)).toFixed(1),
+      median: parseFloat(d3Array.median(arr)).toFixed(1),
+      q3: parseFloat(d3Array.quantile(arr, 0.75)).toFixed(1),
+      max: parseFloat(d3Array.max(arr)).toFixed(0),
+    };
+  } else {
+    return null;
   }
 }

@@ -13,21 +13,26 @@
   position:absolute;
   z-index: 10;
   width: 100vw;
-  background-color: rgba(254, 254, 254, 0.95);
   padding: 0px;
   margin: 0px;
+  max-height: 50px;
   border: none;
+  border-bottom: 1px solid lightgray;
 }
 
+
 .gp-settings-box {
-  background-color: rgba(238, 238, 238, 0.1);
+  background-color: rgb(242, 242, 242, 0.3);
   margin: 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(209, 209, 209, 0.5);
 }
 
 .gp-select{
   max-width: 250px;
   min-width: 100px;
   margin-bottom: 10px;
+  margin-left: 0px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
