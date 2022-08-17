@@ -1,26 +1,30 @@
+import { Select } from "antd";
 import React from "react";
-import { Col, Select } from "antd";
 import { connect } from "react-redux";
-import * as constant from "../utils/constants";
 import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import * as constant from "../utils/constants";
 
 import { bindActionCreators } from "redux";
+import { categoricalMapToStore } from "../action/categoricalMapActions";
+import { colorLUTtoStore } from "../action/colorActions";
 import {
-  selectDemoDataToStore,
-  sequenceToStore,
-  projectJSONToStore,
+  isinputLoadingToStore,
   metadataToStore,
   patientMovementToStore,
-  isinputLoadingToStore,
+  projectJSONToStore,
+  selectDemoDataToStore,
+  sequenceToStore,
 } from "../action/inputActions";
-import { colorLUTtoStore } from "../action/colorActions";
-import { categoricalMapToStore } from "../action/categoricalMapActions";
 import {
-  loadProjectJSON,
-  snpsLoader,
-  getMetadataInput,
+  dist_changeDataColumn,
+  dist_changeDataToDisplay,
+} from "../action/snpdistSettingsActions";
+import {
   getMatrixInput,
+  getMetadataInput,
+  loadProjectJSON,
   loadSNPsequence,
+  snpsLoader,
 } from "./util_home";
 
 const { Option } = Select;
@@ -54,6 +58,8 @@ const SelectDemoData = (props) => {
       props.colorLUTtoStore(null);
       props.categoricalMapToStore(null);
       props.patientMovementToStore(null);
+      props.dist_changeDataColumn(null);
+      props.dist_changeDataToDisplay("all");
 
       //load a new one
       let projectData = props.projectJSON.get(val);
@@ -128,6 +134,8 @@ function mapDispatchToProps(dispatch) {
       hmmMatrixToStore,
       colorLUTtoStore,
       categoricalMapToStore,
+      dist_changeDataToDisplay,
+      dist_changeDataColumn,
     },
     dispatch
   );

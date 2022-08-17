@@ -5,13 +5,13 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { dist_changeChartsData } from "../action/snpdistSettingsActions";
 import GraphEdgeList from "../model/graphEdgeList_prop";
-import { getAllDistData } from "./util_snpDist";
+import {
+  getAllDistData,
+  getGroupPieData,
+  getGroupViolinData,
+} from "./util_snpDist";
 
 const DrawSNPdistCharts = (props) => {
-  const metadata_arr = props.metadata
-    ? Array.from(props.metadata.values())
-    : null;
-
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
 
@@ -28,13 +28,26 @@ const DrawSNPdistCharts = (props) => {
     //all data fun
     let allDistData = getAllDistData(allDist);
 
-    //group data fun group
+    //group data fun
+    let groupPieData =
+      props.metadata && props.snpDistSettings.dataColumn
+        ? getGroupPieData(props.metadata, props.snpDistSettings.dataColumn)
+        : null;
+
+    let groupViolinData =
+      props.metadata && props.snpDistSettings.dataColumn
+        ? getGroupViolinData(
+            allDist,
+            props.metadata,
+            props.snpDistSettings.dataColumn
+          )
+        : null;
 
     let chartsData = {
       allDistData: allDistData.all_distData,
       allDistStats: allDistData.all_distStats,
-      groupDistData: null,
-      groupDistStats: null,
+      groupPieData: groupPieData,
+      groupViolinData: groupViolinData,
     };
     props.dist_changeChartsData(chartsData);
   };

@@ -38,7 +38,7 @@ const SNPdistSettings = (props) => {
         </Modal>
       </Row>
 
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} id="gp-settings-box-container">
         <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
           <h5>
             Select preloaded dataset{" "}

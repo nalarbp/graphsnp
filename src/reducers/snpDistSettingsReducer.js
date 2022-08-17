@@ -12,7 +12,7 @@ const snpDistSettingsReducer = (prevState, action) => {
 
     case constant.DIST_DATA_COLUMN:
       let newState_dc = Object.assign({}, prevState);
-      if (action.payload && action.payload !== prevState.dataColumn) {
+      if (action.payload !== prevState.dataColumn) {
         newState_dc.dataColumn = action.payload;
       }
       return newState_dc;

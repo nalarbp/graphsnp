@@ -63,7 +63,12 @@ export const initialState = {
     isUserExportSnpDist: false,
     chartSession: null,
     isUserReloadSession: false,
-    chartsData: null,
+    chartsData: {
+      allDistData: null,
+      allDistStats: null,
+      groupPieData: null,
+      groupDistStats: null,
+    },
   },
   navSettings: {
     navLocation: null,

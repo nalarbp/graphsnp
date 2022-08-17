@@ -1,6 +1,6 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
@@ -11,12 +11,12 @@ import {
 const { Option } = Select;
 
 const SelectCharts = (props) => {
-  const metadata_arr = props.metadata
-    ? Array.from(props.metadata.values())
-    : null;
-
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
+
+  useEffect(() => {
+    props.dist_changeDataColumn(null);
+  }, [dataToDisplay]);
 
   const dataToDisplayHandler = (val) => {
     props.dist_changeDataToDisplay(val);
@@ -55,15 +55,12 @@ const SelectCharts = (props) => {
         disabled={props.hammingMatrix ? false : true}
         onChange={dataToDisplayHandler}>
         <Option value="all">All samples</Option>
-        <Option disabled={props.metadata ? false : true} value="group">
-          Group of samples
-        </Option>
         <Option disabled={props.metadata ? false : true} value="all-and-group">
           All + Group
         </Option>
       </Select>
 
-      {(dataToDisplay === "group" || dataToDisplay === "all-and-group") &&
+      {dataToDisplay === "all-and-group" &&
         props.hammingMatrix &&
         props.metadata && (
           <React.Fragment>
@@ -79,8 +76,7 @@ const SelectCharts = (props) => {
               value={dataColumn}
               className={"gp-select"}
               disabled={
-                (dataToDisplay === "group" ||
-                  dataToDisplay === "all-and-group") &&
+                dataToDisplay === "all-and-group" &&
                 props.hammingMatrix &&
                 props.metadata
                   ? false
