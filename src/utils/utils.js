@@ -103,6 +103,7 @@ export function getColorByColorIndex(query, colIndex, colLUT) {
   let col = "lightgray";
   if (colLUT[colIndex] && colIndex !== "na") {
     let lut = colLUT[colIndex];
+    console.log(lut);
     col = lut.get(query) ? lut.get(query) : "lightgray";
   }
   return col;

@@ -3,16 +3,17 @@ import { Violin } from "@ant-design/plots";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
-import { NoChart, violin_group_config } from "./util_snpDist";
+import { NoChart, violin_intraInter_group_config } from "./util_snpDist";
 
-const SNPDistBoxplotGroup = (props) => {
+const SNPDistBoxplotIntraInterGroup = (props) => {
   const [data, setData] = useState(null);
-  const category = props.snpDistSettings.dataColumn;
 
-  const grouped_violinChart_ref = useRef();
+  const intraInter_violinChart_ref = useRef();
 
   const downloadChart = () => {
-    grouped_violinChart_ref.current?.downloadImage("grouped-dist-violin.png");
+    intraInter_violinChart_ref.current?.downloadImage(
+      "intraInterGroup-dist-violin.png"
+    );
   };
 
   useEffect(() => {
@@ -21,9 +22,12 @@ const SNPDistBoxplotGroup = (props) => {
 
   useEffect(() => {
     if (props.snpDistSettings.dataToDisplay === "all-and-group") {
-      setData(props.snpDistSettings.chartsData.groupViolinData);
+      setData(props.snpDistSettings.chartsData.groupDistIntraInter);
     }
-  }, [props.snpDistSettings.chartsData.groupViolinData]);
+  }, [
+    props.snpDistSettings.chartsData.groupDistIntraInter,
+    props.snpDistSettings.dataToDisplay,
+  ]);
 
   useEffect(() => {
     if (props.snpDistSettings.dataToDisplay === "all") {
@@ -44,14 +48,9 @@ const SNPDistBoxplotGroup = (props) => {
             <CloudDownloadOutlined />
           </Button>
           <Violin
-            {...violin_group_config(
-              data,
-              category,
-              props.colLUT,
-              props.metadata
-            )}
+            {...violin_intraInter_group_config(data)}
             onReady={(plot) => {
-              grouped_violinChart_ref.current = plot;
+              intraInter_violinChart_ref.current = plot;
             }}
           />
         </React.Fragment>
@@ -65,8 +64,7 @@ function mapStateToProps(state) {
     snpDistSettings: state.snpDistSettings,
     metadata: state.metadata,
     hammingMatrix: state.hammMatrix,
-    colLUT: state.colorLUT,
   };
 }
 
-export default connect(mapStateToProps)(SNPDistBoxplotGroup);
+export default connect(mapStateToProps)(SNPDistBoxplotIntraInterGroup);

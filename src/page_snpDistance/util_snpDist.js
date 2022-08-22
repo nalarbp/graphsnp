@@ -1,4 +1,4 @@
-import { DownloadOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Col, Row, Tooltip } from "antd";
 import * as d3Array from "d3-array";
 import React from "react";
@@ -9,9 +9,7 @@ export const ChartHeader = (props) => {
       <Col xs={12} style={{ textAlign: "left" }}>
         <p>{props.title}</p>
       </Col>
-      <Col xs={12} style={{ textAlign: "right" }}>
-        <DownloadOutlined />
-      </Col>
+      <Col xs={12} style={{ textAlign: "right" }}></Col>
     </Row>
   );
 };
@@ -90,20 +88,37 @@ export const getGroupViolinData = (allDist, meta, column) => {
     return null;
   } else {
     let group_violin_data = [];
+    let intraInter_violin_data = [];
     allDist.forEach((d) => {
       let s_col = meta.get(d.source)[column];
       let t_col = meta.get(d.target)[column];
       if (s_col === t_col) {
         group_violin_data.push({ x: s_col, y: d.value });
-        group_violin_data.push({ x: "intra-group", y: d.value });
+        intraInter_violin_data.push({ x: "intra-group", y: d.value });
       }
       if (s_col !== t_col) {
-        group_violin_data.push({ x: "inter-group", y: d.value });
+        intraInter_violin_data.push({ x: "inter-group", y: d.value });
       }
     });
-    return group_violin_data;
+    return { all: group_violin_data, intraInter: intraInter_violin_data };
   }
 };
+
+function getGroupColor(metadata, category, colLUT) {
+  let lut = colLUT[category];
+  let lut_dict = new Map();
+  lut.forEach((v, k) => {
+    if (!lut_dict.get(v)) {
+      lut_dict.set(v, k);
+    }
+  });
+  let col = {};
+  lut_dict.forEach((v, k) => {
+    let cat = metadata.get(v)[category];
+    col[cat] = k;
+  });
+  return col;
+}
 
 export const barchart_config = (data) => {
   return {
@@ -131,12 +146,16 @@ export const violin_indv_config = (data) => {
   };
 };
 
-export const piechart_config = (data, dataColumn) => {
+export const piechart_config = (data, dataColumn, colLUT, meta) => {
+  let lut = getGroupColor(meta, dataColumn, colLUT);
   return {
     appendPadding: 10,
     data: data,
     angleField: "count",
     colorField: "group",
+    color: ({ group }) => {
+      return lut[group];
+    },
     radius: 1,
     innerRadius: 0.6,
     label: {
@@ -171,7 +190,20 @@ export const piechart_config = (data, dataColumn) => {
   };
 };
 
-export const violin_group_config = (data) => {
+export const violin_group_config = (data, dataColumn, colLUT, meta) => {
+  let lut = getGroupColor(meta, dataColumn, colLUT);
+  return {
+    data: data,
+    colorField: "x",
+    color: ({ x }) => {
+      return lut[x];
+    },
+    xField: "x",
+    yField: "y",
+    shape: "smooth-hollow",
+  };
+};
+export const violin_intraInter_group_config = (data) => {
   return {
     data: data,
     xField: "x",

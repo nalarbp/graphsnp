@@ -68,6 +68,7 @@ export const initialState = {
       allDistStats: null,
       groupPieData: null,
       groupDistStats: null,
+      groupDistIntraInter: null,
     },
   },
   navSettings: {

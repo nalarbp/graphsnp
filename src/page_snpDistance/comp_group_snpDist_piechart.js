@@ -1,11 +1,19 @@
+import { CloudDownloadOutlined } from "@ant-design/icons";
 import { Pie } from "@ant-design/plots";
-import { useEffect, useState } from "react";
+import { Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { NoChart, piechart_config } from "./util_snpDist";
 
 const SNPDistPieGroup = (props) => {
   const [data, setData] = useState(null);
   const category = props.snpDistSettings.dataColumn;
+
+  const group_pieChart_ref = useRef();
+
+  const downloadChart = () => {
+    group_pieChart_ref.current?.downloadImage("grouped-dist-pie.png");
+  };
 
   useEffect(() => {
     setData(null);
@@ -29,7 +37,23 @@ const SNPDistPieGroup = (props) => {
   return (
     <div className="snpDist-chart-content">
       {!data && <NoChart />}
-      {data && <Pie {...piechart_config(data, category)} />}
+      {data && (
+        <React.Fragment>
+          <Button
+            disabled={data ? false : true}
+            size="small"
+            className="snpDist-chart-download-button"
+            onClick={downloadChart}>
+            <CloudDownloadOutlined />
+          </Button>
+          <Pie
+            {...piechart_config(data, category, props.colLUT, props.metadata)}
+            onReady={(plot) => {
+              group_pieChart_ref.current = plot;
+            }}
+          />
+        </React.Fragment>
+      )}
     </div>
   );
 };
@@ -39,6 +63,7 @@ function mapStateToProps(state) {
     snpDistSettings: state.snpDistSettings,
     metadata: state.metadata,
     hammingMatrix: state.hammMatrix,
+    colLUT: state.colorLUT,
   };
 }
 

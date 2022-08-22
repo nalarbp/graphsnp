@@ -1,6 +1,5 @@
+import { Collapse, Table } from "antd";
 import React from "react";
-import { Row, Col, Collapse, Table } from "antd";
-import { InfoCircleOutlined } from "@ant-design/icons";
 
 const { Panel } = Collapse;
 const _ = require("lodash");
@@ -20,7 +19,6 @@ const TableViewer = (props) => {
   selectedNodeList.forEach((d) => {
     let keyIndexFoUniq = 0;
     for (const [k, v, i] of Object.entries(d)) {
-      console.log(i);
       //column
       columns.push({
         title: k,

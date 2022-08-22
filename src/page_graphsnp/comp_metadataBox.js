@@ -1,22 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { Row, Col, Collapse, Table } from "antd";
 import { TableOutlined } from "@ant-design/icons";
+import { Col, Collapse, Row, Table } from "antd";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import Moment from "moment";
-import { extendMoment } from "moment-range";
 import { changeSelectedNode } from "../action/graphSettingsActions";
 
 const { Panel } = Collapse;
-const moment = extendMoment(Moment);
 const MetadataBox = (props) => {
   //STATES
   const [dataTable, setdataTable] = useState({
     columns: null,
     cells: null,
   });
-
-  const lala = "ll,egka";
 
   //USEEFFECTS
   useEffect(() => {
@@ -48,7 +43,6 @@ const MetadataBox = (props) => {
 
           //clear up columns
           let columns_filtered = columns.filter((c) => {
-            console.log(c.dataIndex);
             if (c.dataIndex.includes(":color") || c.dataIndex.includes("key")) {
               return false;
             } else {
@@ -93,8 +87,7 @@ const MetadataBox = (props) => {
                       <TableOutlined /> Selected node metadata
                     </p>
                   }
-                  key="1"
-                >
+                  key="1">
                   {props.selectedNode &&
                     props.graphObject &&
                     dataTable.columns && (

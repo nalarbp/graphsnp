@@ -4,42 +4,40 @@
 - All useEffect called when first loaded (eg: from Home to graphSNP page)
 - certain useEffect called when any deppendent useEffect affected
 */
+import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Button, Col, Empty, message } from "antd";
+import cytoscape from "cytoscape";
+import coseBilkent from "cytoscape-cose-bilkent";
+import cy_svg from "cytoscape-svg";
 import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { colorLUTtoStore } from "../action/colorActions";
-import { Col, Empty, Button, message } from "antd";
-import { createGraphObject } from "../utils/create_graphObject";
-import { createCytoscapeData } from "../utils/create_cyData";
-import { createClusterCSVFile } from "../utils/create_exportFile";
-import { cricle_svgUrl } from "../img/circle.js";
-import { findClusters } from "../utils//find_clusters";
-import cytoscape from "cytoscape";
-import cy_svg from "cytoscape-svg";
-import { LoadingOutlined, ReloadOutlined } from "@ant-design/icons";
 import {
-  createColorLUT,
-  getColorByColorIndex,
-  getEdgeAndArrowWidth,
-  downloadFileAsText,
-} from "../utils/utils";
-import HammingMatrix from "../model/hammingMatrix_prop";
-import {
-  hmmMatrixToStore,
-  graphObjectToStore,
   graphClusterToStore,
+  graphObjectToStore,
+  hmmMatrixToStore,
 } from "../action/graphMatrixActions";
 import {
-  changeIsUserReDrawSetting,
+  changeChartSessionSetting,
   changeIsUserClusteringSetting,
   changeIsUserDownloadingSetting,
-  changeChartSessionSetting,
   changeIsUserLoadSessionSetting,
-  changeSelectedNode,
+  changeIsUserReDrawSetting,
   changeIsUserRelayoutSetting,
+  changeSelectedNode,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
-import coseBilkent from "cytoscape-cose-bilkent";
+import HammingMatrix from "../model/hammingMatrix_prop";
+import { findClusters } from "../utils//find_clusters";
+import { createCytoscapeData } from "../utils/create_cyData";
+import { createGraphObject } from "../utils/create_graphObject";
+import {
+  createColorLUT,
+  downloadFileAsText,
+  getColorByColorIndex,
+  getEdgeAndArrowWidth,
+} from "../utils/utils";
 
 const _ = require("lodash");
 const fcose = require("cytoscape-fcose");
@@ -58,7 +56,6 @@ const GraphContainer = (props) => {
   const [processingGraph, setProcessingGraph] = useState(false);
 
   //Settings
-  const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
@@ -88,7 +85,6 @@ const GraphContainer = (props) => {
   //Cytoscape default settings
   const node_size = 6;
   const node_size_margin = 1;
-  const node_size_sel = 8;
   const node_label_size = "6px";
 
   //Automatic reloading if previous graph session data is a available
@@ -555,14 +551,12 @@ const GraphContainer = (props) => {
       <Col span={24} style={{ position: "relative" }}>
         <div
           id="graph-cont-is-empty"
-          style={{ display: graphIsAvailable ? "none" : "block" }}
-        >
+          style={{ display: graphIsAvailable ? "none" : "block" }}>
           <Empty
             description={
               prevSessionData ? "Reload previous graph" : "No graph. Create one"
             }
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          >
+            image={Empty.PRESENTED_IMAGE_SIMPLE}>
             {prevSessionData && (
               <Button onClick={reloadChartHandler} type="primary">
                 <ReloadOutlined />
@@ -572,13 +566,11 @@ const GraphContainer = (props) => {
         </div>
         <div
           id="graph-cont-is-processing"
-          style={{ display: processingGraph ? "block" : "none" }}
-        >
+          style={{ display: processingGraph ? "block" : "none" }}>
           <p
             style={{
               textAlign: "right",
-            }}
-          >
+            }}>
             <span>
               <LoadingOutlined
                 style={{

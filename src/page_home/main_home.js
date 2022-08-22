@@ -1,13 +1,13 @@
-import "./style_home.css";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Col, Modal, Row, Spin } from "antd";
 import React from "react";
-import { Row, Col, Modal, Spin } from "antd";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { changeNavLocation } from "../action/navigationActions";
-import { LoadingOutlined } from "@ant-design/icons";
+import FooterComponent from "./comp_footer";
 import InputPlaceholder from "./comp_inputPlaceholder";
 import SelectDemoData from "./comp_selectDemoData";
-import FooterComponent from "./comp_footer";
+import "./style_home.css";
 
 const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
@@ -25,8 +25,7 @@ const Home = (props) => {
             bodyStyle={{
               textAlign: "center",
               padding: "0px",
-            }}
-          >
+            }}>
             <Spin
               indicator={loadingIcon}
               style={{ color: "white" }}
@@ -67,11 +66,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
-/*
-<Col xs={24} sm={12}>
-          <SNPsLoader />
-        </Col>
-        <Col xs={24} sm={12}>
-          <MetadataLoader />
-        </Col>
-*/

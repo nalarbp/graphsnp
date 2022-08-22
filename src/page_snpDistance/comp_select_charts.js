@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
+  dist_changeChartsData,
   dist_changeDataColumn,
   dist_changeDataToDisplay,
 } from "../action/snpdistSettingsActions";
@@ -16,6 +17,11 @@ const SelectCharts = (props) => {
 
   useEffect(() => {
     props.dist_changeDataColumn(null);
+    let newState_cd = Object.assign({}, props.snpDistSettings.chartsData);
+    newState_cd.groupPieData = null;
+    newState_cd.groupViolinData = null;
+    newState_cd.groupDistIntraInter = null;
+    props.dist_changeChartsData(newState_cd);
   }, [dataToDisplay]);
 
   const dataToDisplayHandler = (val) => {
@@ -116,6 +122,7 @@ function mapDispatchToProps(dispatch) {
     {
       dist_changeDataToDisplay,
       dist_changeDataColumn,
+      dist_changeChartsData,
     },
     dispatch
   );

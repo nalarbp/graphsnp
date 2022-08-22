@@ -1,10 +1,17 @@
+import { CloudDownloadOutlined } from "@ant-design/icons";
 import { Violin } from "@ant-design/plots";
-import { useEffect, useState } from "react";
+import { Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { NoChart, violin_indv_config } from "./util_snpDist";
 
 const SNPDistBoxplotAll = (props) => {
   const [data, setData] = useState(null);
+  const violinChart_ref = useRef();
+
+  const downloadChart = () => {
+    violinChart_ref.current?.downloadImage("all-dist-violin.png");
+  };
 
   useEffect(() => {
     setData(null);
@@ -17,7 +24,23 @@ const SNPDistBoxplotAll = (props) => {
   return (
     <div className="snpDist-chart-content">
       {!data && <NoChart />}
-      {data && <Violin {...violin_indv_config(data)} />}
+      {data && (
+        <React.Fragment>
+          <Button
+            disabled={data ? false : true}
+            size="small"
+            className="snpDist-chart-download-button"
+            onClick={downloadChart}>
+            <CloudDownloadOutlined />
+          </Button>
+          <Violin
+            {...violin_indv_config(data)}
+            onReady={(plot) => {
+              violinChart_ref.current = plot;
+            }}
+          />
+        </React.Fragment>
+      )}
     </div>
   );
 };

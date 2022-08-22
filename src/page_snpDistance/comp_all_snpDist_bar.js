@@ -1,10 +1,17 @@
+import { CloudDownloadOutlined } from "@ant-design/icons";
 import { Column } from "@ant-design/plots";
-import { useEffect, useState } from "react";
+import { Button } from "antd";
+import React, { useEffect, useRef, useState } from "react";
 import { connect } from "react-redux";
 import { barchart_config, NoChart } from "./util_snpDist";
 
 const SNPDistBarAll = (props) => {
   const [data, setData] = useState(null);
+  const barChart_ref = useRef();
+
+  const downloadChart = () => {
+    barChart_ref.current?.downloadImage("all-dist-bar.png");
+  };
 
   useEffect(() => {
     setData(null);
@@ -17,7 +24,23 @@ const SNPDistBarAll = (props) => {
   return (
     <div className="snpDist-chart-content">
       {!data && <NoChart />}
-      {data && <Column {...barchart_config(data)} />}
+      {data && (
+        <React.Fragment>
+          <Button
+            disabled={data ? false : true}
+            size="small"
+            className="snpDist-chart-download-button"
+            onClick={downloadChart}>
+            <CloudDownloadOutlined />
+          </Button>
+          <Column
+            {...barchart_config(data)}
+            onReady={(plot) => {
+              barChart_ref.current = plot;
+            }}
+          />
+        </React.Fragment>
+      )}
     </div>
   );
 };

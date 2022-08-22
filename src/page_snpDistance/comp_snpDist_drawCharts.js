@@ -12,9 +12,6 @@ import {
 } from "./util_snpDist";
 
 const DrawSNPdistCharts = (props) => {
-  const dataToDisplay = props.snpDistSettings.dataToDisplay;
-  const dataColumn = props.snpDistSettings.dataColumn;
-
   const createAndDrawChartsHandler = () => {
     let edgeList = [];
     let nodeList = [];
@@ -41,13 +38,14 @@ const DrawSNPdistCharts = (props) => {
             props.metadata,
             props.snpDistSettings.dataColumn
           )
-        : null;
+        : { all: null, intraInter: null };
 
     let chartsData = {
       allDistData: allDistData.all_distData,
       allDistStats: allDistData.all_distStats,
       groupPieData: groupPieData,
-      groupViolinData: groupViolinData,
+      groupViolinData: groupViolinData.all,
+      groupDistIntraInter: groupViolinData.intraInter,
     };
     props.dist_changeChartsData(chartsData);
   };

@@ -1,29 +1,31 @@
-import React from "react";
-import { connect } from "react-redux";
-import { bindActionCreators } from "redux";
-import { colorLUTtoStore } from "../action/colorActions";
-import { categoricalMapToStore } from "../action/categoricalMapActions";
 import {
-  metadataToStore,
-  isinputLoadingToStore,
-  sequenceToStore,
-} from "../action/inputActions";
-import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import { extensionCheck, snpsLoader, loadMetaOrMatrix } from "./util_home";
-import { Upload, Button, Row, Col, Tooltip } from "antd";
-import {
-  getParticleHeight,
-  getParticleWidth,
-  particleParams,
-  graphSNP_desc,
-} from "./util_home";
-import Particles from "react-particles-js";
-import {
-  StopOutlined,
   CheckCircleFilled,
   DeleteOutlined,
   QuestionCircleOutlined,
+  StopOutlined,
 } from "@ant-design/icons";
+import { Button, Col, Row, Tooltip, Upload } from "antd";
+import React from "react";
+import Particles from "react-particles-js";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { categoricalMapToStore } from "../action/categoricalMapActions";
+import { colorLUTtoStore } from "../action/colorActions";
+import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import {
+  isinputLoadingToStore,
+  metadataToStore,
+  sequenceToStore,
+} from "../action/inputActions";
+import {
+  extensionCheck,
+  getParticleHeight,
+  getParticleWidth,
+  graphSNP_desc,
+  loadMetaOrMatrix,
+  particleParams,
+  snpsLoader,
+} from "./util_home";
 
 const { Dragger } = Upload;
 
@@ -128,79 +130,84 @@ const InputPlaceholder = (props) => {
             minWidth: "calc(100vw - 50px)",
           }}
           beforeUpload={beforeUploadHandler}>
-          <div id="home-input-dragger">
-            <Row align={"center"}>
-              <Col xs={24} md={16} xl={12} xxl={8}>
-                <p id="home-input-dragger-text-title">GraphSNP</p>
-                <p id="home-input-dragger-text-subtitle">{graphSNP_desc}</p>
-                <p id="home-input-dragger-text">
-                  [Drag and drop your input file(s) here]
-                </p>
-              </Col>
-            </Row>
-            <Row id={"home-input-dragger-buttons"} align={"center"}>
-              <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
-                <Button
-                  id="home-input-button-snps"
-                  shape={"round"}
-                  size={"large"}
-                  type={"ghost"}>
-                  {getIconStatus("SNP")}Alignment/matrix{"  "}
-                  <span style={{ marginLeft: "5px" }}>
-                    <Tooltip
-                      title="A non-ambiguous multi-fasta SNPs alignment (.fa, .fna, 
-                    .mfa, .fsa) or a distance matrix (.csv) file here"
-                      placement="rightTop">
-                      <QuestionCircleOutlined
-                        style={{ fontSize: "14px", color: "white" }}
-                      />
-                    </Tooltip>
-                  </span>
-                </Button>
-                <Button
-                  disabled={props.hammMatrix ? false : true}
-                  title={"Remove loaded alingment/matrix"}
-                  type={"ghost"}
-                  style={{ backgroundColor: "transparent" }}
-                  className="home-input-remove-button "
-                  shape={"circle"}
-                  size={"small"}
-                  onClick={removeSNPHandler}>
-                  <DeleteOutlined />
-                </Button>
-              </Col>
+          <Row id="home-input-dragger" justify="space-around" align="middle">
+            <Col xs={24}>
+              <Row align="center">
+                <Col xs={24} md={16} xl={12} xxl={8}>
+                  <p id="home-input-dragger-text-title">GraphSNP</p>
+                  <p id="home-input-dragger-text-subtitle">{graphSNP_desc}</p>
+                  <p id="home-input-dragger-text">
+                    [Drag and drop your input file(s) here]
+                  </p>
+                </Col>
+              </Row>
+            </Col>
 
-              <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
-                <Button
-                  id="home-input-button-metadata"
-                  shape={"round"}
-                  size={"large"}
-                  type={"ghost"}>
-                  {getIconStatus("Metadata")} Metadata{" "}
-                  <span style={{ marginLeft: "5px" }}>
-                    <Tooltip
-                      title="A table file (.csv) with column sample_id"
-                      placement="rightTop">
-                      <QuestionCircleOutlined
-                        style={{ fontSize: "14px", color: "white" }}
-                      />
-                    </Tooltip>
-                  </span>
-                </Button>
-                <Button
-                  disabled={props.metadata ? false : true}
-                  title={"Remove loaded metadata"}
-                  type={"ghost"}
-                  style={{ backgroundColor: "transparent" }}
-                  className="home-input-remove-button "
-                  shape={"circle"}
-                  size={"small"}
-                  onClick={removeMetadataHandler}>
-                  <DeleteOutlined />
-                </Button>
-              </Col>
-            </Row>
-          </div>
+            <Col xs={24}>
+              <Row id={"home-input-dragger-buttons"} align={"center"}>
+                <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
+                  <Button
+                    id="home-input-button-snps"
+                    shape={"round"}
+                    size={"large"}
+                    type={"ghost"}>
+                    {getIconStatus("SNP")}Alignment/matrix{"  "}
+                    <span style={{ marginLeft: "5px" }}>
+                      <Tooltip
+                        title="A non-ambiguous multi-fasta SNPs alignment (.fa, .fna, 
+                    .mfa, .fsa) or a distance matrix (.csv) file here"
+                        placement="rightTop">
+                        <QuestionCircleOutlined
+                          style={{ fontSize: "14px", color: "white" }}
+                        />
+                      </Tooltip>
+                    </span>
+                  </Button>
+                  <Button
+                    disabled={props.hammMatrix ? false : true}
+                    title={"Remove loaded alingment/matrix"}
+                    type={"ghost"}
+                    style={{ backgroundColor: "transparent" }}
+                    className="home-input-remove-button "
+                    shape={"circle"}
+                    size={"small"}
+                    onClick={removeSNPHandler}>
+                    <DeleteOutlined />
+                  </Button>
+                </Col>
+
+                <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
+                  <Button
+                    id="home-input-button-metadata"
+                    shape={"round"}
+                    size={"large"}
+                    type={"ghost"}>
+                    {getIconStatus("Metadata")} Metadata{" "}
+                    <span style={{ marginLeft: "5px" }}>
+                      <Tooltip
+                        title="A table file (.csv) with column sample_id"
+                        placement="rightTop">
+                        <QuestionCircleOutlined
+                          style={{ fontSize: "14px", color: "white" }}
+                        />
+                      </Tooltip>
+                    </span>
+                  </Button>
+                  <Button
+                    disabled={props.metadata ? false : true}
+                    title={"Remove loaded metadata"}
+                    type={"ghost"}
+                    style={{ backgroundColor: "transparent" }}
+                    className="home-input-remove-button "
+                    shape={"circle"}
+                    size={"small"}
+                    onClick={removeMetadataHandler}>
+                    <DeleteOutlined />
+                  </Button>
+                </Col>
+              </Row>
+            </Col>
+          </Row>
         </Dragger>
       </div>
     </React.Fragment>

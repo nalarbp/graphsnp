@@ -2,7 +2,6 @@
 /* Adapted from SeqTrack algorithm implemented in:
 - paper
 */
-import GraphEdgeList from "../model/graphEdgeList_prop";
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 
@@ -66,7 +65,7 @@ export function createSeqTrack(
         let oldestAnces = ancesWithLowestSNPdist_wDate[0];
         return { ances: oldestAnces.id, snpDist: oldestAnces.snpDist };
       } else {
-        console.log("with mutation");
+        //console.log("with mutation");
         let case_date = moment(aCase.date);
         let ancesWithLowestSNPdist_wDayDiff = ancesWithLowestSNPdist_wDate.map(
           (a) => {

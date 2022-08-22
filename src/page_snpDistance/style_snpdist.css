@@ -18,6 +18,17 @@
   width: 100%;
 }
 
+.snpDist-chart-download-button{
+  font-size: 18px;
+  background-color: transparent;
+  right: 0;
+  border: none;
+  position: absolute;
+  margin-right: 12px;
+  margin-top: -35px;
+  
+}
+
 .snpDist-chart-header{
   height: 30px;
   background-color: rgb(248, 248, 248);
