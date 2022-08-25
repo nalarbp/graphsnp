@@ -119,6 +119,15 @@
   background-color: rgb(255, 255, 255);
 }
 
+@media (max-width : 400px) {
+  #home-input-dragger-text-title {
+    font-size: 30px;
+  }
+  #home-input-dragger-text-subtitle {
+    font-size: 16px;
+  }
+}
+
 /*
   background-image: linear-gradient(90deg, #ffb790, #ffef91, #ffb03a);
   background-clip: text;

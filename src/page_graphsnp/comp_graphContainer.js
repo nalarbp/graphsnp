@@ -326,6 +326,7 @@ const GraphContainer = (props) => {
 
   //DRAW
   function draw() {
+    console.time("draw MST");
     //console.log("drawww", props.selectedNode);
     //console.log("3. Start drawing, creating hammingMatrix ##", +new Date());
     //check hamming distance ? if not create one, send to store at the end.
@@ -536,6 +537,7 @@ const GraphContainer = (props) => {
         }
         props.graphObjectToStore(graphObject);
         props.changeChartSessionSetting(cy);
+        console.timeEnd("draw MST");
       }
     }
   }

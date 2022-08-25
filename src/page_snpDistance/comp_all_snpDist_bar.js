@@ -34,6 +34,7 @@ const SNPDistBarAll = (props) => {
             <CloudDownloadOutlined />
           </Button>
           <Column
+            id="all-bar-chart"
             {...barchart_config(data)}
             onReady={(plot) => {
               barChart_ref.current = plot;

@@ -19,6 +19,7 @@ export async function snpsLoader(
   propsHmmMatrixToStore,
   propsIsinputLoadingToStore
 ) {
+  console.time("loadingSNP");
   const sequenceJSON = await fastaToJson(fastaString);
   const snpsSequence = [];
   if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
@@ -84,9 +85,11 @@ export async function snpsLoader(
           snpsSequence
         ).getHammingMatrix();
         message.success("Pair-wise SNP distance matrix has been created", 1);
+
         propsSequenceToStore(snpsSequence);
         propsHmmMatrixToStore(hammingMatrix);
         propsIsinputLoadingToStore(false);
+        console.timeEnd("loadingSNP");
       }, 100);
     }
   } else {
@@ -97,6 +100,7 @@ export async function snpsLoader(
 
 //DIST-MATRIX
 export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
+  console.time("loadingMatrix");
   let data_promise_super_raw = await csv(fileURL).then(function (result) {
     return result;
   });
@@ -130,9 +134,9 @@ export async function getMatrixInput(fileURL, matrixToStore, setisLoading) {
           headers
         ).createMatrix();
         message.success("Pairwise distance matrix has been created", 1);
-
         matrixToStore(inputMatrix);
         setisLoading(false);
+        console.timeEnd("loadingMatrix");
       }, 100);
     } else {
       alert("Invalid CSV matrix: not symetrical");
@@ -151,6 +155,7 @@ export async function getMetadataInput(
   categoricalMapToStore,
   setisLoading
 ) {
+  console.time("loadingMetadata");
   let data_promise_raw = await csv(fileURL).then(function (result) {
     return result;
   });
@@ -288,6 +293,7 @@ export async function getMetadataInput(
   colorLUTtoStore(colorLUTstore);
   categoricalMapToStore(categorical_Map);
   setisLoading(false);
+  console.timeEnd("loadingMetadata");
 }
 
 //PROJECT JSON

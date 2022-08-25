@@ -13,6 +13,7 @@ import {
 
 const DrawSNPdistCharts = (props) => {
   const createAndDrawChartsHandler = () => {
+    console.time("ChartsDataConstruction");
     let edgeList = [];
     let nodeList = [];
     props.hammingMatrix.forEach((v, k) => {
@@ -47,6 +48,7 @@ const DrawSNPdistCharts = (props) => {
       groupViolinData: groupViolinData.all,
       groupDistIntraInter: groupViolinData.intraInter,
     };
+    console.timeEnd("ChartsDataConstruction");
     props.dist_changeChartsData(chartsData);
   };
 
