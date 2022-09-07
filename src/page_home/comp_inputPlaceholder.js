@@ -11,12 +11,20 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
 import { colorLUTtoStore } from "../action/colorActions";
-import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import {
+  graphClusterToStore,
+  graphObjectToStore,
+  hmmMatrixToStore,
+} from "../action/graphMatrixActions";
 import {
   isinputLoadingToStore,
   metadataToStore,
   sequenceToStore,
 } from "../action/inputActions";
+import {
+  resetDistanceInputRelatedStates,
+  resetMetadataInputRelatedStates,
+} from "../utils/reset_states";
 import {
   extensionCheck,
   getParticleHeight,
@@ -72,13 +80,17 @@ const InputPlaceholder = (props) => {
 
   const removeMetadataHandler = () => {
     props.metadataToStore(null);
-    props.colorLUTtoStore(null);
     props.categoricalMapToStore(null);
+    props.colorLUTtoStore(null);
+    resetMetadataInputRelatedStates();
   };
 
   const removeSNPHandler = () => {
     props.sequenceToStore(null);
     props.hmmMatrixToStore(null);
+    props.graphObjectToStore(null);
+    props.graphClusterToStore(null);
+    resetDistanceInputRelatedStates();
   };
 
   const getIconStatus = function (type) {
@@ -226,6 +238,8 @@ function mapDispatchToProps(dispatch) {
     {
       sequenceToStore,
       hmmMatrixToStore,
+      graphObjectToStore,
+      graphClusterToStore,
       metadataToStore,
       colorLUTtoStore,
       isinputLoadingToStore,

@@ -42,13 +42,11 @@ import {
 const _ = require("lodash");
 const fcose = require("cytoscape-fcose");
 const spread = require("cytoscape-spread");
-const dagre = require("cytoscape-dagre");
 
 cytoscape.use(coseBilkent); // register extension
 cytoscape.use(fcose); // register extension
 cytoscape.use(spread); // register extension
 cytoscape.use(cy_svg); // register extension
-cytoscape.use(dagre); // register extension
 
 const GraphContainer = (props) => {
   //state
@@ -71,7 +69,6 @@ const GraphContainer = (props) => {
   const graph_isEdgeScaled = props.graphSettings.isEdgeScaled;
   const graph_edgeScaleFactor = props.graphSettings.edgeScaleFactor;
   const graph_isUserDownloading = props.graphSettings.isUserDownloading;
-  const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
   const graph_node_isLabelShown = props.graphSettings.node_isLabelShown;
   const graph_edge_labelSize = props.graphSettings.edge_labelSize;
@@ -88,12 +85,10 @@ const GraphContainer = (props) => {
   const node_label_size = "6px";
 
   //Automatic reloading if previous graph session data is a available
-
   useEffect(() => {
     if (graph_isUserReDraw) {
       //console.log("1. START: user click draw ##", +new Date());
       //setProcessingGraph(true); // set time out to delay drawing and let processing graph state run
-
       setTimeout(function () {
         //console.log("2. setTimeout start and draw start ##", +new Date());
         draw();
@@ -345,9 +340,7 @@ const GraphContainer = (props) => {
       graph_method,
       graph_edgeFilterCutoff,
       props.categoricalMap,
-      props.patientMovement,
       props.metadata,
-      trans_locLevel,
       seq_len
     );
 
@@ -593,7 +586,6 @@ const GraphContainer = (props) => {
 function mapStateToProps(state) {
   return {
     metadata: state.metadata,
-    patientMovement: state.patientMovement,
     sequence: state.sequence,
     graphObject: state.graphObject,
     hammMatrix: state.hammMatrix,

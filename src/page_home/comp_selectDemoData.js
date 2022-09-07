@@ -1,24 +1,19 @@
 import { Select } from "antd";
 import React from "react";
 import { connect } from "react-redux";
-import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import * as constant from "../utils/constants";
-
 import { bindActionCreators } from "redux";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
 import { colorLUTtoStore } from "../action/colorActions";
+import { resetStore } from "../action/generalActions";
+import { hmmMatrixToStore } from "../action/graphMatrixActions";
 import {
   isinputLoadingToStore,
   metadataToStore,
-  patientMovementToStore,
   projectJSONToStore,
   selectDemoDataToStore,
   sequenceToStore,
 } from "../action/inputActions";
-import {
-  dist_changeDataColumn,
-  dist_changeDataToDisplay,
-} from "../action/snpdistSettingsActions";
+import * as constant from "../utils/constants";
 import {
   getMatrixInput,
   getMetadataInput,
@@ -48,19 +43,12 @@ const SelectDemoData = (props) => {
     });
   }
 
-  const selectedDemoData = props.selectDemoData;
+  const selectedDemoData =
+    props.metadata && props.hammMatrix ? props.selectDemoData : null;
 
   const selectDemoDataHandler = (val) => {
     if (props.projectJSON && val) {
-      props.sequenceToStore(null);
-      props.hmmMatrixToStore(null);
-      props.metadataToStore(null);
-      props.colorLUTtoStore(null);
-      props.categoricalMapToStore(null);
-      props.patientMovementToStore(null);
-      props.dist_changeDataColumn(null);
-      props.dist_changeDataToDisplay("all");
-
+      props.resetStore();
       //load a new one
       let projectData = props.projectJSON.get(val);
 
@@ -109,7 +97,7 @@ const SelectDemoData = (props) => {
         value={selectedDemoData}
         onChange={selectDemoDataHandler}
         className={"gp-select"}>
-        <Option value={null}>Preloaded dataset</Option>
+        <Option value={null}>Select preloaded dataset</Option>
         {project_options}
       </Select>
     </React.Fragment>
@@ -120,6 +108,8 @@ function mapStateToProps(state) {
   return {
     projectJSON: state.projectJSON,
     selectDemoData: state.selectDemoData,
+    metadata: state.metadata,
+    hammMatrix: state.hammMatrix,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -129,13 +119,11 @@ function mapDispatchToProps(dispatch) {
       selectDemoDataToStore,
       sequenceToStore,
       metadataToStore,
-      patientMovementToStore,
       isinputLoadingToStore,
       hmmMatrixToStore,
       colorLUTtoStore,
       categoricalMapToStore,
-      dist_changeDataToDisplay,
-      dist_changeDataColumn,
+      resetStore,
     },
     dispatch
   );

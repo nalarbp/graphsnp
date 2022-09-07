@@ -1,3 +1,5 @@
+//Reset store
+export const GENERAL_RESET = "GENERAL_RESET";
 //Projects json
 export const PROJECTS_JSON = "PROJECTS_JSON";
 //Is input loading

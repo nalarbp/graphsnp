@@ -19,25 +19,7 @@ import {
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { categoricalMapToStore } from "../action/categoricalMapActions";
-import { colorLUTtoStore } from "../action/colorActions";
-import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import {
-  isinputLoadingToStore,
-  metadataToStore,
-  patientMovementToStore,
-  projectJSONToStore,
-  selectDemoDataToStore,
-  sequenceToStore,
-} from "../action/inputActions";
-import {
-  getMatrixInput,
-  getMetadataInput,
-  loadProjectJSON,
-  loadSNPsequence,
-  snpsLoader,
-} from "../page_home/util_home";
-import * as constant from "../utils/constants";
+import { isinputLoadingToStore } from "../action/inputActions";
 import {
   createClusterCSVFile,
   createDOTGraph,
@@ -66,14 +48,12 @@ import {
   changeTypeOfAnalysisSetting,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
+import SelectDemoData from "../page_home/comp_selectDemoData";
 
 const { Option } = Select;
 const loadingIcon = <LoadingOutlined style={{ fontSize: 34 }} spin />;
 
 const SiderMenu = (props) => {
-  //GLOBAL VAR
-  //STATES
-
   //SETTINGS
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
@@ -88,34 +68,15 @@ const SiderMenu = (props) => {
   const graph_edgesHideCutoff = props.graphSettings.hiddenEdgesCutoff;
   const graph_colorNodeBy = props.graphSettings.colorNodedBy;
   const graph_exportFormat = props.graphSettings.exportFormat;
-  const trans_locLevel = props.graphSettings.transIncludeLocLevel;
   const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
   const graph_node_isLabelShown = props.graphSettings.node_isLabelShown;
-  const graph_edge_labelSize = props.graphSettings.edge_labelSize;
-  const selectedDemoData = props.selectDemoData;
   let graph_nodeID_options = [];
-  let project_options = [];
 
   //get nodeIDs from hamming matrix
   if (props.hammMatrix) {
     props.hammMatrix.forEach((v, k) => {
       graph_nodeID_options.push(<Option key={k}>{k}</Option>);
-    });
-  }
-
-  //get preloaded project dataset for options
-  //List projects and create as options
-  if (props.projectJSON === null) {
-    loadProjectJSON(constant.PROJECTS_JSON_URL, props.projectJSONToStore);
-  }
-  if (props.projectJSON) {
-    props.projectJSON.forEach((v, k) => {
-      project_options.push(
-        <Option key={k} value={k}>
-          {v.name}
-        </Option>
-      );
     });
   }
 
@@ -218,10 +179,6 @@ const SiderMenu = (props) => {
     }
   };
 
-  const changeTransLocLevelHandler = (val) => {
-    props.changeTransIcludeLocLevel(val);
-  };
-
   const selectNodeIDsHandler = (val) => {
     props.changeSelectedNode(val);
   };
@@ -255,61 +212,6 @@ const SiderMenu = (props) => {
     }
   };
 
-  const selectDemoDataHandler = (val) => {
-    // case for each demo data
-    if (props.projectJSON && val) {
-      //clean all states
-      props.sequenceToStore(null);
-      props.hmmMatrixToStore(null);
-      props.metadataToStore(null);
-      props.colorLUTtoStore(null);
-      props.categoricalMapToStore(null);
-      props.patientMovementToStore(null);
-
-      //load a new one
-      let projectData = props.projectJSON.get(val);
-
-      //meta
-      if (projectData.metadata) {
-        getMetadataInput(
-          projectData.metadata,
-          props.metadataToStore,
-          props.colorLUTtoStore,
-          props.categoricalMapToStore,
-          props.isinputLoadingToStore
-        );
-      }
-
-      //if snps alignment
-      if (projectData.matrixOrAlignment === "alignment") {
-        if (projectData.snpDistance) {
-          loadSNPsequence(
-            //need to do this because different parsing with drag and drop one
-            projectData.snpDistance,
-            props.sequenceToStore,
-            props.hmmMatrixToStore,
-            props.isinputLoadingToStore,
-            snpsLoader
-          );
-        }
-      } else if (projectData.matrixOrAlignment === "matrix") {
-        if (projectData.snpDistance) {
-          getMatrixInput(
-            projectData.snpDistance,
-            props.hmmMatrixToStore,
-            props.isinputLoadingToStore
-          );
-        }
-      }
-
-      props.selectDemoDataToStore(val);
-    } else {
-      props.selectDemoDataToStore(null);
-    }
-  };
-
-  //input list data
-
   const getColorOption = function (header, i) {
     return (
       <Option key={i} disabled={false} value={header}>
@@ -341,14 +243,17 @@ const SiderMenu = (props) => {
           </Modal>
         </Col>
         <Col span={24}>
-          <h5>Preloaded dataset</h5>
-          <Select
-            value={selectedDemoData}
-            style={{ width: "100%", textOverflow: "ellipsis" }}
-            onChange={selectDemoDataHandler}>
-            <Option value={null}>Select dataset</Option>
-            {project_options}
-          </Select>
+          <h5>
+            Select preloaded dataset{" "}
+            <span>
+              <Tooltip
+                title="Select preloaded dataset for the visualisation."
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </h5>
+          <SelectDemoData />
         </Col>
 
         <Col span={24}>
@@ -791,7 +696,6 @@ const SiderMenu = (props) => {
 function mapStateToProps(state) {
   return {
     metadata: state.metadata,
-    patientMovement: state.patientMovement,
     sequence: state.sequence,
     hammMatrix: state.hammMatrix,
     graphSettings: state.graphSettings,
@@ -829,15 +733,7 @@ function mapDispatchToProps(dispatch) {
       changeNodeIsLabelShown,
       isShowingLoadingModalToStore,
       changeSelectedNode,
-      projectJSONToStore,
-      selectDemoDataToStore,
-      sequenceToStore,
-      metadataToStore,
-      patientMovementToStore,
       isinputLoadingToStore,
-      hmmMatrixToStore,
-      colorLUTtoStore,
-      categoricalMapToStore,
     },
     dispatch
   );

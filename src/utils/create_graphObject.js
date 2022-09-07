@@ -1,28 +1,15 @@
-import { createMCG } from "../algorithm/construct_mcg";
 import { createCATHAI } from "../algorithm/construct_cathai";
 import { createCGE } from "../algorithm/construct_cge";
-import { createSMSO } from "../algorithm/construct_smso";
-import { createSeqTrack } from "../algorithm/construct_seqtrack";
+import { createMCG } from "../algorithm/construct_mcg";
 import { createMSCG } from "../algorithm/construct_mscg";
-
-/* Definition of graph object
-it always returns an object
-{
-  creator : "mcg";
-  nodes : mcg_graph.nodes;
-  edges : mcg_graph.edges;
-}
-
-*/
+import { createSeqTrack } from "../algorithm/construct_seqtrack";
 
 export function createGraphObject(
   hammingMatrix,
   method,
   edgeCutoff,
   categoricalMap,
-  patientMovementData,
   metadataMap,
-  trans_locLevel,
   seq_len
 ) {
   let graphObject = { creator: null, nodes: null, edges: null };
@@ -49,7 +36,6 @@ export function createGraphObject(
       } else {
         alert("Require a cut-off. Please input one.");
       }
-
       break;
     case "cge":
       let cge_graph = createCGE(hammingMatrix, categoricalMap, edgeCutoff);
@@ -63,21 +49,17 @@ export function createGraphObject(
       graphObject.nodes = seqtk_graph.nodes;
       graphObject.edges = seqtk_graph.edges;
       break;
-    case "hierSnpsMetaStayOverlap":
-      let hierStayOverlap_graph = createSMSO(
-        hammingMatrix,
-        edgeCutoff,
-        patientMovementData,
-        metadataMap,
-        trans_locLevel
-      );
-      graphObject.creator = "hierSnpsMetaStayOverlap";
-      graphObject.nodes = hierStayOverlap_graph.nodes;
-      graphObject.edges = hierStayOverlap_graph.edges;
-      break;
 
     default:
       break;
   }
   return graphObject;
 }
+
+/* Definition of graph object:it always returns an object
+{
+  creator : "mcg";
+  nodes : mcg_graph.nodes;
+  edges : mcg_graph.edges;
+}
+*/

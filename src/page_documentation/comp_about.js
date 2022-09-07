@@ -52,17 +52,35 @@ const About = (props) => {
         </ul>
         <Title level={3}>How to use </Title>
         <Text>
-          Drag and drop a multi-fasta SNPs alignment or a distance matrix file
-          into
+          Drag and drop a multi-fasta SNPs alignment or a distance matrix and a
+          metadata file into
+          <Link
+            to="/"
+            onClick={() => {
+              props.changeNavLocation("home");
+            }}>
+            {" "}
+            Input
+          </Link>{" "}
+          page. Then visualise it at{" "}
+          <Link
+            to="/snpdistance"
+            onClick={() => {
+              props.changeNavLocation("graphsnp");
+            }}>
+            {" "}
+            Distances
+          </Link>{" "}
+          and{" "}
           <Link
             to="/graphsnp"
             onClick={() => {
               props.changeNavLocation("graphsnp");
             }}>
             {" "}
-            Input page.
+            GraphSNP
           </Link>{" "}
-          You can also add other information on a metadata input file.
+          page.
         </Text>
 
         <Title level={3}>User Manual </Title>

@@ -21,13 +21,6 @@ export function metadataToStore(val) {
   };
 }
 
-export function patientMovementToStore(val) {
-  return {
-    type: constant.TIME_TREE_DATA,
-    payload: val,
-  };
-}
-
 export function isinputLoadingToStore(val) {
   return {
     type: constant.INPUT_LOADING,

@@ -1,4 +1,5 @@
 import { combineReducers } from "redux";
+import { GENERAL_RESET } from "../utils/constants";
 import categoricalMapReducer from "./categoricalMapReducer";
 import colorLUTReducer from "./colorLUTReducer";
 import graphClustersReducer from "./graphClustersReducer";
@@ -9,7 +10,6 @@ import isInputLoadingReducer from "./isInputLoadingReducer";
 import isShowingLoadingModalReducer from "./isShowingLoadingModalReducer";
 import metadataReducer from "./metadataReducer";
 import navSettingsReducer from "./navSettingsReducer";
-import patientMovementReducer from "./patientMovementReducer";
 import projectsReducer from "./projectsReducer";
 import selectDemoDataReducer from "./selectDemoDataReducer";
 import selectedNodeReducer from "./selectedNodeReducer";
@@ -20,16 +20,15 @@ export const initialState = {
   projectJSON: null,
   sequence: null,
   metadata: null,
-  patientMovement: null,
   selectDemoData: null,
   categoricalMap: null,
   isInputLoading: false,
   hammMatrix: null,
   graphObject: null,
   graphClusters: null,
-  selectedNode: [], //exception, reducers and action were on
+  selectedNode: [],
   graphSettings: {
-    typeOfAnalysis: "clustering", //clustering;transmission
+    typeOfAnalysis: "clustering",
     method: "mscg",
     layout: "cose-bilkent",
     isUserReDraw: false,
@@ -44,11 +43,10 @@ export const initialState = {
     colorNodedBy: "na",
     exportFormat: "clusterID",
     isUserDownloading: false,
-    transIncludeLocLevel: 1,
     chartSession: null,
     isUserReloadSession: false,
     isUserRelayout: false,
-    node_isLabelShown: true, //mean show it
+    node_isLabelShown: true,
     edge_labelSize: 3,
   },
   snpDistSettings: {
@@ -77,14 +75,21 @@ export const initialState = {
   colorLUT: null,
   isShowingLoadingModal: false,
 };
-const rootReducer = combineReducers(
+
+const rootReducer = (state, action) => {
+  if (action.type === GENERAL_RESET) {
+    return appReducer(undefined, action);
+  }
+  return appReducer(state, action);
+};
+
+const appReducer = combineReducers(
   {
     projectJSON: projectsReducer,
     sequence: sequenceReducer,
     metadata: metadataReducer,
     selectDemoData: selectDemoDataReducer,
     categoricalMap: categoricalMapReducer,
-    patientMovement: patientMovementReducer,
     navSettings: navSettingsReducer,
     graphSettings: graphSettingsReducer,
     hammMatrix: hammMatrixReducer,
@@ -100,4 +105,3 @@ const rootReducer = combineReducers(
 );
 
 export default rootReducer;
-//isUserFilterEdges: { status: false, cutoff: 0 },

@@ -111,24 +111,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistance);
 
 /*
-
-{props.hammingMatrix && (
-              <Content>
-                <SNPdistViewer />
-              </Content>
-            )}
-            {!props.hammingMatrix && (
-              <div id="snpdist-cont-is-empty" style={{ display: "block" }}>
-                <Empty
-                  description={"No input: Load one."}
-                  image={Empty.PRESENTED_IMAGE_SIMPLE}
-                />
-              </div>
-            )}
-
-           
-
-        
-
-        
  */
