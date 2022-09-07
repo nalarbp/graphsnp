@@ -1,5 +1,5 @@
+import { Button, Divider, Typography } from "antd";
 import React from "react";
-import { Typography, Divider, Button } from "antd";
 import { Link } from "react-router-dom";
 import * as constant from "../utils/constants";
 import "./style_documentation.css";
@@ -15,17 +15,17 @@ const About = (props) => {
           GraphSNP: What is it?{" "}
         </Title>
         <Text>
-          GraphSNP is a web-based application to create and visualise network of
-          pairwise SNP distances for outbreak cluster and transmission analysis.
-          It is a client-side and standalone version of integrated cluster
-          analysis platform CATHAI: Cluster Analysis for Healthcare-Associated
-          Infections (https://cathai.fordelab.com/)
+          GraphSNP is an interactive visualisation tool running in a web browser
+          that allows users to rapidly generate pairwise SNP distance networks,
+          investigate SNP distance distributions, identify clusters of related
+          organisms, and reconstruct transmission routes.
         </Text>
         <Title level={3}>When to use </Title>
         <Text>You can use GraphSNP for:</Text>
         <ul>
           <li>
-            Rapid outbreak network visualization:{" "}
+            Rapid SNP distance or (other type of distances) network
+            visualisation:{" "}
             <b>
               No instalation required, drag and drop input files, interactive
               and easy to use.
@@ -33,35 +33,34 @@ const About = (props) => {
           </li>
           <li>
             {" "}
-            <b>Visualize distribution </b> of pairwise SNP distances from a
-            multi-fasta SNPs aligment{" "}
+            <b>Visualise and investigate distance distribution </b>{" "}
+            interactively.
           </li>
           <li>
             {" "}
             <b>Create network </b>of pairwise SNP distances and{" "}
-            <b>apply SNPs cutoff </b>for cluster analysis
+            <b>apply SNPs cutoff </b>for cluster analysis.
           </li>
           <li>
-            <b>Automatic cluster detection </b> based on community detection
-            algorithms
+            <b>Detect and report cluster's membership</b> based on community
+            detection algorithms.
           </li>
           <li>
             {" "}
-            <b>Create transmission tree </b> based on SNPs and collection day{" "}
+            <b>Create transmission tree </b> based on SNPs and collection day.{" "}
           </li>
         </ul>
         <Title level={3}>How to use </Title>
         <Text>
-          Load at least a multi-fasta SNPs alignment file as the input file then
-          drag and drop it to
+          Drag and drop a multi-fasta SNPs alignment or a distance matrix file
+          into
           <Link
             to="/graphsnp"
             onClick={() => {
               props.changeNavLocation("graphsnp");
-            }}
-          >
+            }}>
             {" "}
-            GraphSNP page.
+            Input page.
           </Link>{" "}
           You can also add other information on a metadata input file.
         </Text>

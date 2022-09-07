@@ -1,5 +1,5 @@
+import { Divider, Typography } from "antd";
 import React from "react";
-import { Typography, Divider } from "antd";
 import "./style_documentation.css";
 
 const { Title, Text } = Typography;
@@ -11,12 +11,11 @@ const Extra = (props) => {
         <Title level={2} underline>
           Browser compatibility{" "}
         </Title>
-        GraphSNP was boostrapped using Create React App (CRA) tool and so it
-        works on majority of modern browsers. Except Internet Explorer (IE),
-        GraphSNP was tested and compatible on the following desktop browsers:
+        GraphSNP was boostrapped using Create React App (CRA) tool and works on
+        majority of modern browsers. GraphSNP was tested and compatible on the
+        following browsers:
         <ul>
           <li> Microsoft Edge </li>
-          <li> Safari</li>
           <li> Chrome</li>
           <li> Firefox</li>
           <li> Opera</li>
@@ -31,8 +30,7 @@ const Extra = (props) => {
               <a
                 href="https://reactjs.org/"
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 React.js
               </a>
             </li>
@@ -40,8 +38,7 @@ const Extra = (props) => {
               <a
                 href="https://d3js.org/"
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 Data-Driven Documents (D3.js)
               </a>
             </li>
@@ -49,8 +46,7 @@ const Extra = (props) => {
               <a
                 href="https://ant.design/"
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 Ant design UI
               </a>
             </li>
@@ -58,15 +54,13 @@ const Extra = (props) => {
               <a
                 href="https://js.cytoscape.org/"
                 target="_blank"
-                rel="noopener noreferrer"
-              >
+                rel="noopener noreferrer">
                 Cytoscape
               </a>
             </li>
             <li>
-              Create React App, cytoscape-svg, dotparser, export-to-csv, lodash,
-              moment, moment-range, react-color, react-faux-dom, react-measure,
-              react-player, redux, react router etc.
+              Redux, bio-parsers, graphlib-dot, hamming, kruskal-mst, lodash,
+              moment, ve-sequence-utils.
             </li>
           </ul>
         </Text>
@@ -78,12 +72,26 @@ const Extra = (props) => {
           </span>
         </Text>
         <Title level={2} underline>
-          Cite us{" "}
+          Related publications{" "}
         </Title>
         <Text>
-          If you use GraphSNP in your publication, please cite our web
-          application: GraphSNP:https://graphsnp.beatsonlab.com and CATHAI:
-          https://cathai.fordelab.com/cathai/
+          <ul>
+            <li>
+              {" "}
+              GraphSNP (available soon). In the meantime, please cite this
+              website: https://graphsnp.beatsonlab.com{" "}
+            </li>
+            <li>
+              {" "}
+              <a
+                href="https://academic.oup.com/bioinformaticsadvances/article/2/1/vbac040/6594149"
+                target="_blank"
+                rel="noopener noreferrer">
+                CATHAI: cluster analysis tool for healthcare-associated
+                infections
+              </a>{" "}
+            </li>
+          </ul>
         </Text>
         <Divider />
       </div>

@@ -89,7 +89,7 @@ export const TEMPLATE = {
 
 //User manual
 export const USER_MANUAL = {
-  latest: "./data/userManual/GraphSNP_userManual_v2022Apr01.pdf",
+  latest: "./data/userManual/GraphSNP_user_manual.pdf",
 };
 
 //Project JSON link

@@ -1,5 +1,5 @@
+import { Button, Divider, Typography } from "antd";
 import React from "react";
-import { Typography, Divider, Button } from "antd";
 import * as constant from "../utils/constants";
 import "./style_documentation.css";
 
@@ -13,28 +13,28 @@ const InputFiles = (props) => {
           {" "}
           Input file(s){" "}
         </Title>
-        <Title level={3}>A multi-fasta SNPs alignment</Title>
+        <Title level={3}>A multi-fasta SNP alignment</Title>
         <Text>
-          SNPs alignment file must contain at least two equally length of
-          fasta-formatted non-gap nucleotide sequences.
+          The alignment file must contain a minimum of two fasta-formatted,
+          non-gap, ATGC-exclusive nucleotide sequences of equal length.
         </Text>
         <br />
         <br />
         <Button type={"primary"} href={constant.TEMPLATE.snps}>
-          Download a SNPs alignment example file
+          Download alignment example file
         </Button>
         <br />
         <br />
         <Title level={3}>A distance matrix</Title>
         <Text>
-          User can also input the pairwise distances matrix instead of SNP
-          alignment. The symmetric matrix should be written in comma-separated
-          value (CSV) format.
+          Alternative to the alignment, a symmetric pairwise distance matrix can
+          be used if users precompute the distance using 3rd party tools. The
+          symmetric distance matrix should be written in CSV format.
         </Text>
         <br />
         <br />
         <Button type={"primary"} href={constant.TEMPLATE.distanceMatrix}>
-          Download a distance matrix example file
+          Download distance matrix example file
         </Button>
         <br />
         <br />
@@ -43,14 +43,15 @@ const InputFiles = (props) => {
         <Text>
           Metadata table must contain at least one non-empty column of
           sample_id. Sample identifier must be identical on both metadata and
-          SNPs alignment or matrix.
+          SNP alignment or matrix file. An additional column listing sample’s
+          collection time (scaled in days, header: collection_day) is required
+          for transmission analysis
         </Text>
         <br />
         <br />
         <Button type={"primary"} href={constant.TEMPLATE.metadata}>
-          Download a metadata example file
+          Download metadata example file
         </Button>
-        <br />
         <br />
       </div>
       <Divider />

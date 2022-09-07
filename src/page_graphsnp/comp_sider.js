@@ -1,69 +1,69 @@
-import React from "react";
 import {
-  Button,
-  Row,
-  Col,
-  Select,
-  InputNumber,
-  Checkbox,
-  Divider,
-  Tooltip,
-  Modal,
-  Spin,
-  Slider,
-} from "antd";
-import {
-  QuestionCircleOutlined,
   LoadingOutlined,
+  QuestionCircleOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
+import {
+  Button,
+  Checkbox,
+  Col,
+  Divider,
+  InputNumber,
+  Modal,
+  Row,
+  Select,
+  Slider,
+  Spin,
+  Tooltip,
+} from "antd";
+import React from "react";
 import { connect } from "react-redux";
-import * as constant from "../utils/constants";
 import { bindActionCreators } from "redux";
+import { categoricalMapToStore } from "../action/categoricalMapActions";
+import { colorLUTtoStore } from "../action/colorActions";
+import { hmmMatrixToStore } from "../action/graphMatrixActions";
+import {
+  isinputLoadingToStore,
+  metadataToStore,
+  patientMovementToStore,
+  projectJSONToStore,
+  selectDemoDataToStore,
+  sequenceToStore,
+} from "../action/inputActions";
+import {
+  getMatrixInput,
+  getMetadataInput,
+  loadProjectJSON,
+  loadSNPsequence,
+  snpsLoader,
+} from "../page_home/util_home";
+import * as constant from "../utils/constants";
 import {
   createClusterCSVFile,
   createDOTGraph,
 } from "../utils/create_exportFile";
-import {
-  selectDemoDataToStore,
-  sequenceToStore,
-  projectJSONToStore,
-  metadataToStore,
-  patientMovementToStore,
-  isinputLoadingToStore,
-} from "../action/inputActions";
-import { hmmMatrixToStore } from "../action/graphMatrixActions";
-import { colorLUTtoStore } from "../action/colorActions";
-import { categoricalMapToStore } from "../action/categoricalMapActions";
-import {
-  loadProjectJSON,
-  snpsLoader,
-  getMetadataInput,
-  getMatrixInput,
-  loadSNPsequence,
-} from "../page_home/util_home";
 
 import {
-  changeMethodSetting,
-  changeLayoutSetting,
-  changeIsUserReDrawSetting,
-  changeEdgeFilterCutoffSetting,
   changeClusterMethodSetting,
-  changeIsUserClusteringSetting,
-  changeExportFormatSetting,
-  changeIsUserDownloadingSetting,
   changeColorNodeSetting,
-  changeIsEdgeScaledSetting,
+  changeEdgeFilterCutoffSetting,
+  changeEdgeLabelSizeSetting,
   changeEdgeScaleFactorSetting,
-  changeIsHideEdgesByCutoff,
   changeEdgesHideCutoff,
+  changeExportFormatSetting,
+  changeIsEdgeScaledSetting,
+  changeIsHideEdgesByCutoff,
+  changeIsUserClusteringSetting,
+  changeIsUserDownloadingSetting,
+  changeIsUserFilterEdgesSetting,
+  changeIsUserReDrawSetting,
+  changeIsUserRelayoutSetting,
+  changeLayoutSetting,
+  changeMethodSetting,
+  changeNodeIsLabelShown,
+  changeSelectedNode,
   changeTransIcludeLocLevel,
   changeTypeOfAnalysisSetting,
-  changeIsUserFilterEdgesSetting,
-  changeIsUserRelayoutSetting,
-  changeSelectedNode,
-  changeNodeIsLabelShown,
-  changeEdgeLabelSizeSetting,
 } from "../action/graphSettingsActions";
 import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 
@@ -331,8 +331,7 @@ const SiderMenu = (props) => {
             bodyStyle={{
               textAlign: "center",
               padding: "0px",
-            }}
-          >
+            }}>
             <Spin
               indicator={loadingIcon}
               style={{ color: "white" }}
@@ -346,8 +345,7 @@ const SiderMenu = (props) => {
           <Select
             value={selectedDemoData}
             style={{ width: "100%", textOverflow: "ellipsis" }}
-            onChange={selectDemoDataHandler}
-          >
+            onChange={selectDemoDataHandler}>
             <Option value={null}>Select dataset</Option>
             {project_options}
           </Select>
@@ -359,9 +357,8 @@ const SiderMenu = (props) => {
             Type of analysis{" "}
             <span>
               <Tooltip
-                title="Analysis to be performed. [1]Clustering: construct an undirected graph and detect putative cluster(s). [2]Transmission: construct a directed graph to show the putative transmission flow"
-                placement="rightTop"
-              >
+                title="Analysis to be performed. Clustering: construct an undirected graph and detect putative cluster(s). Transmission: construct a directed graph to show the putative transmission flow"
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -370,19 +367,16 @@ const SiderMenu = (props) => {
             disabled={props.hammMatrix ? false : true}
             value={graph_typeOfAnalysis}
             style={{ width: "100%" }}
-            onChange={changeTypeOfAnalysisHandler}
-          >
+            onChange={changeTypeOfAnalysisHandler}>
             <Option
               disabled={props.hammMatrix ? false : true}
-              value="clustering"
-            >
+              value="clustering">
               {" "}
               Clustering{" "}
             </Option>
             <Option
               disabled={props.hammMatrix && props.metadata ? false : true}
-              value="transmission"
-            >
+              value="transmission">
               Transmission
             </Option>
           </Select>
@@ -395,9 +389,9 @@ const SiderMenu = (props) => {
               <span>
                 <Tooltip
                   title="Method to construct clustering graph. 
-                  [1] CATHAI: given the SNP cut-off, create networks of pairwise SNP-distances between samples (Forde et al. 2021)"
-                  placement="rightTop"
-                >
+                  CATHAI: given a SNP threshold, remove edges and bridges to produce the connected components (Cuddihy et al. 2022). 
+                  Threshold-based MST: given a SNP threshold, detect connected components and build a minimum spanning tree (MST)"
+                  placement="rightTop">
                   <QuestionCircleOutlined style={{ color: "red" }} />
                 </Tooltip>
               </span>
@@ -406,14 +400,12 @@ const SiderMenu = (props) => {
               disabled={props.hammMatrix && graph_typeOfAnalysis ? false : true}
               value={graph_method}
               style={{ width: "100%" }}
-              onChange={changeMethodHandler}
-            >
+              onChange={changeMethodHandler}>
               <Option value="cathai">CATHAI</Option>
               <Option
                 value="mscg"
-                disabled={graph_isUserFilterEdges ? false : true}
-              >
-                MST Single-linkage Cluster
+                disabled={graph_isUserFilterEdges ? false : true}>
+                Threshold-based MST
               </Option>
             </Select>
           </Col>
@@ -426,10 +418,8 @@ const SiderMenu = (props) => {
               <span>
                 <Tooltip
                   title="Method to construct transmission graph. 
-                  [1]SeqTrack: construct a parsimonous transmission tree based on SNP distances and sampling dates (Jombart et al. 2014). 
-                  [2]SNPs and patient stay: construct a directed graph where edges were weighted by sum of SNPs distance weight and patient stays"
-                  placement="rightTop"
-                >
+                  SeqTrack: construct a parsimonous transmission tree based on SNP distances and sampling dates (Jombart et al. 2014)"
+                  placement="rightTop">
                   <QuestionCircleOutlined style={{ color: "red" }} />
                 </Tooltip>
               </span>
@@ -438,12 +428,10 @@ const SiderMenu = (props) => {
               disabled={graph_typeOfAnalysis ? false : true}
               value={graph_method}
               style={{ width: "100%" }}
-              onChange={changeMethodHandler}
-            >
+              onChange={changeMethodHandler}>
               <Option
                 disabled={props.hammMatrix && props.metadata ? false : true}
-                value="seqtrack"
-              >
+                value="seqtrack">
                 SeqTrack
               </Option>
             </Select>
@@ -456,8 +444,7 @@ const SiderMenu = (props) => {
             <span>
               <Tooltip
                 title="Layout to display the graph."
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -466,13 +453,11 @@ const SiderMenu = (props) => {
             disabled={props.hammMatrix ? false : true}
             value={graph_layout}
             style={{ width: "100%" }}
-            onChange={changeLayoutHandler}
-          >
+            onChange={changeLayoutHandler}>
             <Option value="cose"> CoSE</Option>
             <Option value="spread">Spread</Option>
             <Option value="fcose">fCoSE</Option>
             <Option value="cose-bilkent">CoSE Bilkent (Compound)</Option>
-            <Option value="dagre">Dagre</Option>
           </Select>
         </Col>
         <Col span={8}>
@@ -481,8 +466,7 @@ const SiderMenu = (props) => {
             <span>
               <Tooltip
                 title="Apply selected layout to current graph."
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -490,8 +474,7 @@ const SiderMenu = (props) => {
           <Button
             disabled={props.graphObject ? false : true}
             onClick={reloadLayoutHandler}
-            type="primary"
-          >
+            type="primary">
             <ReloadOutlined />
           </Button>
         </Col>
@@ -505,14 +488,12 @@ const SiderMenu = (props) => {
               props.hammMatrix && graph_typeOfAnalysis === "clustering"
                 ? false
                 : true
-            }
-          >
+            }>
             Apply SNPs cutoff{" "}
             <span>
               <Tooltip
-                title="Apply a cutoff number to limit the maximum pairwise SNPs distance to be displayed."
-                placement="rightTop"
-              >
+                title="Apply a threshold number to limit the maximum pairwise SNP distance to be displayed."
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -526,8 +507,7 @@ const SiderMenu = (props) => {
               <Tooltip
                 title="Maximum pairwise SNPs distance to be included in graph 
                   (e.g. 25 SNPs cutoff will include edges with 0 to 25 SNPs)."
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -548,53 +528,11 @@ const SiderMenu = (props) => {
           />
         </Col>
 
-        {graph_method === "hierSnpsMetaStayOverlap" && (
-          <Col span={24}>
-            <p>
-              Filter weighted edges
-              <span>
-                <Tooltip
-                  title="Filter edges based on its weight. 
-                The weight is a combination score computed from pairwise SNP distances and stay overlap in hierarhical order.
-                The weight assignation are: 
-                #1 (all SNP distances), 
-                #2 (#1+SNP distances less and equal to cutoff),
-                #3 (#2+They had overlap stay at hospital level),
-                #4 (#3+They had overlap stay at ward level),
-                #5 (#4+They had overlap stay at bay level), and
-                #6 (#5+They had overlap stay at bed level).
-                So an edge with weight of #6 represents the highest score for a possible transmission
-                based on their SNPs distance and stay overlap in bed level.
-                *Stay overlap is considered in 7 days range (REF)"
-                  placement="rightTop"
-                >
-                  <QuestionCircleOutlined style={{ color: "red" }} />
-                </Tooltip>
-              </span>
-            </p>
-            <Select
-              disabled={
-                graph_method === "hierSnpsMetaStayOverlap" ? false : true
-              }
-              value={trans_locLevel}
-              style={{ width: "100%" }}
-              onChange={changeTransLocLevelHandler}
-            >
-              <Option value={1}>SNPs</Option>
-              <Option value={2}>Hospital</Option>
-              <Option value={3}>Ward</Option>
-              <Option value={4}>Bay</Option>
-              <Option value={5}>Bed</Option>
-            </Select>
-          </Col>
-        )}
-
         <Col span={24}>
           <Button
             disabled={props.hammMatrix ? false : true}
             onClick={drawingHandler}
-            type="primary"
-          >
+            type="primary">
             Create graph
           </Button>
         </Col>
@@ -610,11 +548,9 @@ const SiderMenu = (props) => {
               Method{" "}
               <span>
                 <Tooltip
-                  title="Method to detect cluster in the constructed graph.
-                  [1]Connected components: using Breadth-first search algorithm (Zhou and Hansen,2006) to find cluster (all connected nodes)
-                  [2]Louvain: using Louvain algoritm (Subelj and Bajec, 2011) to find the cluster(s) "
-                  placement="rightTop"
-                >
+                  title="Method to detect and report cluster(s) membership of the constructed graph.
+                  Connected components: using Breadth-first search algorithm (Zhou and Hansen,2006) to all connected nodes"
+                  placement="rightTop">
                   <QuestionCircleOutlined style={{ color: "red" }} />
                 </Tooltip>
               </span>
@@ -623,8 +559,7 @@ const SiderMenu = (props) => {
               disabled={props.graphObject ? false : true}
               value={graph_clusterMethod}
               style={{ width: "100%" }}
-              onChange={changeClusterMethodHandler}
-            >
+              onChange={changeClusterMethodHandler}>
               <Option value="Connected Components">Connected Components</Option>
             </Select>
           </Col>
@@ -635,8 +570,7 @@ const SiderMenu = (props) => {
             <Button
               type="primary"
               disabled={props.graphObject ? false : true}
-              onClick={clusteringHandler}
-            >
+              onClick={clusteringHandler}>
               Detect clusters
             </Button>
           </Col>
@@ -653,8 +587,7 @@ const SiderMenu = (props) => {
                 title="Color nodes by the selected column in metadata or by the clustering result.
                 User can also specify the color manually
                 (e.g. To specify color on column 'patient_group', add new column named 'patient_group:color' in metadata)."
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -663,8 +596,7 @@ const SiderMenu = (props) => {
             disabled={props.graphObject ? false : true}
             value={graph_colorNodeBy}
             style={{ width: "100%" }}
-            onChange={changeColorNodeHandler}
-          >
+            onChange={changeColorNodeHandler}>
             {" "}
             {props.colorLUT && Object.keys(props.colorLUT)
               ? Object.keys(props.colorLUT).map((k, i) => {
@@ -681,8 +613,7 @@ const SiderMenu = (props) => {
             <span>
               <Tooltip
                 title="Select one or more node IDs to highlight the node(s) on the graph"
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -693,8 +624,7 @@ const SiderMenu = (props) => {
             style={{ width: "100%" }}
             placeholder="Select ID(s)"
             onChange={selectNodeIDsHandler}
-            value={props.selectedNode}
-          >
+            value={props.selectedNode}>
             {graph_nodeID_options}
           </Select>
         </Col>
@@ -704,8 +634,7 @@ const SiderMenu = (props) => {
             style={{ fontSize: "10px" }}
             onChange={isNodeLabelShownHandler}
             checked={graph_node_isLabelShown}
-            disabled={props.graphObject ? false : true}
-          >
+            disabled={props.graphObject ? false : true}>
             Show node label{" "}
             <span>
               <Tooltip title="Show or hide node's label." placement="rightTop">
@@ -739,15 +668,13 @@ const SiderMenu = (props) => {
             style={{ fontSize: "10px" }}
             onChange={isEdgeScaledHandler}
             checked={graph_isEdgeScaled}
-            disabled={props.graphObject ? false : true}
-          >
+            disabled={props.graphObject ? false : true}>
             Scale edge to weight{" "}
             <span>
               <Tooltip
                 title="Change the thickness of the edge accordin to its weight.
                   (e.g. the higher the transmission score the thicker the line)."
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -759,8 +686,7 @@ const SiderMenu = (props) => {
             <span>
               <Tooltip
                 title="Multiply the thickness of the edge with the scaling factor (positive number greater than zero)"
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -779,15 +705,13 @@ const SiderMenu = (props) => {
             style={{ fontSize: "10px" }}
             onChange={isEdgeHideByCutoffHandler}
             checked={graph_isEdgesHideByCutoff}
-            disabled={props.graphObject ? false : true}
-          >
+            disabled={props.graphObject ? false : true}>
             Show partial edges{" "}
             <span>
               <Tooltip
                 title="Only show edges which have weight within the specified range (min to max)
                 (Note: It doesn't remove the edges but only hide it to the background)"
-                placement="rightTop"
-              >
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -827,11 +751,8 @@ const SiderMenu = (props) => {
             <span>
               <Tooltip
                 title="Type of file to be downloaded: 
-                [1]Graph image (SVG)
-                [2]Graph object file (DOT format: suitable for visualization with HAIviz)
-                [3]Clustering result (CSV)."
-                placement="rightTop"
-              >
+                Graph image (SVG). Graph object file in DOT format. Cluster(s) membership table(CSV)."
+                placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
             </span>
@@ -840,8 +761,7 @@ const SiderMenu = (props) => {
             value={graph_exportFormat}
             style={{ width: "100%" }}
             onChange={changeExportFormatHandler}
-            disabled={props.graphObject || props.graphClusters ? false : true}
-          >
+            disabled={props.graphObject || props.graphClusters ? false : true}>
             <Option disabled={props.graphObject ? false : true} value="svg">
               Graph image (SVG)
             </Option>
@@ -850,8 +770,7 @@ const SiderMenu = (props) => {
             </Option>
             <Option
               disabled={props.graphClusters ? false : true}
-              value="clusterID"
-            >
+              value="clusterID">
               Clustering result (CSV)
             </Option>
           </Select>
@@ -860,8 +779,7 @@ const SiderMenu = (props) => {
           <Button
             disabled={props.graphClusters || props.graphObject ? false : true}
             onClick={exportingHandler}
-            type="primary"
-          >
+            type="primary">
             Download
           </Button>
         </Col>
@@ -928,14 +846,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SiderMenu);
 
 /*
-<Option disabled={props.hammMatrix && props.metadata ? false : true} value="hierSnpsMetaStayOverlap">
-                SNPs and patient stay
-              </Option>
-
-                            <Option
-                disabled={props.hammMatrix && props.metadata ? false : true}
-                value="cge"
-              >
-                CATHAI + metadata
-              </Option>
-*/
+ */

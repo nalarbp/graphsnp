@@ -154,8 +154,7 @@ const InputPlaceholder = (props) => {
                     {getIconStatus("SNP")}Alignment/matrix{"  "}
                     <span style={{ marginLeft: "5px" }}>
                       <Tooltip
-                        title="A non-ambiguous multi-fasta SNPs alignment (.fa, .fna, 
-                    .mfa, .fsa) or a distance matrix (.csv) file here"
+                        title="The alignment file must contain a minimum of two fasta-formatted, non-gap, ATGC-exclusive nucleotide sequences of equal length (accepted file extension includes: .fa, .fasta, .fna, .mfa, .aln, .txt. A distance matrix input is a symmetric distance matrix table written in comma separated values (CSV) format (accepted file extension: .csv)."
                         placement="rightTop">
                         <QuestionCircleOutlined
                           style={{ fontSize: "14px", color: "white" }}
@@ -185,7 +184,7 @@ const InputPlaceholder = (props) => {
                     {getIconStatus("Metadata")} Metadata{" "}
                     <span style={{ marginLeft: "5px" }}>
                       <Tooltip
-                        title="A table file (.csv) with column sample_id"
+                        title="A metadata table written in CSV format (accepted file extension: .csv) with mandatory column sample_id, containing ids match to alignment/matrix file. An additional column listing sample’s collection time (scaled in days, header: collection_day) is required for transmission analysis."
                         placement="rightTop">
                         <QuestionCircleOutlined
                           style={{ fontSize: "14px", color: "white" }}
@@ -239,6 +238,4 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(InputPlaceholder);
 
 /*
-<p id="home-input-dragger-text-title">GraphSNP</p>
-<Divider style={{ opacity: 0 }} />
-*/
+ */
