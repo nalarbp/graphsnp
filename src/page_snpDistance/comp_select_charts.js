@@ -1,10 +1,16 @@
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import { Select, Tooltip } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import {
-  dist_changeChartsData,
+  chart_changeAllDistData,
+  chart_changeAllDistStats,
+  chart_changeGroupDistIntraInter,
+  chart_changeGroupDistStats,
+  chart_changeGroupPieData,
+} from "../action/chartDataActions";
+import {
   dist_changeDataColumn,
   dist_changeDataToDisplay,
 } from "../action/snpdistSettingsActions";
@@ -15,21 +21,20 @@ const SelectCharts = (props) => {
   const dataToDisplay = props.snpDistSettings.dataToDisplay;
   const dataColumn = props.snpDistSettings.dataColumn;
 
-  useEffect(() => {
-    props.dist_changeDataColumn(null);
-    let newState_cd = Object.assign({}, props.snpDistSettings.chartsData);
-    newState_cd.groupPieData = null;
-    newState_cd.groupViolinData = null;
-    newState_cd.groupDistIntraInter = null;
-    props.dist_changeChartsData(newState_cd);
-  }, [dataToDisplay]);
-
   const dataToDisplayHandler = (val) => {
     props.dist_changeDataToDisplay(val);
+    if (val === "all") {
+      props.chart_changeGroupPieData(null);
+      props.chart_changeGroupDistStats(null);
+      props.chart_changeGroupDistIntraInter(null);
+    }
   };
 
   const dataColumnHandler = (val) => {
     props.dist_changeDataColumn(val);
+    props.chart_changeGroupPieData(null);
+    props.chart_changeGroupDistStats(null);
+    props.chart_changeGroupDistIntraInter(null);
   };
 
   const getMetadataColumn = function (header, i) {
@@ -122,7 +127,11 @@ function mapDispatchToProps(dispatch) {
     {
       dist_changeDataToDisplay,
       dist_changeDataColumn,
-      dist_changeChartsData,
+      chart_changeAllDistData,
+      chart_changeAllDistStats,
+      chart_changeGroupPieData,
+      chart_changeGroupDistStats,
+      chart_changeGroupDistIntraInter,
     },
     dispatch
   );

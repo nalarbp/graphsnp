@@ -3,7 +3,13 @@ import { Button, Tooltip } from "antd";
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { dist_changeChartsData } from "../action/snpdistSettingsActions";
+import {
+  chart_changeAllDistData,
+  chart_changeAllDistStats,
+  chart_changeGroupDistIntraInter,
+  chart_changeGroupDistStats,
+  chart_changeGroupPieData,
+} from "../action/chartDataActions";
 import GraphEdgeList from "../model/graphEdgeList_prop";
 import {
   getAllDistData,
@@ -13,7 +19,7 @@ import {
 
 const DrawSNPdistCharts = (props) => {
   const createAndDrawChartsHandler = () => {
-    console.time("ChartsDataConstruction");
+    //global var
     let edgeList = [];
     let nodeList = [];
     props.hammingMatrix.forEach((v, k) => {
@@ -23,33 +29,33 @@ const DrawSNPdistCharts = (props) => {
     let allDist = new GraphEdgeList(nodeList, edgeList).getSymetricEdges()
       .edges;
 
-    //all data fun
-    let allDistData = getAllDistData(allDist);
+    if (!props.chartsData.allDistData) {
+      //all data fun
+      let allDistData = getAllDistData(allDist);
+      props.chart_changeAllDistData(allDistData.all_distData);
+      props.chart_changeAllDistStats(allDistData.all_distStats);
+    }
 
-    //group data fun
-    let groupPieData =
-      props.metadata && props.snpDistSettings.dataColumn
-        ? getGroupPieData(props.metadata, props.snpDistSettings.dataColumn)
-        : null;
+    if (!props.chartsData.groupPieData) {
+      let groupPieData =
+        props.metadata && props.snpDistSettings.dataColumn
+          ? getGroupPieData(props.metadata, props.snpDistSettings.dataColumn)
+          : null;
+      props.chart_changeGroupPieData(groupPieData);
+    }
 
-    let groupViolinData =
-      props.metadata && props.snpDistSettings.dataColumn
-        ? getGroupViolinData(
-            allDist,
-            props.metadata,
-            props.snpDistSettings.dataColumn
-          )
-        : { all: null, intraInter: null };
-
-    let chartsData = {
-      allDistData: allDistData.all_distData,
-      allDistStats: allDistData.all_distStats,
-      groupPieData: groupPieData,
-      groupViolinData: groupViolinData.all,
-      groupDistIntraInter: groupViolinData.intraInter,
-    };
-    console.timeEnd("ChartsDataConstruction");
-    props.dist_changeChartsData(chartsData);
+    if (!props.chartsData.groupDistIntraInter) {
+      let groupViolinData =
+        props.metadata && props.snpDistSettings.dataColumn
+          ? getGroupViolinData(
+              allDist,
+              props.metadata,
+              props.snpDistSettings.dataColumn
+            )
+          : { all: null, intraInter: null };
+      props.chart_changeGroupDistStats(groupViolinData.all);
+      props.chart_changeGroupDistIntraInter(groupViolinData.intraInter);
+    }
   };
 
   return (
@@ -76,6 +82,7 @@ const DrawSNPdistCharts = (props) => {
 
 function mapStateToProps(state) {
   return {
+    chartsData: state.chartsData,
     snpDistSettings: state.snpDistSettings,
     hammingMatrix: state.hammMatrix,
     metadata: state.metadata,
@@ -83,7 +90,16 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators({ dist_changeChartsData }, dispatch);
+  return bindActionCreators(
+    {
+      chart_changeAllDistData,
+      chart_changeAllDistStats,
+      chart_changeGroupPieData,
+      chart_changeGroupDistStats,
+      chart_changeGroupDistIntraInter,
+    },
+    dispatch
+  );
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(DrawSNPdistCharts);

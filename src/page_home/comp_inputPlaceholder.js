@@ -10,6 +10,13 @@ import Particles from "react-particles-js";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
+import {
+  chart_changeAllDistData,
+  chart_changeAllDistStats,
+  chart_changeGroupDistIntraInter,
+  chart_changeGroupDistStats,
+  chart_changeGroupPieData,
+} from "../action/chartDataActions";
 import { colorLUTtoStore } from "../action/colorActions";
 import {
   graphClusterToStore,
@@ -82,6 +89,11 @@ const InputPlaceholder = (props) => {
     props.metadataToStore(null);
     props.categoricalMapToStore(null);
     props.colorLUTtoStore(null);
+    props.chart_changeAllDistData(null);
+    props.chart_changeAllDistStats(null);
+    props.chart_changeGroupPieData(null);
+    props.chart_changeGroupDistStats(null);
+    props.chart_changeGroupDistIntraInter(null);
     resetMetadataInputRelatedStates();
   };
 
@@ -90,6 +102,11 @@ const InputPlaceholder = (props) => {
     props.hmmMatrixToStore(null);
     props.graphObjectToStore(null);
     props.graphClusterToStore(null);
+    props.chart_changeAllDistData(null);
+    props.chart_changeAllDistStats(null);
+    props.chart_changeGroupPieData(null);
+    props.chart_changeGroupDistStats(null);
+    props.chart_changeGroupDistIntraInter(null);
     resetDistanceInputRelatedStates();
   };
 
@@ -244,6 +261,11 @@ function mapDispatchToProps(dispatch) {
       colorLUTtoStore,
       isinputLoadingToStore,
       categoricalMapToStore,
+      chart_changeAllDistData,
+      chart_changeAllDistStats,
+      chart_changeGroupPieData,
+      chart_changeGroupDistStats,
+      chart_changeGroupDistIntraInter,
     },
     dispatch
   );

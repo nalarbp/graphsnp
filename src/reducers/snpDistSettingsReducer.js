@@ -80,13 +80,6 @@ const snpDistSettingsReducer = (prevState, action) => {
       }
       return newState_iuls;
 
-    case constant.DIST_CHARTS_DATA:
-      let newState_dcd = Object.assign({}, prevState);
-      if (action.payload !== prevState.chartsData) {
-        newState_dcd.chartsData = action.payload;
-      }
-      return newState_dcd;
-
     default:
       if (prevState) {
         return prevState;

@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import { GENERAL_RESET } from "../utils/constants";
 import categoricalMapReducer from "./categoricalMapReducer";
+import chartsDataReducer from "./chartsDataReducer";
 import colorLUTReducer from "./colorLUTReducer";
 import graphClustersReducer from "./graphClustersReducer";
 import graphObjectReducer from "./graphObjectReducer";
@@ -61,13 +62,13 @@ export const initialState = {
     isUserExportSnpDist: false,
     chartSession: null,
     isUserReloadSession: false,
-    chartsData: {
-      allDistData: null,
-      allDistStats: null,
-      groupPieData: null,
-      groupDistStats: null,
-      groupDistIntraInter: null,
-    },
+  },
+  chartsData: {
+    allDistData: null,
+    allDistStats: null,
+    groupPieData: null,
+    groupDistStats: null,
+    groupDistIntraInter: null,
   },
   navSettings: {
     navLocation: null,
@@ -100,6 +101,7 @@ const appReducer = combineReducers(
     snpDistSettings: snpDistSettingsReducer,
     selectedNode: selectedNodeReducer,
     isShowingLoadingModal: isShowingLoadingModalReducer,
+    chartsData: chartsDataReducer,
   },
   initialState
 );

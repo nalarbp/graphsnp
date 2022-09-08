@@ -76,10 +76,3 @@ export function dist_changeIsUserLoadSession(val) {
     payload: val,
   };
 }
-
-export function dist_changeChartsData(val) {
-  return {
-    type: constant.DIST_CHARTS_DATA,
-    payload: val,
-  };
-}

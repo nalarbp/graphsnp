@@ -1,6 +1,8 @@
+import * as chartDataActions from "../action/chartDataActions";
 import * as graphMatrixActions from "../action/graphMatrixActions";
 import * as graphSettingsActions from "../action/graphSettingsActions";
 import * as snpDistSettingsActions from "../action/snpdistSettingsActions";
+
 import { initialState } from "../reducers/index";
 //import * as inputActions from "../action/inputActions";
 //import { resetStore } from "../action/generalActions";
@@ -78,18 +80,26 @@ function resetSnpDistSettings() {
   snpDistSettingsActions.dist_changeChartSession(
     initialState.snpDistSettings.chartSession
   );
-  snpDistSettingsActions.dist_changeChartsData(
-    initialState.snpDistSettings.chartsData
-  );
+}
+
+function resetAllChartsData() {
+  //reset all charts data
+  chartDataActions.chart_changeAllDistData(null);
+  chartDataActions.chart_changeAllDistStats(null);
+  chartDataActions.chart_changeGroupPieData(null);
+  chartDataActions.chart_changeGroupDistStats(null);
+  chartDataActions.chart_changeGroupDistIntraInter(null);
 }
 
 export function resetDistanceInputRelatedStates() {
   //resetGraphObjects();
   resetGraphSettings();
   resetSnpDistSettings();
+  //resetAllChartsData();
 }
 
 export function resetMetadataInputRelatedStates() {
   resetGraphSettings();
   resetSnpDistSettings();
+  //resetAllChartsData();
 }

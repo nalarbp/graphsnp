@@ -1,33 +1,24 @@
 import { CloudDownloadOutlined } from "@ant-design/icons";
 import { Column } from "@ant-design/plots";
 import { Button } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { connect } from "react-redux";
 import { barchart_config, NoChart } from "./util_snpDist";
 
 const SNPDistBarAll = (props) => {
-  const [data, setData] = useState(null);
-  const barChart_ref = useRef();
+  const barChart_ref = useRef(null);
 
   const downloadChart = () => {
     barChart_ref.current?.downloadImage("all-dist-bar.png");
   };
 
-  useEffect(() => {
-    setData(null);
-  }, [props.metadata, props.hammingMatrix]);
-
-  useEffect(() => {
-    setData(props.snpDistSettings.chartsData.allDistData);
-  }, [props.snpDistSettings.chartsData.allDistData]);
-
   return (
     <div className="snpDist-chart-content">
-      {!data && <NoChart />}
-      {data && (
+      {!props.chartData && <NoChart />}
+      {props.chartData && (
         <React.Fragment>
           <Button
-            disabled={data ? false : true}
+            disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
             onClick={downloadChart}>
@@ -35,7 +26,7 @@ const SNPDistBarAll = (props) => {
           </Button>
           <Column
             id="all-bar-chart"
-            {...barchart_config(data)}
+            {...barchart_config(props.chartData)}
             onReady={(plot) => {
               barChart_ref.current = plot;
             }}
@@ -48,7 +39,7 @@ const SNPDistBarAll = (props) => {
 
 function mapStateToProps(state) {
   return {
-    snpDistSettings: state.snpDistSettings,
+    chartData: state.chartsData.allDistData,
     metadata: state.metadata,
     hammingMatrix: state.hammMatrix,
   };

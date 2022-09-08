@@ -66,6 +66,13 @@ export const DIST_IS_USER_DRAW = "DIST_IS_USER_DRAW";
 export const DIST_IS_USER_EXPORT = "DIST_IS_USER_EXPORT";
 export const DIST_CHART_SESSION = "DIST_CHART_SESSION";
 export const DIST_IS_USER_LOAD_SESSION = "DIST_IS_USER_LOAD_SESSION";
+
+//Chart data settings
+export const CHART_ALL_DIST = "CHART_ALL_DIST";
+export const CHART_ALL_STATS = "CHART_ALL_STATS";
+export const CHART_GROUP_PIE = "CHART_GROUP_PIE";
+export const CHART_GROUP_STATS = "CHART_GROUP_STATS";
+export const CHART_GROUP_INTRA_INTER = "CHART_GROUP_INTRA_INTER";
 export const DIST_CHARTS_DATA = "DIST_CHARTS_DATA";
 
 //Demonstration dataset

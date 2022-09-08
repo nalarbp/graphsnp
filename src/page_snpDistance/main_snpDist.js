@@ -63,35 +63,29 @@ const SNPdistance = (props) => {
           </div>
         </Col>
 
-        {props.snpDistSettings.dataColumn && (
-          <Col xs={24} sm={9} md={8}>
-            <div className="snpDist-chart-box">
-              <ChartHeader title={"Group"} chartID={"gp-group-boxplot"} />
-              <SNPDistViolinGroup />
-            </div>
-          </Col>
-        )}
+        <Col xs={24} sm={9} md={8}>
+          <div className="snpDist-chart-box">
+            <ChartHeader title={"Group"} chartID={"gp-group-boxplot"} />
+            <SNPDistViolinGroup />
+          </div>
+        </Col>
 
-        {props.snpDistSettings.dataColumn && (
-          <Col xs={24} sm={9} md={8}>
-            <div className="snpDist-chart-box">
-              <ChartHeader
-                title={"Intra & inter-group"}
-                chartID={"gp-group-intra-inter-boxplot"}
-              />
-              <SNPDistBoxplotIntraInterGroup />
-            </div>
-          </Col>
-        )}
+        <Col xs={24} sm={9} md={8}>
+          <div className="snpDist-chart-box">
+            <ChartHeader
+              title={"Intra & inter-group"}
+              chartID={"gp-group-intra-inter-boxplot"}
+            />
+            <SNPDistBoxplotIntraInterGroup />
+          </div>
+        </Col>
 
-        {props.snpDistSettings.dataColumn && (
-          <Col xs={24} sm={6} md={8}>
-            <div className="snpDist-chart-box">
-              <ChartHeader title={"Group"} chartID={"gp-group-piechart"} />
-              <SNPDistPieGroup />
-            </div>
-          </Col>
-        )}
+        <Col xs={24} sm={6} md={8}>
+          <div className="snpDist-chart-box">
+            <ChartHeader title={"Group"} chartID={"gp-group-piechart"} />
+            <SNPDistPieGroup />
+          </div>
+        </Col>
       </Row>
     </React.Fragment>
   );
@@ -100,7 +94,6 @@ const SNPdistance = (props) => {
 function mapStateToProps(state) {
   return {
     hammingMatrix: state.hammMatrix,
-    snpDistSettings: state.snpDistSettings,
   };
 }
 
@@ -111,4 +104,5 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistance);
 
 /*
+
  */

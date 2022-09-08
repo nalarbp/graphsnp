@@ -1,43 +1,25 @@
 import { CloudDownloadOutlined } from "@ant-design/icons";
 import { Violin } from "@ant-design/plots";
 import { Button } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { connect } from "react-redux";
 import { NoChart, violin_group_config } from "./util_snpDist";
 
 const SNPDistBoxplotGroup = (props) => {
-  const [data, setData] = useState(null);
-  const category = props.snpDistSettings.dataColumn;
-
+  const category = props.dataColumn;
   const grouped_violinChart_ref = useRef();
 
   const downloadChart = () => {
     grouped_violinChart_ref.current?.downloadImage("grouped-dist-violin.png");
   };
 
-  useEffect(() => {
-    setData(null);
-  }, [props.metadata, props.hammingMatrix, props.snpDistSettings.dataColumn]);
-
-  useEffect(() => {
-    if (props.snpDistSettings.dataToDisplay === "all-and-group") {
-      setData(props.snpDistSettings.chartsData.groupViolinData);
-    }
-  }, [props.snpDistSettings.chartsData.groupViolinData]);
-
-  useEffect(() => {
-    if (props.snpDistSettings.dataToDisplay === "all") {
-      setData(null);
-    }
-  }, [props.snpDistSettings.dataToDisplay]);
-
   return (
     <div className="snpDist-chart-content">
-      {!data && <NoChart />}
-      {data && (
+      {!props.chartData && <NoChart />}
+      {props.chartData && (
         <React.Fragment>
           <Button
-            disabled={data ? false : true}
+            disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
             onClick={downloadChart}>
@@ -45,7 +27,7 @@ const SNPDistBoxplotGroup = (props) => {
           </Button>
           <Violin
             {...violin_group_config(
-              data,
+              props.chartData,
               category,
               props.colLUT,
               props.metadata
@@ -62,7 +44,8 @@ const SNPDistBoxplotGroup = (props) => {
 
 function mapStateToProps(state) {
   return {
-    snpDistSettings: state.snpDistSettings,
+    dataColumn: state.snpDistSettings.dataColumn,
+    chartData: state.chartsData.groupDistStats,
     metadata: state.metadata,
     hammingMatrix: state.hammMatrix,
     colLUT: state.colorLUT,
