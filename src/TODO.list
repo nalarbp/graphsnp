@@ -2,6 +2,7 @@
 1. File: camelCase separated by underscore
 2. Style: lowercase separated by hyphen
 3. Constants: MODULE_DESCRIPTION
+4. x means done. - means to do list
 
 
 //TO DO LIST
@@ -25,15 +26,15 @@ x metadata input OK
 #ALGORITHM 
 
 #PAGE-SNP-DIST 
-- intra and inter genetic diversity
+x intra and inter genetic diversity
 
 #PAGE-GRAPH-SNP 
 x need to be able to save the reconstructed graph, so no wasting time to repeat reconstruction
 x add example case dataset
 x add option for cluster or transmission network reconstruction
 
-- Fix buh in Spread algorithm 
-- Add update layout next to layout option: user need to click the update button to update the layout
+x Fix buh in Spread algorithm 
+x Add update layout next to layout option: user need to click the update button to update the layout
 - Add color legend below the selected data info box
 - Add legend about nodes, edges, edge label, selected node
 x always use current color when draw the graph
@@ -43,7 +44,7 @@ x always use current color when draw the graph
 ## Create HammingMatrixMap 
     x get HammingMatrixMap from STORE, 
     x If NONE: create one, save to STORE
-    - Hamming comparion only done once but save in both direction (making a symetric matrix), save in AdjMap format
+    x Hamming comparion only done once but save in both direction (making a symetric matrix), save in AdjMap format
 
 ## Create GraphMap based on user's construction method
     - Get the construction method
@@ -52,18 +53,16 @@ x always use current color when draw the graph
     - include method attributes, if current method != with storeMethod, create new, otherwise take from store: WONT work you need to check cutoff as well: SKIP
 
 ## View in Cytoscape
-    - Always create a new CytoscapeData from a fresh GraphObjectMap. PERIOD
-    - Load, view, save to current state
+    x Always create a new CytoscapeData from a fresh GraphObjectMap. PERIOD
+    x Load, view, save to current state
 
-## Cluster Object 
-    - With 
 
 ## Metadata group
-    - hash map on each metadata header based on their categorical group
+    x hash map on each metadata header based on their categorical group
 
-- Tidy up the architecture (before its too big and messy)
+x Tidy up the architecture (before its too big and messy)
 
-- Home: all initial states 
+x Home: all initial states 
 
 x filter final_snpDist so no duplicated edges (MEG)
 x Create loading mechanism on graph container
@@ -77,7 +76,12 @@ x Add filter edges algorithm
         - change value to base = 0 
         - look up edge cutoff, if below, add value with 1
         - look up (iterate) all available hash map key, if edge in the list (indexOf), add value with 1
+
 ## STATE RESET 
-- export a list of object containing all state and respective action 
-- loop through all states, and set it all to the initial state
-- we need to make a separate elements/module for reloading dataset       
+x export a list of object containing all state and respective action 
+x loop through all states, and set it all to the initial state
+x we need to make a separate elements/module for reloading dataset       
+
+## BUGS
+x when draw charts, even its on all-samples, group also re-drawn.
+- demo interfacility, crash

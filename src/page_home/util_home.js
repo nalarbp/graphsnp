@@ -225,7 +225,7 @@ export async function getMetadataInput(
     if (isHeaderForColor) {
       headers_userColorLUT.push(splittedHeader[0]);
     } else {
-      if (h !== "sample_id") {
+      if (h !== "sample_id" && h !== "collection_day") {
         headers_for_categoricalMap.push(h);
       }
     }

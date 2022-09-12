@@ -30,7 +30,6 @@ const DrawSNPdistCharts = (props) => {
       .edges;
 
     if (!props.chartsData.allDistData) {
-      //all data fun
       let allDistData = getAllDistData(allDist);
       props.chart_changeAllDistData(allDistData.all_distData);
       props.chart_changeAllDistStats(allDistData.all_distStats);
@@ -38,7 +37,9 @@ const DrawSNPdistCharts = (props) => {
 
     if (!props.chartsData.groupPieData) {
       let groupPieData =
-        props.metadata && props.snpDistSettings.dataColumn
+        props.metadata &&
+        props.snpDistSettings.dataColumn &&
+        props.snpDistSettings.dataToDisplay !== "all"
           ? getGroupPieData(props.metadata, props.snpDistSettings.dataColumn)
           : null;
       props.chart_changeGroupPieData(groupPieData);
@@ -46,7 +47,9 @@ const DrawSNPdistCharts = (props) => {
 
     if (!props.chartsData.groupDistIntraInter) {
       let groupViolinData =
-        props.metadata && props.snpDistSettings.dataColumn
+        props.metadata &&
+        props.snpDistSettings.dataColumn &&
+        props.snpDistSettings.dataToDisplay !== "all"
           ? getGroupViolinData(
               allDist,
               props.metadata,
