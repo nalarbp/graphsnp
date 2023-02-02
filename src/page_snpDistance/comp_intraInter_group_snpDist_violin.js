@@ -3,14 +3,19 @@ import { Violin } from "@ant-design/plots";
 import { Button } from "antd";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { NoChart, violin_intraInter_group_config } from "./util_snpDist";
+import {
+  downloadSVGchart,
+  NoChart,
+  violin_intraInter_group_config,
+} from "./util_snpDist";
 
 const SNPDistBoxplotIntraInterGroup = (props) => {
   const intraInter_violinChart_ref = useRef();
-  const downloadChart = () => {
-    intraInter_violinChart_ref.current?.downloadImage(
-      "intraInterGroup-dist-violin.png"
-    );
+
+  const downloadHandler = () => {
+    let ref = intraInter_violinChart_ref.current;
+    let id = "intra_inter_group_violin";
+    downloadSVGchart(ref, id);
   };
 
   return (
@@ -22,15 +27,12 @@ const SNPDistBoxplotIntraInterGroup = (props) => {
             disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
-            onClick={downloadChart}>
+            onClick={downloadHandler}>
             <CloudDownloadOutlined />
           </Button>
-          <Violin
-            {...violin_intraInter_group_config(props.chartData)}
-            onReady={(plot) => {
-              intraInter_violinChart_ref.current = plot;
-            }}
-          />
+          <div ref={intraInter_violinChart_ref}>
+            <Violin {...violin_intraInter_group_config(props.chartData)} />
+          </div>
         </React.Fragment>
       )}
     </div>

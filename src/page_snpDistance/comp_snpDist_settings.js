@@ -44,7 +44,7 @@ const SNPdistSettings = (props) => {
             Select preloaded dataset{" "}
             <span>
               <Tooltip
-                title="Select preloaded dataset for the visualisation."
+                title="Ignore this tab, if you have loaded your data"
                 placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
@@ -87,71 +87,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SNPdistSettings);
-
-/*
-<Col className="gp-settings-box" xs={22} sm={10} lg={5}>
-          <h5>
-            Generate chart(s){" "}
-            <span>
-              <Tooltip
-                title="Click to generate the chart(s)"
-                placement="rightTop">
-                <QuestionCircleOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </span>
-          </h5>
-          <Button
-            disabled={props.hammingMatrix ? false : true}
-            onClick={drawChartHandler}
-            type="primary">
-            Create Bar chart
-          </Button>
-        </Col>
-
-        <Col className="gp-settings-box" xs={22} sm={10} lg={5}>
-          <h5>
-            Select download type{" "}
-            <span>
-              <Tooltip
-                title="Type of file to be downloaded: Table of pairwise SNP distances (CSV) or Displayed bar chart (SVG)"
-                placement="rightTop">
-                <QuestionCircleOutlined style={{ color: "red" }} />
-              </Tooltip>
-            </span>
-          </h5>
-          <Select
-            className={"gp-select"}
-            disabled={props.hammingMatrix ? false : true}
-            value={snpDistExportFormat}
-            onChange={exportFormatHandler}
-            style={{ width: "100%" }}>
-            <Option
-              disabled={props.hammingMatrix ? false : true}
-              value="symSnpDist">
-              Table of pairwise SNP distances (CSV)
-            </Option>
-            <Option value="barChartSvg">Bar chart (SVG)</Option>
-          </Select>
-          <Divider style={{ margin: "5px 0px", opacity: 0 }} />
-          <Button
-            disabled={props.hammingMatrix ? false : true}
-            onClick={exportChartHandler}
-            type="primary">
-            Download
-          </Button>
-        </Col>
-
-
-<Col span={24}>
-          <p>Chart(s) orientation</p>
-          <Select
-            value={chartOrientation}
-            style={{ width: "100%" }}
-            disabled={props.hammingMatrix ? false : true}
-            onChange={chartOrientationHandler}
-          >
-            <Option value="horizontal">Horizontal</Option>
-            <Option value="vertical">Vertical</Option>
-          </Select>
-        </Col>
-*/

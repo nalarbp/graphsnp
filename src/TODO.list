@@ -84,4 +84,7 @@ x we need to make a separate elements/module for reloading dataset
 
 ## BUGS
 x when draw charts, even its on all-samples, group also re-drawn.
-- demo interfacility, crash
+x demo interfacility, crash
+
+## CHANGE permission on build dir
+find ./build -type d -exec chmod 775 {} \;

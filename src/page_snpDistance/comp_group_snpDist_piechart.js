@@ -3,14 +3,15 @@ import { Pie } from "@ant-design/plots";
 import { Button } from "antd";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { NoChart, piechart_config } from "./util_snpDist";
+import { downloadSVGchart, NoChart, piechart_config } from "./util_snpDist";
 
 const SNPDistPieGroup = (props) => {
-  const category = props.dataColumn;
   const group_pieChart_ref = useRef();
 
-  const downloadChart = () => {
-    group_pieChart_ref.current?.downloadImage("grouped-dist-pie.png");
+  const downloadHandler = () => {
+    let ref = group_pieChart_ref.current;
+    let id = "grouping_variable";
+    downloadSVGchart(ref, id);
   };
 
   return (
@@ -22,20 +23,19 @@ const SNPDistPieGroup = (props) => {
             disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
-            onClick={downloadChart}>
-            <CloudDownloadOutlined />
+            onClick={downloadHandler}>
+            <CloudDownloadOutlined title="Download SVG" />
           </Button>
-          <Pie
-            {...piechart_config(
-              props.chartData,
-              category,
-              props.colLUT,
-              props.metadata
-            )}
-            onReady={(plot) => {
-              group_pieChart_ref.current = plot;
-            }}
-          />
+          <div ref={group_pieChart_ref}>
+            <Pie
+              {...piechart_config(
+                props.chartData,
+                props.dataColumn,
+                props.colLUT,
+                props.metadata
+              )}
+            />
+          </div>
         </React.Fragment>
       )}
     </div>

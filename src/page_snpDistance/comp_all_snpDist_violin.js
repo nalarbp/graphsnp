@@ -3,13 +3,17 @@ import { Violin } from "@ant-design/plots";
 import { Button } from "antd";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { NoChart, violin_indv_config } from "./util_snpDist";
+import { bindActionCreators } from "redux";
+import { dist_changeIsModalOpen } from "../action/snpdistSettingsActions";
+import { downloadSVGchart, NoChart, violin_indv_config } from "./util_snpDist";
 
 const SNPDistBoxplotAll = (props) => {
-  const violinChart_ref = useRef();
+  const all_violinChart_ref = useRef();
 
-  const downloadChart = () => {
-    violinChart_ref.current?.downloadImage("all-dist-violin.png");
+  const downloadHandler = () => {
+    let ref = all_violinChart_ref.current;
+    let id = "all_samples_violin";
+    downloadSVGchart(ref, id);
   };
 
   return (
@@ -21,15 +25,12 @@ const SNPDistBoxplotAll = (props) => {
             disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
-            onClick={downloadChart}>
-            <CloudDownloadOutlined />
+            onClick={downloadHandler}>
+            <CloudDownloadOutlined title="Download SVG" />
           </Button>
-          <Violin
-            {...violin_indv_config(props.chartData)}
-            onReady={(plot) => {
-              violinChart_ref.current = plot;
-            }}
-          />
+          <div ref={all_violinChart_ref}>
+            <Violin {...violin_indv_config(props.chartData)} />
+          </div>
         </React.Fragment>
       )}
     </div>
@@ -44,4 +45,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SNPDistBoxplotAll);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ dist_changeIsModalOpen }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SNPDistBoxplotAll);

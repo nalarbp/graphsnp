@@ -7,9 +7,15 @@ export const ChartHeader = (props) => {
   return (
     <Row className="snpDist-chart-header">
       <Col xs={12} style={{ textAlign: "left" }}>
-        <p>{props.title}</p>
+        <p>
+          {props.title}{" "}
+          <span>
+            <Tooltip title={props.desc} placement="rightTop">
+              <QuestionCircleOutlined style={{ color: "red" }} />
+            </Tooltip>
+          </span>
+        </p>
       </Col>
-      <Col xs={12} style={{ textAlign: "right" }}></Col>
     </Row>
   );
 };
@@ -126,8 +132,14 @@ export const barchart_config = (data) => {
     xField: "bin", //cat: bin, 1,2,
     yField: "count", //freq of bin
     xAxis: {
-      label: {
-        autoRotate: false,
+      title: {
+        text: "Distance",
+      },
+    },
+    yAxis: {
+      title: {
+        text: "Count",
+        autoRotate: true,
       },
     },
     slider: {
@@ -139,9 +151,16 @@ export const barchart_config = (data) => {
 
 export const violin_indv_config = (data) => {
   return {
+    renderer: "svg",
     data: data,
     xField: "x",
     yField: "y",
+    yAxis: {
+      title: {
+        text: "Distance",
+        autoRotate: true,
+      },
+    },
     shape: "smooth-hollow",
   };
 };
@@ -149,6 +168,7 @@ export const violin_indv_config = (data) => {
 export const piechart_config = (data, dataColumn, colLUT, meta) => {
   let lut = getGroupColor(meta, dataColumn, colLUT);
   return {
+    renderer: "svg",
     appendPadding: 10,
     data: data,
     angleField: "count",
@@ -176,10 +196,16 @@ export const piechart_config = (data, dataColumn, colLUT, meta) => {
       },
     ],
     statistic: {
-      title: false,
+      title: {
+        content: "Grouped by:",
+        style: {
+          fontSize: "14px",
+          textOverflow: "ellipsis",
+        },
+      },
       content: {
         style: {
-          fontSize: "12px",
+          fontSize: "14px",
           whiteSpace: "pre-wrap",
           overflow: "hidden",
           textOverflow: "ellipsis",
@@ -193,6 +219,7 @@ export const piechart_config = (data, dataColumn, colLUT, meta) => {
 export const violin_group_config = (data, dataColumn, colLUT, meta) => {
   let lut = getGroupColor(meta, dataColumn, colLUT);
   return {
+    renderer: "svg",
     data: data,
     colorField: "x",
     color: ({ x }) => {
@@ -200,14 +227,37 @@ export const violin_group_config = (data, dataColumn, colLUT, meta) => {
     },
     xField: "x",
     yField: "y",
+    yAxis: {
+      title: {
+        text: "Distance",
+        autoRotate: true,
+      },
+    },
     shape: "smooth-hollow",
   };
 };
 export const violin_intraInter_group_config = (data) => {
   return {
+    renderer: "svg",
     data: data,
     xField: "x",
     yField: "y",
+    yAxis: {
+      title: {
+        text: "Distance",
+        autoRotate: true,
+      },
+    },
     shape: "smooth-hollow",
   };
+};
+
+export const downloadSVGchart = (chart_ref, id) => {
+  const svg = chart_ref.querySelector("svg");
+  const svgString = new XMLSerializer().serializeToString(svg);
+  const blob = new Blob([svgString], { type: "image/svg+xml" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = id + ".svg";
+  link.click();
 };

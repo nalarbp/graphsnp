@@ -62,6 +62,7 @@ export const initialState = {
     isUserExportSnpDist: false,
     chartSession: null,
     isUserReloadSession: false,
+    isModalOpen: { visible: false, chartSettings: null, chartType: null },
   },
   chartsData: {
     allDistData: null,

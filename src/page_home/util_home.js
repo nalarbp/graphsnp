@@ -9,7 +9,7 @@ const _ = require("lodash");
 const fastaToJson = require("bio-parsers").fastaToJson;
 
 export const graphSNP_desc =
-  "An interactive SNP distance viewer for investigating outbreaks and transmission networks using a graph approach.";
+  "An interactive distance viewer for investigating outbreaks and transmission networks using a graph approach.";
 
 export const isoDateParser = utcParse("%Y-%m-%d");
 //SNPS

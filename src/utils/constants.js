@@ -66,6 +66,7 @@ export const DIST_IS_USER_DRAW = "DIST_IS_USER_DRAW";
 export const DIST_IS_USER_EXPORT = "DIST_IS_USER_EXPORT";
 export const DIST_CHART_SESSION = "DIST_CHART_SESSION";
 export const DIST_IS_USER_LOAD_SESSION = "DIST_IS_USER_LOAD_SESSION";
+export const DIST_IS_MODAL_OPEN = "DIST_IS_MODAL_OPEN";
 
 //Chart data settings
 export const CHART_ALL_DIST = "CHART_ALL_DIST";

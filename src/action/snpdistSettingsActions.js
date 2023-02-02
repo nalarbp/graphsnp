@@ -76,3 +76,10 @@ export function dist_changeIsUserLoadSession(val) {
     payload: val,
   };
 }
+
+export function dist_changeIsModalOpen(val) {
+  return {
+    type: constant.DIST_IS_MODAL_OPEN,
+    payload: val,
+  };
+}

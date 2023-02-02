@@ -80,6 +80,13 @@ const snpDistSettingsReducer = (prevState, action) => {
       }
       return newState_iuls;
 
+    case constant.DIST_IS_MODAL_OPEN:
+      let newState_imo = Object.assign({}, prevState);
+      if (action.payload !== prevState.isModalOpen) {
+        newState_imo.isModalOpen = action.payload;
+      }
+      return newState_imo;
+
     default:
       if (prevState) {
         return prevState;

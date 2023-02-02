@@ -41,6 +41,9 @@ const Home = (props) => {
       </Row>
 
       <Row id="home-preloaded-data">
+        <p style={{ fontSize: "10px" }}>
+          <b>Select a preloaded dataset for a quick demo</b>
+        </p>
         <SelectDemoData />
       </Row>
 

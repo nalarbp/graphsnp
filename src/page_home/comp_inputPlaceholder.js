@@ -166,7 +166,8 @@ const InputPlaceholder = (props) => {
                   <p id="home-input-dragger-text-title">GraphSNP</p>
                   <p id="home-input-dragger-text-subtitle">{graphSNP_desc}</p>
                   <p id="home-input-dragger-text">
-                    [Drag and drop your input file(s) here]
+                    [Drag and drop input files here and click either Distances
+                    or Graph to start visualising]
                   </p>
                 </Col>
               </Row>

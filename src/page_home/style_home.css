@@ -54,7 +54,7 @@
 }
 
 #home-input-dragger-text {
-  max-width: 300px;
+  max-width: 400px;
   text-align: center;
   margin: auto;
   font-weight: 900;
@@ -101,7 +101,7 @@
 }
 
 #home-preloaded-data {
-  max-width: 250px;
+  max-width: 370px;
   left: 0;
   height: auto;
   text-align: left;
@@ -115,7 +115,7 @@
   height: auto;
   text-align: left;
   margin: auto;
-  padding: 15px 5px 5px 40px;
+  padding: 0px 5px 5px 40px;
   background-color: rgb(255, 255, 255);
 }
 

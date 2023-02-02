@@ -1,15 +1,25 @@
-import { CloudDownloadOutlined } from "@ant-design/icons";
+import { ZoomInOutlined } from "@ant-design/icons";
 import { Column } from "@ant-design/plots";
 import { Button } from "antd";
-import React, { useRef } from "react";
+import React from "react";
 import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { dist_changeIsModalOpen } from "../action/snpdistSettingsActions";
 import { barchart_config, NoChart } from "./util_snpDist";
 
 const SNPDistBarAll = (props) => {
-  const barChart_ref = useRef(null);
+  const showModal = () => {
+    let toModal = {
+      visible: true,
+      chartSettings: barchart_config(props.chartData),
+      chartType: "column",
+    };
+    props.dist_changeIsModalOpen(toModal);
+  };
 
-  const downloadChart = () => {
-    barChart_ref.current?.downloadImage("all-dist-bar.png");
+  const barChart_settings = () => {
+    let new_config = barchart_config(props.chartData);
+    return new_config;
   };
 
   return (
@@ -21,16 +31,10 @@ const SNPDistBarAll = (props) => {
             disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
-            onClick={downloadChart}>
-            <CloudDownloadOutlined />
+            onClick={showModal}>
+            <ZoomInOutlined title="Render in higher resolution, and download SVG" />
           </Button>
-          <Column
-            id="all-bar-chart"
-            {...barchart_config(props.chartData)}
-            onReady={(plot) => {
-              barChart_ref.current = plot;
-            }}
-          />
+          <Column id="all-bar-chart" {...barChart_settings()} />
         </React.Fragment>
       )}
     </div>
@@ -45,4 +49,12 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(SNPDistBarAll);
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({ dist_changeIsModalOpen }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SNPDistBarAll);
+
+/*
+
+*/

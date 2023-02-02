@@ -3,14 +3,15 @@ import { Violin } from "@ant-design/plots";
 import { Button } from "antd";
 import React, { useRef } from "react";
 import { connect } from "react-redux";
-import { NoChart, violin_group_config } from "./util_snpDist";
+import { downloadSVGchart, NoChart, violin_group_config } from "./util_snpDist";
 
 const SNPDistBoxplotGroup = (props) => {
-  const category = props.dataColumn;
   const grouped_violinChart_ref = useRef();
 
-  const downloadChart = () => {
-    grouped_violinChart_ref.current?.downloadImage("grouped-dist-violin.png");
+  const downloadHandler = () => {
+    let ref = grouped_violinChart_ref.current;
+    let id = "grouped_violin";
+    downloadSVGchart(ref, id);
   };
 
   return (
@@ -22,20 +23,19 @@ const SNPDistBoxplotGroup = (props) => {
             disabled={props.chartData ? false : true}
             size="small"
             className="snpDist-chart-download-button"
-            onClick={downloadChart}>
-            <CloudDownloadOutlined />
+            onClick={downloadHandler}>
+            <CloudDownloadOutlined title="Download SVG" />
           </Button>
-          <Violin
-            {...violin_group_config(
-              props.chartData,
-              category,
-              props.colLUT,
-              props.metadata
-            )}
-            onReady={(plot) => {
-              grouped_violinChart_ref.current = plot;
-            }}
-          />
+          <div ref={grouped_violinChart_ref}>
+            <Violin
+              {...violin_group_config(
+                props.chartData,
+                props.dataColumn,
+                props.colLUT,
+                props.metadata
+              )}
+            />
+          </div>
         </React.Fragment>
       )}
     </div>

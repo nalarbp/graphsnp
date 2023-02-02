@@ -97,7 +97,7 @@ const SelectDemoData = (props) => {
         value={selectedDemoData}
         onChange={selectDemoDataHandler}
         className={"gp-select"}>
-        <Option value={null}>Select preloaded dataset</Option>
+        <Option value={null}>Preloaded datasets</Option>
         {project_options}
       </Select>
     </React.Fragment>

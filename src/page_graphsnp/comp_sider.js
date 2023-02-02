@@ -247,7 +247,7 @@ const SiderMenu = (props) => {
             Select preloaded dataset{" "}
             <span>
               <Tooltip
-                title="Select preloaded dataset for the visualisation."
+                title="Select and visualise a preloaded dataset in the app."
                 placement="rightTop">
                 <QuestionCircleOutlined style={{ color: "red" }} />
               </Tooltip>
