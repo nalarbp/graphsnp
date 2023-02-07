@@ -143,6 +143,13 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_els;
 
+    case constant.SETTING_NODE_SIZE:
+      let newState_nds = Object.assign({}, prevState);
+      if (action.payload !== prevState.node_size) {
+        newState_nds.node_size = action.payload;
+      }
+      return newState_nds;
+
     default:
       if (prevState) {
         return prevState;

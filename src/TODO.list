@@ -87,4 +87,4 @@ x when draw charts, even its on all-samples, group also re-drawn.
 x demo interfacility, crash
 
 ## CHANGE permission on build dir
-find ./build -type d -exec chmod 775 {} \;
+find ./build -type d -exec chmod 777 {} \;

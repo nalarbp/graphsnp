@@ -119,6 +119,19 @@
   background-color: rgb(255, 255, 255);
 }
 
+#home-footer-hanging {
+    position:fixed;
+    font-size: 10px;
+    font-weight: bold;
+    text-align: right;
+    bottom:0;
+    right:0;
+    padding-right: 20px;
+    width:200px;
+    height:100px;
+    background-image: url("../img/bg_content_header.png") no-repeat fixed center;
+}
+
 @media (max-width : 400px) {
   #home-input-dragger-text-title {
     font-size: 30px;

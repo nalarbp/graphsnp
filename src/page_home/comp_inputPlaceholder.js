@@ -6,7 +6,6 @@ import {
 } from "@ant-design/icons";
 import { Button, Col, Row, Tooltip, Upload } from "antd";
 import React from "react";
-import Particles from "react-particles-js";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { categoricalMapToStore } from "../action/categoricalMapActions";
@@ -34,11 +33,8 @@ import {
 } from "../utils/reset_states";
 import {
   extensionCheck,
-  getParticleHeight,
-  getParticleWidth,
   graphSNP_desc,
   loadMetaOrMatrix,
-  particleParams,
   snpsLoader,
 } from "./util_home";
 
@@ -139,12 +135,6 @@ const InputPlaceholder = (props) => {
   return (
     <React.Fragment>
       <div id="home-input-area">
-        <Particles
-          params={particleParams}
-          height={getParticleHeight}
-          width={getParticleWidth}
-          style={{ position: "absolute" }}
-        />
         <Dragger
           disabled={props.hammMatrix && props.metadata ? true : false}
           accept={".csv, .fa, .fasta, .fna, .aln, .msa"}
@@ -275,4 +265,10 @@ function mapDispatchToProps(dispatch) {
 export default connect(mapStateToProps, mapDispatchToProps)(InputPlaceholder);
 
 /*
+<Particles
+          params={particleParams}
+          height={getParticleHeight}
+          width={getParticleWidth}
+          style={{ position: "absolute" }}
+        />
  */

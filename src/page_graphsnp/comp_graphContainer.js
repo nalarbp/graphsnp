@@ -72,6 +72,8 @@ const GraphContainer = (props) => {
   const graph_isUserRelayout = props.graphSettings.isUserRelayout;
   const graph_node_isLabelShown = props.graphSettings.node_isLabelShown;
   const graph_edge_labelSize = props.graphSettings.edge_labelSize;
+  const graph_node_size = props.graphSettings.node_size;
+  const graph_exportFormat = props.graphSettings.exportFormat;
 
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };
@@ -118,9 +120,19 @@ const GraphContainer = (props) => {
   useEffect(() => {
     if (graph_isUserDownloading) {
       let cy = cytoscapeRef.current;
-      let svgContent = cy.svg({ scale: 1, full: true });
-      downloadFileAsText("GraphSNP-cytoscape-svg.svg", svgContent);
-      props.changeIsUserDownloadingSetting(false);
+      if (graph_exportFormat === "svg") {
+        let svgContent = cy.svg({ scale: 1, full: true });
+        downloadFileAsText("graph.svg", svgContent);
+        props.changeIsUserDownloadingSetting(false);
+      }
+      if (graph_exportFormat === "png") {
+        var png = cy.png();
+        var link = document.createElement("a");
+        link.download = "graph.png";
+        link.href = png;
+        link.click();
+        props.changeIsUserDownloadingSetting(false);
+      }
     }
   }, [graph_isUserDownloading]);
 
@@ -296,6 +308,20 @@ const GraphContainer = (props) => {
       cytoscapeRef.current = cy;
     }
   }, [graph_edge_labelSize]);
+
+  useEffect(() => {
+    if (cytoscapeRef.current) {
+      let cy = cytoscapeRef.current;
+      cy.style()
+        .selector("node")
+        .style({
+          width: String(graph_node_size) + "px",
+          height: String(graph_node_size) + "px",
+        })
+        .update();
+      cytoscapeRef.current = cy;
+    }
+  }, [graph_node_size]);
 
   useEffect(() => {
     if (props.selectedNode && cytoscapeRef.current) {

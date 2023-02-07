@@ -6,7 +6,7 @@ import React from "react";
 export const ChartHeader = (props) => {
   return (
     <Row className="snpDist-chart-header">
-      <Col xs={12} style={{ textAlign: "left" }}>
+      <Col xs={20} style={{ textAlign: "left" }}>
         <p>
           {props.title}{" "}
           <span>

@@ -48,6 +48,7 @@ export const initialState = {
     isUserReloadSession: false,
     isUserRelayout: false,
     node_isLabelShown: true,
+    node_size: 5,
     edge_labelSize: 3,
   },
   snpDistSettings: {

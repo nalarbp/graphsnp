@@ -59,8 +59,7 @@ const Extra = (props) => {
               </a>
             </li>
             <li>
-              Redux, bio-parsers, graphlib-dot, hamming, kruskal-mst, lodash,
-              moment, ve-sequence-utils.
+              Redux, bio-parsers, graphlib-dot, kruskal-mst, lodash, moment.
             </li>
           </ul>
         </Text>

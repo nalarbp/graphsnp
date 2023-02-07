@@ -153,3 +153,10 @@ export function changeEdgeLabelSizeSetting(val) {
     payload: val,
   };
 }
+
+export function changeNodeSizeSetting(val) {
+  return {
+    type: constant.SETTING_NODE_SIZE,
+    payload: val,
+  };
+}

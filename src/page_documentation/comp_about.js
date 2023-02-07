@@ -66,7 +66,7 @@ const About = (props) => {
           <Link
             to="/snpdistance"
             onClick={() => {
-              props.changeNavLocation("graphsnp");
+              props.changeNavLocation("snpdistance");
             }}>
             {" "}
             Distances

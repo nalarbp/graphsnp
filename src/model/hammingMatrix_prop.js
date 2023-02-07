@@ -17,7 +17,10 @@ HammingMatrix.prototype.getHammingMatrix = function () {
     let sourceTaxa = seq[i];
     for (let j = i + 1; j < seq.length; j++) {
       let targetTaxa = seq[j];
-      let snpDist = hammingDistance(sourceTaxa.sequence, targetTaxa.sequence);
+      let snpDist = calculateHammingDistATGC(
+        sourceTaxa.sequence,
+        targetTaxa.sequence
+      );
       //upper
       if (matrixMap.get(sourceTaxa.id)) {
         let currentList = matrixMap.get(sourceTaxa.id);
@@ -65,31 +68,42 @@ HammingMatrix.prototype.getHammingMatrix = function () {
   return matrixMap; //an adjacency Map
 };
 
-// HammingMatrix.prototype.getUpperMatrix = function () {
-//   //generate upper matrix of pairwise SNVs distance based on hamming distance
-//   //written in list of edge object [{source:A, target:B, value:Num}]
-//   //re-structure graph object in: adjacency list (object) e.g {taxaU: [{target: taxaV, value: UV_value}], taxaV: [{target: taxaU, value: VU_value}]}
-//   let seq = this.seq;
-//   let ids = this.seqIDs;
-//   let upper_matrix = [];
-//   for (let i = 0; i < ids.length - 1; i++) {
-//     let source = seq[i];
-//     for (let j = i + 1; j < seq.length; j++) {
-//       let target = seq[j];
-//       let snpDist = hammingDistance(source.sequence, target.sequence);
-//       upper_matrix.push({
-//         source: source.id,
-//         target: target.id,
-//         value: snpDist,
-//       });
-//     }
-//   }
-//   return { matrix_headers: ids, matrix_cells: upper_matrix };
-// };
+function calculateHammingDistATGC(s1, s2) {
+  //ignore
+  if (typeof s1 === "number" && !isNaN(s1)) {
+    s1 = s1.toString();
+  }
+  if (typeof s2 === "number" && !isNaN(s2)) {
+    s2 = s2.toString();
+  }
+  if (
+    !(
+      typeof s1 === "string" &&
+      typeof s2 === "string" &&
+      s1.length === s2.length
+    )
+  ) {
+    return null;
+  }
 
-// HammingMatrix.prototype.getNodesEdges = function () {
-//   //generate object of nodes and edges {nodes: ['A', 'B', ...], edges: [{source:A, target:B, value:Num}, ...]}
-//   return { nodes: this.seqIDs, edges: this.getUpperMatrix() };
-// };
+  var i = s1.length;
+  var sum = 0;
+
+  while (i--) {
+    let s1_exclusiveATGC = ["A", "T", "G", "C", "a", "t", "g", "c"].includes(
+      s1[i]
+    );
+    let s2_exclusiveATGC = ["A", "T", "G", "C", "a", "t", "g", "c"].includes(
+      s2[i]
+    );
+    if (s1_exclusiveATGC && s2_exclusiveATGC) {
+      if (s1[i] !== s2[i]) {
+        sum++;
+      }
+    }
+  }
+
+  return sum;
+}
 
 export default HammingMatrix;

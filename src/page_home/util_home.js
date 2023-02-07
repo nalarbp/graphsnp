@@ -13,6 +13,22 @@ export const graphSNP_desc =
 
 export const isoDateParser = utcParse("%Y-%m-%d");
 //SNPS
+function replaceNon_ATGCN_chars(fastaText) {
+  let processedFasta = "";
+  let lines = fastaText.split("\n");
+
+  for (let i = 0; i < lines.length; i++) {
+    let line = lines[i];
+    if (line.startsWith(">")) {
+      processedFasta += line + "\n";
+    } else {
+      let processedLine = line.replace(/[^ATCGN]/g, "N");
+      processedFasta += processedLine + "\n";
+    }
+  }
+  return processedFasta;
+}
+
 export async function snpsLoader(
   fastaString,
   propsSequenceToStore,
@@ -20,7 +36,9 @@ export async function snpsLoader(
   propsIsinputLoadingToStore
 ) {
   console.time("loadingSNP");
-  const sequenceJSON = await fastaToJson(fastaString);
+  console.log(fastaString);
+  let fastaString_transformed = replaceNon_ATGCN_chars(fastaString);
+  const sequenceJSON = await fastaToJson(fastaString_transformed);
   const snpsSequence = [];
   if (Array.isArray(sequenceJSON) && sequenceJSON.length > 1) {
     let isolateName = {};
@@ -293,7 +311,6 @@ export async function getMetadataInput(
   colorLUTtoStore(colorLUTstore);
   categoricalMapToStore(categorical_Map);
   setisLoading(false);
-  console.timeEnd("loadingMetadata");
 }
 
 //PROJECT JSON

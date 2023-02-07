@@ -43,6 +43,7 @@ import {
   changeLayoutSetting,
   changeMethodSetting,
   changeNodeIsLabelShown,
+  changeNodeSizeSetting,
   changeSelectedNode,
   changeTransIcludeLocLevel,
   changeTypeOfAnalysisSetting,
@@ -186,6 +187,10 @@ const SiderMenu = (props) => {
     props.changeEdgeLabelSizeSetting(val);
   };
 
+  const nodeSizeHandler = (val) => {
+    props.changeNodeSizeSetting(val);
+  };
+
   const isNodeLabelShownHandler = (e) => {
     let isChecked = e.target.checked;
     props.changeNodeIsLabelShown(isChecked);
@@ -201,6 +206,9 @@ const SiderMenu = (props) => {
         }
         break;
       case "svg":
+        props.changeIsUserDownloadingSetting(true);
+        break;
+      case "png":
         props.changeIsUserDownloadingSetting(true);
         break;
       case "dot":
@@ -486,6 +494,23 @@ const SiderMenu = (props) => {
         <h5>Node settings</h5>
         <Col span={24}>
           <p>
+            Node size{" "}
+            <span>
+              <Tooltip title="Change node size" placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Slider
+            value={props.graphSettings.node_size}
+            min={0}
+            max={100}
+            onChange={nodeSizeHandler}
+            disabled={props.graphObject ? false : true}
+          />
+        </Col>
+        <Col span={24}>
+          <p>
             Node color{" "}
             <span>
               <Tooltip
@@ -670,6 +695,9 @@ const SiderMenu = (props) => {
             <Option disabled={props.graphObject ? false : true} value="svg">
               Graph image (SVG)
             </Option>
+            <Option disabled={props.graphObject ? false : true} value="png">
+              Graph image (PNG)
+            </Option>
             <Option disabled={props.graphObject ? false : true} value="dot">
               Graph file (DOT)
             </Option>
@@ -731,6 +759,7 @@ function mapDispatchToProps(dispatch) {
       changeIsUserRelayoutSetting,
       changeEdgeLabelSizeSetting,
       changeNodeIsLabelShown,
+      changeNodeSizeSetting,
       isShowingLoadingModalToStore,
       changeSelectedNode,
       isinputLoadingToStore,

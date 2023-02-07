@@ -1,5 +1,6 @@
 import { Button, Col, Modal, Row } from "antd";
 import React from "react";
+import compatibleBrowsers from "../img/compatibleBrowsers.png";
 import { graphSNP_desc } from "./util_home";
 
 const TextLink = (props) => {
@@ -92,6 +93,14 @@ const FooterComponent = () => {
             />
           </p>
         </Col>
+        <div id="home-footer-hanging">
+          Compatible desktop browsers:
+          <br></br>
+          <img
+            src={compatibleBrowsers}
+            height={40}
+            alt="Compatible desktop browsers"></img>
+        </div>
       </Row>
     </React.Fragment>
   );

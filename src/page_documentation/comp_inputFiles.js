@@ -5,7 +5,7 @@ import "./style_documentation.css";
 
 const { Title, Paragraph, Text } = Typography;
 
-const InputFiles = (props) => {
+const InputFiles = () => {
   return (
     <React.Fragment>
       <div className="graphsnp-docs-content">
@@ -15,8 +15,8 @@ const InputFiles = (props) => {
         </Title>
         <Title level={3}>A multi-fasta SNP alignment</Title>
         <Text>
-          The alignment file must contain a minimum of two fasta-formatted,
-          non-gap, ATGC-exclusive nucleotide sequences of equal length.
+          The alignment file must contain a minimum of two fasta-formatted
+          nucleotide sequences of equal length.
         </Text>
         <br />
         <br />
