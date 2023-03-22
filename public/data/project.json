@@ -27,6 +27,13 @@
       "matrixOrAlignment": "matrix",
       "snpDistance": "./data/demoFile/e3/Spencer_et_al_SNPdistMat.csv",
       "metadata": "/data/demoFile/e3/Spencer_et_al_metadata.csv"
+    },
+    {
+      "id": "e4",
+      "name": " Using genomics to investigate an outbreak of Vancomycin-resistant Enterococcus faecium ST78 at a large tertiary hospital in Queensland. (Permana et al., 2023)",
+      "matrixOrAlignment": "matrix",
+      "snpDistance": "./data/demoFile/e4/PermanaB_distMat_qld_vrefm_st78.csv",
+      "metadata": "/data/demoFile/e4/PermanaB_meta_qld_vrefm_st78.csv"
     }
   ],
   "description": "This JSON file describes project ids, names, and input files to be rendered in the landing page. The path of these files must be written with directory 'public' as the root (e.g. ./data/ means 'data' is inside directory 'public'"
