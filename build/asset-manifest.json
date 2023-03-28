@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.5424cba3.chunk.css",
-    "main.js": "/static/js/main.1ac78b36.chunk.js",
-    "runtime-main.js": "/static/js/runtime-main.7c7721af.js",
+    "main.css": "/static/css/main.4a9676a1.chunk.css",
+    "main.js": "/static/js/main.b8433d5a.chunk.js",
+    "runtime-main.js": "/static/js/runtime-main.a9072b79.js",
     "static/css/2.f5c9f7f0.chunk.css": "/static/css/2.f5c9f7f0.chunk.css",
-    "static/js/2.cb118051.chunk.js": "/static/js/2.cb118051.chunk.js",
-    "static/js/3.ec7c1be6.chunk.js": "/static/js/3.ec7c1be6.chunk.js",
+    "static/js/2.a1b12cd5.chunk.js": "/static/js/2.a1b12cd5.chunk.js",
+    "static/js/3.905c2608.chunk.js": "/static/js/3.905c2608.chunk.js",
     "index.html": "/index.html",
-    "static/js/2.cb118051.chunk.js.LICENSE.txt": "/static/js/2.cb118051.chunk.js.LICENSE.txt",
+    "static/js/2.a1b12cd5.chunk.js.LICENSE.txt": "/static/js/2.a1b12cd5.chunk.js.LICENSE.txt",
     "static/media/style_home.css": "/static/media/bg_content_header.530683f1.png",
     "static/media/compatibleBrowsers.cfec2159.png": "/static/media/compatibleBrowsers.cfec2159.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.7c7721af.js",
+    "static/js/runtime-main.a9072b79.js",
     "static/css/2.f5c9f7f0.chunk.css",
-    "static/js/2.cb118051.chunk.js",
-    "static/css/main.5424cba3.chunk.css",
-    "static/js/main.1ac78b36.chunk.js"
+    "static/js/2.a1b12cd5.chunk.js",
+    "static/css/main.4a9676a1.chunk.css",
+    "static/js/main.b8433d5a.chunk.js"
   ]
 }

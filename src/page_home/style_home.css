@@ -120,12 +120,13 @@
 }
 
 #home-footer-hanging {
-    position:fixed;
+    position:absolute;
+    right: 0 !important;
+    margin-top: -40px !important;
+    z-index: 100;
     font-size: 10px;
     font-weight: bold;
     text-align: right;
-    bottom:0;
-    right:0;
     padding-right: 20px;
     width:200px;
     height:100px;

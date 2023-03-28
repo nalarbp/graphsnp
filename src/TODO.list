@@ -88,3 +88,9 @@ x demo interfacility, crash
 
 ## CHANGE permission on build dir
 find ./build -type d -exec chmod 777 {} \;
+
+##Push changes to both repo
+-check repos: git remote -v
+- push with -u: 
+git push -u origin master 
+git push -u github master

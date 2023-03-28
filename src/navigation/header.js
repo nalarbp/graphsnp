@@ -1,7 +1,7 @@
+import { Col, Row } from "antd";
 import React from "react";
-import { Row, Col } from "antd";
-import NavigationMenu from "./navigation";
 import logo from "../img/logo.png";
+import NavigationMenu from "./navigation";
 import "./style_navigation.css";
 
 const Header = (props) => {
@@ -16,8 +16,7 @@ const Header = (props) => {
             style={{ float: "right" }}
             src={logo}
             alt="GraphSNP"
-            height="70px"
-          ></img>
+            height="70px"></img>
         </Col>
       </Row>
     </React.Fragment>

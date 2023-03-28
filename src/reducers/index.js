@@ -40,7 +40,7 @@ export const initialState = {
     isEdgeScaled: false,
     edgeScaleFactor: 1,
     isHideEdgesByCutoff: false,
-    hiddenEdgesCutoff: { min: 0, max: 25 },
+    hiddenEdgesCutoff: { min: 0, max: 11 },
     colorNodedBy: "na",
     exportFormat: "clusterID",
     isUserDownloading: false,
@@ -50,6 +50,8 @@ export const initialState = {
     node_isLabelShown: true,
     node_size: 5,
     edge_labelSize: 3,
+    isShowClusterNotification: false,
+    isShowTransNotification: false,
   },
   snpDistSettings: {
     dataToDisplay: "all",

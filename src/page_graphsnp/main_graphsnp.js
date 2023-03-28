@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import GraphContainer from "./comp_graphContainer";
 import MetadataBox from "./comp_metadataBox";
+import ResultNotificationContent from "./comp_resultNotification";
 import SiderMenu from "./comp_sider";
 import "./style_graphsnp.css";
 
@@ -16,6 +17,7 @@ const GraphSNP = (props) => {
       <Layout>
         <Sider id="graphsnp-sider" collapsible={false}>
           <SiderMenu />
+          <ResultNotificationContent />
         </Sider>
         <Layout id="graphsnp-container">
           {props.hammingMatrix && (

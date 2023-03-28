@@ -160,3 +160,18 @@ export function changeNodeSizeSetting(val) {
     payload: val,
   };
 }
+
+export function changeIsShowClustNotif(val) {
+  console.log("action checked");
+  return {
+    type: constant.SETTING_IS_CLUST_NOTIF_DISPLAYED,
+    payload: val,
+  };
+}
+
+export function changeIsShowTransNotif(val) {
+  return {
+    type: constant.SETTING_IS_TRANS_NOTIF_DISPLAYED,
+    payload: val,
+  };
+}

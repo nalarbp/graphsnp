@@ -19,6 +19,7 @@ import {
 import React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import { graphObjectToStore } from "../action/graphMatrixActions";
 import { isinputLoadingToStore } from "../action/inputActions";
 import {
   createClusterCSVFile,
@@ -83,10 +84,14 @@ const SiderMenu = (props) => {
 
   //HANDLERS
   const changeTypeOfAnalysisHandler = (val) => {
+    props.graphObjectToStore(null);
     if (val === "clustering") {
       props.changeMethodSetting("cathai");
+      props.changeIsHideEdgesByCutoff(false);
     } else {
       props.changeMethodSetting("seqtrack");
+      props.changeIsHideEdgesByCutoff(true);
+      props.changeEdgeLabelSizeSetting(8);
     }
     props.changeTypeOfAnalysisSetting(val);
   };
@@ -446,7 +451,7 @@ const SiderMenu = (props) => {
             disabled={props.hammMatrix ? false : true}
             onClick={drawingHandler}
             type="primary">
-            Create graph
+            Create Graph
           </Button>
         </Col>
 
@@ -484,7 +489,7 @@ const SiderMenu = (props) => {
               type="primary"
               disabled={props.graphObject ? false : true}
               onClick={clusteringHandler}>
-              Detect clusters
+              Detect Clusters
             </Button>
           </Col>
         )}
@@ -763,6 +768,7 @@ function mapDispatchToProps(dispatch) {
       isShowingLoadingModalToStore,
       changeSelectedNode,
       isinputLoadingToStore,
+      graphObjectToStore,
     },
     dispatch
   );

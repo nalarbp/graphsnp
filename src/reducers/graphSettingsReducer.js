@@ -150,6 +150,20 @@ const graphSettingsReducer = (prevState, action) => {
       }
       return newState_nds;
 
+    case constant.SETTING_IS_CLUST_NOTIF_DISPLAYED:
+      let newState_icnd = Object.assign({}, prevState);
+      if (action.payload !== prevState.isShowClusterNotification) {
+        newState_icnd.isShowClusterNotification = action.payload;
+      }
+      return newState_icnd;
+
+    case constant.SETTING_IS_TRANS_NOTIF_DISPLAYED:
+      let newState_itnd = Object.assign({}, prevState);
+      if (action.payload !== prevState.isShowTransNotification) {
+        newState_itnd.isShowTransNotification = action.payload;
+      }
+      return newState_itnd;
+
     default:
       if (prevState) {
         return prevState;

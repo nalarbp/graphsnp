@@ -1,11 +1,11 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { Menu } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
+import { Menu } from "antd";
+import React from "react";
 import { connect } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { bindActionCreators } from "redux";
-import history from "../utils/history";
 import { changeNavLocation } from "../action/navigationActions";
+import history from "../utils/history";
 
 const NavigationMenu = (props) => {
   const currentKeys = props.navLocation
@@ -37,15 +37,13 @@ const NavigationMenu = (props) => {
         id="header-menu"
         mode="horizontal"
         selectedKeys={[currentKeys]}
-        overflowedIndicator={<MenuOutlined />}
-      >
+        overflowedIndicator={<MenuOutlined />}>
         <Menu.Item
           key="home"
           style={{ padding: "0 20px", margin: "0px" }}
           onClick={(e) => {
             props.changeNavLocation(e.key);
-          }}
-        >
+          }}>
           <NavLink to="/" exact>
             Input
           </NavLink>
@@ -56,8 +54,7 @@ const NavigationMenu = (props) => {
           style={{ padding: "0 20px", margin: "0px" }}
           onClick={(e) => {
             props.changeNavLocation(e.key);
-          }}
-        >
+          }}>
           <NavLink to="/snpdistance">Distances</NavLink>
         </Menu.Item>
 
@@ -66,8 +63,7 @@ const NavigationMenu = (props) => {
           style={{ padding: "0 20px", margin: "0px" }}
           onClick={(e) => {
             props.changeNavLocation(e.key);
-          }}
-        >
+          }}>
           <NavLink to="/graphsnp">Graph</NavLink>
         </Menu.Item>
         <Menu.Item
@@ -75,8 +71,7 @@ const NavigationMenu = (props) => {
           style={{ padding: "0 20px", margin: "0px" }}
           onClick={(e) => {
             props.changeNavLocation(e.key);
-          }}
-        >
+          }}>
           <NavLink to="/documentation">Documentation</NavLink>
         </Menu.Item>
       </Menu>

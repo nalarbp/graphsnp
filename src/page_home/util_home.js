@@ -36,7 +36,6 @@ export async function snpsLoader(
   propsIsinputLoadingToStore
 ) {
   console.time("loadingSNP");
-  console.log(fastaString);
   let fastaString_transformed = replaceNon_ATGCN_chars(fastaString);
   const sequenceJSON = await fastaToJson(fastaString_transformed);
   const snpsSequence = [];

@@ -25,3 +25,12 @@
   margin-left: 50px;
   padding: 0;
 }
+
+@media (max-width : 500px) {
+
+  #header-menu {
+    width: 300px;
+    margin-left: 10px;
+  }
+  
+}

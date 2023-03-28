@@ -120,14 +120,14 @@ export function getEdgeAndArrowWidth(
     if (option === "edge") {
       return width;
     } else {
-      let arrow_w = width < 1 ? width : 0.25;
+      let arrow_w = width < 1 ? width : 0.5;
       return arrow_w;
     }
   } else {
     if (option === "edge") {
       return 1;
     } else {
-      return 0.25;
+      return 0.5;
     }
   }
 }

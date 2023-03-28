@@ -55,6 +55,7 @@ const GraphContainer = (props) => {
 
   //Settings
   const graph_method = props.graphSettings.method;
+  const graph_typeOfAnalysis = props.graphSettings.typeOfAnalysis;
   const graph_layout = props.graphSettings.layout;
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
   const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
@@ -74,6 +75,8 @@ const GraphContainer = (props) => {
   const graph_edge_labelSize = props.graphSettings.edge_labelSize;
   const graph_node_size = props.graphSettings.node_size;
   const graph_exportFormat = props.graphSettings.exportFormat;
+  const graph_isShowClustNotif = props.graphSettings.isShowClusterNotification;
+  const graph_isShowTransNotif = props.graphSettings.isShowTransNotification;
 
   //Internal setting
   const cy_layout = { name: graph_layout, animate: false, fit: true };

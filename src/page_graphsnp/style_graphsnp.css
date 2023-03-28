@@ -69,3 +69,18 @@
   overflow-y: scroll;
   overflow-x: scroll;
 }
+
+#result-notification-container{
+  font-size: 14px;
+}
+
+.graphOutNotification {
+width: calc(100vw - 20px) !important;
+font-size: 11px;
+text-align: left;
+border: 2px solid rgb(0, 113, 219) !important;
+box-shadow: none !important;
+border-radius: 5px !important;
+
+}
+
