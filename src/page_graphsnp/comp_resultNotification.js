@@ -78,10 +78,10 @@ const ResultNotificationContent = (props) => {
                         rel="noreferrer">
                         SeqTrack
                       </a>{" "}
-                      algorithm attempts to infer ancestry based on isolate
-                      collection dates and genetic distance, regardless of SNP
-                      thresholds. Consequently, all possible transmission links
-                      converge on the earliest collected sample, which can
+                      algorithm attempts to infer ancestry based on genetic
+                      distance, regardless of SNP thresholds, and isolate
+                      collection dates. Consequently, all possible transmission
+                      links converge on the earliest collected sample, which can
                       obscure disparate transmission clusters and falsely infer
                       transmission dynamics. To mask unlikely transmissions
                       filtering has been applied using a predefined range
