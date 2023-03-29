@@ -66,14 +66,14 @@ const FooterComponent = () => {
   return (
     <React.Fragment>
       <Row>
-        <div id="home-footer-hanging">
+        <Col id="home-footer-hanging">
           Compatible desktop browsers:
           <br></br>
           <img
             src={compatibleBrowsers}
             height={40}
             alt="Compatible desktop browsers"></img>
-        </div>
+        </Col>
 
         <Col id="home-footer">
           <Button
