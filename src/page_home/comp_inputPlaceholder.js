@@ -174,7 +174,7 @@ const InputPlaceholder = (props) => {
                     {getIconStatus("SNP")}Alignment/matrix{"  "}
                     <span style={{ marginLeft: "5px" }}>
                       <Tooltip
-                        title="The alignment file must contain a minimum of two fasta-formatted, non-gap, ATGC-exclusive nucleotide sequences of equal length (accepted file extension includes: .fa, .fasta, .fna, .mfa, .aln, .txt. A distance matrix input is a symmetric distance matrix table written in comma separated values (CSV) format (accepted file extension: .csv)."
+                        title="The alignment file must contain a minimum of two fasta-formatted nucleotide sequences of equal length (accepted file extension includes: .fa, .fasta, .fna, .mfa, .aln, .txt. A distance matrix input is a symmetric distance matrix table written in comma separated values (CSV) format (accepted file extension: .csv)."
                         placement="rightTop">
                         <QuestionCircleOutlined
                           style={{ fontSize: "14px", color: "white" }}
