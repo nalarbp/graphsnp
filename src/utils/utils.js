@@ -296,3 +296,23 @@ export function getStats(arr) {
     return null;
   }
 }
+
+// Function to convert SVG string to Data URL
+function svgToDataURL(svgString) {
+  var svgData = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+  var domURL = window.URL || window.webkitURL || window;
+  var url = domURL.createObjectURL(svgData);
+  return url;
+}
+
+//create a function that takes an object and return an svg string. This svg string must can be used as background image.
+export function createSVGStringFromObject(obj_in) {
+  var svgString =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50">' +
+    '<circle cx="25" cy="25" r="20" fill="purple" />' +
+    "</svg>";
+
+  let a = svgToDataURL(svgString);
+  console.log(a);
+  return a;
+}

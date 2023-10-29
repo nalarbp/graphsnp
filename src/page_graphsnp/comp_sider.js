@@ -59,6 +59,7 @@ const SiderMenu = (props) => {
   //SETTINGS
   const graph_method = props.graphSettings.method;
   const graph_layout = props.graphSettings.layout;
+  const compoundNode_layout = "standard";
   const graph_isUserReDraw = props.graphSettings.isUserReDraw;
   const graph_isUserFilterEdges = props.graphSettings.isUserFilteringEdge;
   const graph_edgeFilterCutoff = props.graphSettings.edgeFilterCutoff;
@@ -112,11 +113,17 @@ const SiderMenu = (props) => {
     props.changeLayoutSetting(val);
   };
 
+  const changeCompoundNodeLayoutHandler = (val) => {};
+
   const reloadLayoutHandler = () => {
     if (!graph_isUserRelayout) {
       props.isShowingLoadingModalToStore(true);
       props.changeIsUserRelayoutSetting(true);
     }
+  };
+
+  const reloadCompoundNodeLayoutHandler = () => {
+    console.log(props.graphObject);
   };
 
   const drawingHandler = () => {
@@ -542,6 +549,56 @@ const SiderMenu = (props) => {
                 })}
           </Select>
         </Col>
+
+        <Col span={16}>
+          <p>
+            Compound node{" "}
+            <span>
+              <Tooltip
+                title="Layout to display the compound node."
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Select
+            disabled={
+              props.hammMatrix &&
+              props.graphObject &&
+              props.graphObject.creator === "mscg"
+                ? false
+                : true
+            }
+            value={compoundNode_layout}
+            style={{ width: "100%" }}
+            onChange={changeCompoundNodeLayoutHandler}>
+            <Option value="standard"> Individual</Option>
+            <Option value="piechart">Piechart</Option>
+          </Select>
+        </Col>
+        <Col span={8}>
+          <p>
+            Refresh{" "}
+            <span>
+              <Tooltip
+                title="Apply selected layout to the compound node."
+                placement="rightTop">
+                <QuestionCircleOutlined style={{ color: "red" }} />
+              </Tooltip>
+            </span>
+          </p>
+          <Button
+            disabled={
+              props.graphObject && props.graphObject.creator === "mscg"
+                ? false
+                : true
+            }
+            onClick={reloadCompoundNodeLayoutHandler}
+            type="primary">
+            <ReloadOutlined />
+          </Button>
+        </Col>
+
         <Col span={24}>
           <p>
             Select node(s){" "}
