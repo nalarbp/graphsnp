@@ -1,5 +1,5 @@
-import * as chartDataActions from "../action/chartDataActions";
-import * as graphMatrixActions from "../action/graphMatrixActions";
+// import * as chartDataActions from "../action/chartDataActions";
+// import * as graphMatrixActions from "../action/graphMatrixActions";
 import * as graphSettingsActions from "../action/graphSettingsActions";
 import * as snpDistSettingsActions from "../action/snpdistSettingsActions";
 
@@ -9,12 +9,12 @@ import { initialState } from "../reducers/index";
 //import isShowingLoadingModalToStore from "../action/isShowingLoadingModalActions";
 //import { changeNavLocation } from "../action/navigationActions";
 
-function resetGraphObjects() {
-  //doesnt work, why?
-  graphMatrixActions.hmmMatrixToStore(initialState.hammMatrix);
-  graphMatrixActions.graphObjectToStore(initialState.graphObject);
-  graphMatrixActions.graphClusterToStore(initialState.graphClusters);
-}
+// function resetGraphObjects() {
+//   //doesnt work, why?
+//   graphMatrixActions.hmmMatrixToStore(initialState.hammMatrix);
+//   graphMatrixActions.graphObjectToStore(initialState.graphObject);
+//   graphMatrixActions.graphClusterToStore(initialState.graphClusters);
+// }
 
 function resetGraphSettings() {
   graphSettingsActions.changeMethodSetting(initialState.graphSettings.method);
@@ -82,14 +82,14 @@ function resetSnpDistSettings() {
   );
 }
 
-function resetAllChartsData() {
-  //reset all charts data
-  chartDataActions.chart_changeAllDistData(null);
-  chartDataActions.chart_changeAllDistStats(null);
-  chartDataActions.chart_changeGroupPieData(null);
-  chartDataActions.chart_changeGroupDistStats(null);
-  chartDataActions.chart_changeGroupDistIntraInter(null);
-}
+// function resetAllChartsData() {
+//   //reset all charts data
+//   chartDataActions.chart_changeAllDistData(null);
+//   chartDataActions.chart_changeAllDistStats(null);
+//   chartDataActions.chart_changeGroupPieData(null);
+//   chartDataActions.chart_changeGroupDistStats(null);
+//   chartDataActions.chart_changeGroupDistIntraInter(null);
+// }
 
 export function resetDistanceInputRelatedStates() {
   //resetGraphObjects();

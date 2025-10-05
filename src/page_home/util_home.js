@@ -393,8 +393,8 @@ export async function loadMetaOrMatrix(
   }
 }
 
-export const getParticleHeight = String(util.vh(100) - 400) + "px";
-export const getParticleWidth = String(util.vw(100) - 50) + "px";
+export const getParticleHeight = `${util.vh(100) - 400}px`;
+export const getParticleWidth = `${util.vw(100) - 50}px`;
 export const particleParams = {
   fpsLimit: 24,
   particles: {

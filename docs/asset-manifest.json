@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "/graphsnp/static/css/main.b5bf8dc5.chunk.css",
+    "main.js": "/graphsnp/static/js/main.a92ec252.chunk.js",
+    "runtime-main.js": "/graphsnp/static/js/runtime-main.fa840d4b.js",
+    "static/css/2.f5c9f7f0.chunk.css": "/graphsnp/static/css/2.f5c9f7f0.chunk.css",
+    "static/js/2.2a3ed63d.chunk.js": "/graphsnp/static/js/2.2a3ed63d.chunk.js",
+    "static/js/3.905c2608.chunk.js": "/graphsnp/static/js/3.905c2608.chunk.js",
+    "index.html": "/graphsnp/index.html",
+    "static/js/2.2a3ed63d.chunk.js.LICENSE.txt": "/graphsnp/static/js/2.2a3ed63d.chunk.js.LICENSE.txt",
+    "static/media/style_home.css": "/graphsnp/static/media/bg_content_header.530683f1.png",
+    "static/media/compatibleBrowsers.cfec2159.png": "/graphsnp/static/media/compatibleBrowsers.cfec2159.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.fa840d4b.js",
+    "static/css/2.f5c9f7f0.chunk.css",
+    "static/js/2.2a3ed63d.chunk.js",
+    "static/css/main.b5bf8dc5.chunk.css",
+    "static/js/main.a92ec252.chunk.js"
+  ]
+}

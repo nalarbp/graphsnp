@@ -1,5 +1,5 @@
 import React from "react";
-import { Upload, Button, message, Tooltip } from "antd";
+import { Upload, Button, message, Tooltip, Col, Row } from "antd";
 import {
   StopOutlined,
   CheckCircleFilled,
@@ -88,7 +88,10 @@ const InputLoader = (props) => {
 
   return (
     <React.Fragment>
-      <div>
+      <Row>
+        <h1>SNPs Alignment Loader</h1>
+      </Row>
+      <Row>
         <Dragger
           accept={".fa, .fasta, .fna, .mfa, .csv"}
           showUploadList={false}
@@ -135,7 +138,7 @@ const InputLoader = (props) => {
             <DeleteOutlined />
           </Button>
         </div>
-      </div>
+      </Row>
     </React.Fragment>
   );
 };

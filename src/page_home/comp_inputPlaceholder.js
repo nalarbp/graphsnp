@@ -43,7 +43,7 @@ const { Dragger } = Upload;
 const InputPlaceholder = (props) => {
   const beforeUploadHandler = (file, fileList) => {
     if (file === fileList[0] || file === fileList[1]) {
-      let fileExtension = file.name.match(/\.[0-9a-z]+$/i)[0];
+      let fileExtension = file.name.match(/\.[0-9a-z]+$/i)[0].toLowerCase();
       let fileType = extensionCheck(fileExtension);
 
       if (fileType === "SNP") {
@@ -135,99 +135,101 @@ const InputPlaceholder = (props) => {
   return (
     <React.Fragment>
       <div id="home-input-area">
-        <Dragger
-          disabled={props.hammMatrix && props.metadata ? true : false}
-          accept={".csv, .fa, .fasta, .fna, .aln, .msa"}
-          showUploadList={false}
-          name="inputFiles"
-          multiple={true}
-          maxCount={2}
-          action="dummy-post"
-          style={{
-            backgroundColor: "transparent",
-            minHeight: "calc(100vh - 400px)",
-            minWidth: "calc(100vw - 50px)",
-          }}
-          beforeUpload={beforeUploadHandler}>
-          <Row id="home-input-dragger" justify="space-around" align="middle">
-            <Col xs={24}>
-              <Row align="center">
-                <Col xs={24} md={16} xl={12} xxl={8}>
-                  <p id="home-input-dragger-text-title">GraphSNP</p>
-                  <p id="home-input-dragger-text-subtitle">{graphSNP_desc}</p>
-                  <p id="home-input-dragger-text">
-                    [Drag and drop input files here and click either Distances
-                    or Graph to start visualising]
-                  </p>
-                </Col>
-              </Row>
-            </Col>
+        <Row justify="center">
+          <Col xs={24}>
+            <p id="home-input-dragger-text-title">GraphSNP</p>
+            <p id="home-input-dragger-text-subtitle">{graphSNP_desc}</p>
+            <p id="home-input-dragger-text">
+              [Drag and drop input files here and click either Distances
+              or Graph to start visualising]
+            </p>
+          </Col>
+        </Row>
+        {/* Below is the row containing two columns side by side (when small they are stacked on top of each other). each column contains a Dragger component. One for SNPs alignment and the other for metadata. */}
+        <Row justify="center" gutter={[16, 16]}>
+          <Col xs={24} sm={10}>
+            <Dragger
+              disabled={props.sequence || props.hammMatrix ? true : false}
+              showUploadList={false}
+              name="file"
+              multiple={false}
+              style={{ backgroundColor: "transparent", minHeight: "300px", borderRadius: "10px" }}
+              action="dummy-post"
+              beforeUpload={beforeUploadHandler}>
+              <div id="home-input-dragger-snps">
+                <Button
+                  id="home-input-button-snps"
+                  shape={"round"}
+                  size={"large"}
+                  type={"ghost"}>
+                  {getIconStatus("SNP")}Alignment/matrix{"  "}
+                  <span style={{ marginLeft: "5px" }}>
+                    <Tooltip
+                      title="The alignment file must contain a minimum of two fasta-formatted nucleotide sequences of equal length (accepted file extension includes: .fa, .fasta, .fna, .mfa, .aln, .txt. A distance matrix input is a symmetric distance matrix table written in comma separated values (CSV) format (accepted file extension: .csv)."
+                      placement="rightTop">
+                      <QuestionCircleOutlined
+                        style={{ fontSize: "14px", color: "white" }}
+                      />
+                    </Tooltip>
+                  </span>
+                </Button>
+                <Button
+                  disabled={props.hammMatrix ? false : true}
+                  title={"Remove loaded SNPs alignment"}
+                  type={"ghost"}
+                  style={{ backgroundColor: "transparent" }}
+                  className="home-input-remove-button "
+                  shape={"circle"}
+                  size={"small"}
+                  onClick={removeSNPHandler}>
+                  <DeleteOutlined />
+                </Button>
+              </div>
+            </Dragger>
+          </Col>
 
-            <Col xs={24}>
-              <Row id={"home-input-dragger-buttons"} align={"center"}>
-                <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
-                  <Button
-                    id="home-input-button-snps"
-                    shape={"round"}
-                    size={"large"}
-                    type={"ghost"}>
-                    {getIconStatus("SNP")}Alignment/matrix{"  "}
-                    <span style={{ marginLeft: "5px" }}>
-                      <Tooltip
-                        title="The alignment file must contain a minimum of two fasta-formatted nucleotide sequences of equal length (accepted file extension includes: .fa, .fasta, .fna, .mfa, .aln, .txt. A distance matrix input is a symmetric distance matrix table written in comma separated values (CSV) format (accepted file extension: .csv)."
-                        placement="rightTop">
-                        <QuestionCircleOutlined
-                          style={{ fontSize: "14px", color: "white" }}
-                        />
-                      </Tooltip>
-                    </span>
-                  </Button>
-                  <Button
-                    disabled={props.hammMatrix ? false : true}
-                    title={"Remove loaded alingment/matrix"}
-                    type={"ghost"}
-                    style={{ backgroundColor: "transparent" }}
-                    className="home-input-remove-button "
-                    shape={"circle"}
-                    size={"small"}
-                    onClick={removeSNPHandler}>
-                    <DeleteOutlined />
-                  </Button>
-                </Col>
+          <Col xs={24} sm={10}>
+            <Dragger
+              disabled={props.metadata ? true : false}
+              showUploadList={false}
+              style={{ backgroundColor: "transparent", minHeight: "300px", borderRadius: "10px" }}
+              name="file"
+              multiple={false}
+              action="dummy-post"
+              beforeUpload={beforeUploadHandler}>
+              <div id="home-input-dragger-metadata">
+                <Button
+                  id="home-input-button-metadata"
+                  shape={"round"}
+                  size={"large"}
+                  type={"ghost"}>
+                  {getIconStatus("Metadata")} Metadata{" "}
+                  <span style={{ marginLeft: "5px" }}>
+                    <Tooltip
+                      title="A metadata table written in CSV format (accepted file extension: .csv) with mandatory column sample_id, containing ids match to alignment/matrix file. An additional column listing sample’s collection time (scaled in days, header: collection_day) is required for transmission analysis."
+                      placement="rightTop">
+                      <QuestionCircleOutlined
+                        style={{ fontSize: "14px", color: "white" }}
+                      />
+                    </Tooltip>
+                  </span>
+                </Button>
+                <Button
+                  disabled={props.metadata ? false : true}
+                  title={"Remove loaded metadata"}
+                  type={"ghost"}
+                  style={{ backgroundColor: "transparent" }}
+                  className="home-input-remove-button "
+                  shape={"circle"}
+                  size={"small"}
+                  onClick={removeMetadataHandler}>
+                  <DeleteOutlined />
+                </Button>
+              </div>
+            </Dragger>
 
-                <Col xs={24} sm={8} md={7} xl={5} xxl={3}>
-                  <Button
-                    id="home-input-button-metadata"
-                    shape={"round"}
-                    size={"large"}
-                    type={"ghost"}>
-                    {getIconStatus("Metadata")} Metadata{" "}
-                    <span style={{ marginLeft: "5px" }}>
-                      <Tooltip
-                        title="A metadata table written in CSV format (accepted file extension: .csv) with mandatory column sample_id, containing ids match to alignment/matrix file. An additional column listing sample’s collection time (scaled in days, header: collection_day) is required for transmission analysis."
-                        placement="rightTop">
-                        <QuestionCircleOutlined
-                          style={{ fontSize: "14px", color: "white" }}
-                        />
-                      </Tooltip>
-                    </span>
-                  </Button>
-                  <Button
-                    disabled={props.metadata ? false : true}
-                    title={"Remove loaded metadata"}
-                    type={"ghost"}
-                    style={{ backgroundColor: "transparent" }}
-                    className="home-input-remove-button "
-                    shape={"circle"}
-                    size={"small"}
-                    onClick={removeMetadataHandler}>
-                    <DeleteOutlined />
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
-        </Dragger>
+          </Col>
+        </Row>
       </div>
     </React.Fragment>
   );

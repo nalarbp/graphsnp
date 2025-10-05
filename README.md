@@ -17,3 +17,5 @@ Drag and drop input files at: https://graphsnp.beatsonlab.com/
 # Development use
 
 Will be available soon.
+
+# Node.js version 16.20.2

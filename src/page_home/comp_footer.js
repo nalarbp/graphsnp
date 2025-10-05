@@ -59,7 +59,7 @@ const FooterComponent = () => {
           </ul>
         </div>
       ),
-      onOk() {},
+      onOk() { },
     });
   };
 
@@ -84,7 +84,7 @@ const FooterComponent = () => {
               border: "None",
               padding: "0px",
             }}>
-            GraphSNP v1.0
+            GraphSNP v1.1
           </Button>
           <p>
             <b>{graphSNP_desc}</b>
