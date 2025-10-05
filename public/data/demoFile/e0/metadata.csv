@@ -1,7 +1,0 @@
-sample_id,collection_day,Location,Source,Clade,Gene-A,Source:color,Gene-A:color
-1,1,room A,clinical,A,present,#FF8076,Black
-2,2,room B,clinical,A,present,#FF8076,Black
-3,3,room C,clinical,A,present,#FF8076,Black
-4,3,room A,environmental,A,absent,#53DE22,White
-5,4,room B,environmental,A,absent,#53DE22,White
-6,5,room C,environmental,A,absent,#53DE22,White

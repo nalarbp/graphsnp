@@ -1,10 +1,14 @@
+> [!IMPORTANT]
+> This branch is the version configured for deployment at my github page: https://nalarbp.github.io/graphsnp/
+> For local dev or self-hosting, use the one in the main branch.
+
 # GraphSNP
 
 GraphSNP: An interactive SNP distance viewer for investigating outbreaks and transmission networks using a graph approach.
 
 # How to use it online
 
-Drag and drop input files at: https://graphsnp.beatsonlab.com/
+Drag and drop input files at: https://graphsnp.fordelab.com/ or https://nalarbp.github.io/graphsnp/
 
 # How to use it offline
 
